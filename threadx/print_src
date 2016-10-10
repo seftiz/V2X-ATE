@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# Create obj dump  for memory and panic alerts
-# Get the PC value from the panic and search is in the file
-/tools/gcc/arm/gcc-arm-none-eabi-4_7-2012q4/bin/arm-none-eabi-objdump -dS ./bin/v2x-cli > ./src_doc
