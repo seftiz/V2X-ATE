@@ -89,6 +89,7 @@ class TGEmbeddedSniffer(object):
 
         cmd = "%s setting -id %d" % (self._module_name, index )
         res = self._if.write( cmd.encode('ascii') + "\r\n" )
+        res = self._if.read_until('ate>');
         if ('ERROR' in res) :
             raise Exception("Error setting sniffer settings")
 
@@ -105,9 +106,10 @@ class TGEmbeddedSniffer(object):
         cmd += " -server_ip %s"  % (server_ip if not server_ip is None else socket.gethostbyname(socket.gethostname()) )
         cmd += (" -server_port %s"  % server_port) if not server_port is None else ""
         res = self._if.write( cmd.encode('ascii') + "\r\n" )
+        
                 
         self._interfaces_active[if_idx] = True
-                
+        res = self._if.read_until('ate>');        
         if ('ERROR' in res):
             raise Exception("Error in starting tg session")
 
@@ -120,6 +122,7 @@ class TGEmbeddedSniffer(object):
 
         cmd = "%s stop -if_idx %d" % (self._module_name, if_idx)
         res = self._if.write( cmd.encode('ascii') + "\r\n" )
+        res = self._if.read_until('ate>');
         if ('ERROR' in res) :
             raise Exception("Error in starting tg session")
 
@@ -140,6 +143,8 @@ class TGEmbeddedSniffer(object):
 
         cmd = "%s counters print -if_idx %d" % (self._module_name, if_idx)
         res = self._if.write( cmd.encode('ascii') + "\r\n" )
+        
+        res = self._if.read_until('ate>');
         if ('ERROR' in res) :
             raise Exception("Error in starting tg session")
 
@@ -165,6 +170,7 @@ class TGEmbeddedSniffer(object):
         assert( if_idx in [1,2] )
         cmd = "%s counters reset -if_idx %d" % (self._module_name, if_idx)
         res = self._if.write( cmd.encode('ascii') + "\r\n" )
+        res = self._if.read_until('ate>');
         if ('ERROR' in res) :
             raise Exception("Error in starting tg session")
 
@@ -237,14 +243,14 @@ class TGHostSniffer(object):
         self.threads_loop_flag[port] = True
             
         sock.settimeout(self.sock_timeout)
-
+        counter = 0
         retries = 0
         while ( self.threads_loop_flag[port] == True ):
                     
             try:
                 data,addr = sock.recvfrom(1518)
                 pcap.write_packet( data )
-
+                    
             except Exception as e:
 
                 if ( type(e) == socket.timeout ):
@@ -255,6 +261,9 @@ class TGHostSniffer(object):
                     self.threads_loop_flag[port] = False
 
                 print "ERROR : {} , {}, {} ".format( type(e), inst.args, e )
+            counter+=1
+        
+        print counter
 
         pcap.close()
         sock.close()
@@ -315,7 +324,7 @@ class TrafficGeneratorPanagea4(object):
             cmd += " -rate_hz %d -payload_len %d"  % (rate_hz, payload_length ) 
             cmd += (" -frame_type %s"  % frame_type) if not frame_type is None else ""
             res = self._if.write( cmd.encode('ascii') + "\r\n" )
-            # res = self._if.read_until(TG_CLI_PROMPT)
+            res = self._if.read_until(TG_CLI_PROMPT)
             if ( ('ERROR' in res)):
                 raise Exception("Error in starting tg session")
             
@@ -405,25 +414,34 @@ if __name__ == "__main__":
 
 
     interface_type = 'TELNET'
-    cnn_info = { 'host':'10.10.1.52', 'port': 10003, 'timeout_sec': 10 }
-    tg = TrafficGeneratorPanagea4( 1, 'TELNET', cnn_info )
+    #cnn_info = { 'host':'10.10.2.23', 'port': 23, 'timeout_sec': 10 }
+    #tg = TrafficGeneratorPanagea4( 1, 'TELNET', cnn_info )
+    #cnn_info_2 = { 'host':'10.10.0.237', 'port': 23, 'timeout_sec': 10 }
+    tg2 = TGHostSniffer( 2 )
+    tg3 = TGHostSniffer( 3 )
     try:
-        tg.link.start( 1, 1, 0x3454, frames = 0, rate_hz = 50, payload_length = 400 )
+        
+        #tg.sniffer.start( rf_if = 3, capture_file = "c:/temp/test_file.pcap" )
+        tg2.start(if_idx = 1, port = 8051, capture_file = "c:/temp/rx_test_file.pcap" )
+        tg3.start(if_idx = 1, port = 8061, capture_file = "c:/temp/tx_test_file.pcap" )
+        time.sleep( 120 )
+        #tg.link.start( 1, 1, 0x1234, frames = 1000, rate_hz = 50, payload_length = 100 )
+        #time.sleep(1)
+        #tg.link.start( 1, 2, 0x5678, frames = 1000, rate_hz = 50, payload_length = 100 )
+       
+        #cntr = tg.sniffer.get_counters( rf_if = 3 )
+        #print cntr
 
-        tg.sniffer.start( rf_if = 3, capture_file = "c:/temp/test_file.pcap" )
-
-        time.sleep( 60 )
-
-        cntr = tg.sniffer.get_counters( rf_if = 1 )
-        print cntr
-
-        tg.sniffer.reset_counters( rf_if = 1)
+        #tg.sniffer.reset_counters( rf_if = 3)
 
     except  Exception as e:
         pass
     finally:
-        tg.link.stop ( 1 )
-        tg.sniffer.stop( 3 )
+        #tg.link.stop ( 1 )
+        #tg.link.stop ( 2 )
+        #tg.sniffer.stop( 3 )
+        tg3.stop( 8061 )
+        tg2.stop( 8051 )
 
 
 
