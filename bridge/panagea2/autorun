@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# This file shuold be in storage directory, bridge shuold be place in the root
+
+bridge=/storage/root/bridge
+
+if [ -x $bridge ]; then
+	echo -n "Running $bridge in background ..."
+        ($bridge &) && echo OK
+else
+	echo "NOTE: $bridge not present or not executable"
+fi

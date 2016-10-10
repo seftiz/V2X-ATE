@@ -1,0 +1,11 @@
+# This file shuold be in storage directory, v2x-cli shuold be place in the root
+#!/bin/sh
+
+v2xcli=/storage/root/v2x-cli
+
+if [ -x $v2xcli ]; then
+	echo -n "Running $v2xcli in background ..."
+        ($v2xcli &) && echo OK
+else
+	echo "NOTE: $v2xcli not present or not executable"
+fi
