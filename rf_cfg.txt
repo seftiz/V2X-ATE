@@ -1,0 +1,8 @@
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 1e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 63

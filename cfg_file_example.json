@@ -1,0 +1,77 @@
+{
+    "StationParamerters" : {
+				"log_dir" : "c:\\temp",
+				"reports_dir" : "c:\\temp"
+
+	},
+	
+	"Instruments":{
+
+        "Sniffer" : {
+					"active"	: 0,
+                    "id"		: 1,
+                    "type"		: "panagea2",
+                    "ip"		: "10.10.0.165",
+					"user"		: "root",
+                    "pwd"		: "123"
+        },
+
+		"PcapConvertServer" : {
+					"active"	: 1,
+ 					"ip"		: "10.10.1.119",
+					"port"		: 8000
+		},
+
+        "Serial2Ip" : {
+   					"active"	: 1,
+	                "id"		: 1,
+                    "type"		: "Trs",
+                    "name"		: "Ser2Ip1",
+                    "ip"		: "10.10.0.11"
+        }, 
+
+        "PowerControl" : {
+					"active"	: 0,
+                    "id"		: 1,
+                    "type"		: "NetworkPower",
+                    "ip"		: "10.10.0.2",
+                    "user"		: "",
+                    "pwd"		: "",
+                    "prompt"	: "NPS >",
+                    "ports"		: 7
+        },
+        "GpsSimulator" : {
+					"active"	: 0,
+                    "id"		: 1,
+                    "type"		: "spectracom_gsg_6",
+                    "addr"		: "10.10.1.50"
+        }
+        "CanBusServer" : {
+					"active"	: 1,
+                    "id"		: 1,
+                    "type"		: "komodo",
+ 					"ip"		: "10.10.1.119",
+					"port"		: 8000
+        }
+            
+    },
+
+    "units" : [
+                {
+                    "id"            : 0,
+                    "type"          : "gm",
+					"version"		: "GM1.0.0A2",
+					"cli_active"	: 1,
+                    "ip"            : "10.10.0.156",
+                    "pc"            : { "device": 1, "port" : 5 },
+                    "terminal"      : { "device": "Serial2Ip", "id" : 1, "port" : 2036 },
+                    "rf_interfaces" : 2
+                }
+                
+        ]
+}
+
+
+
+
+]
