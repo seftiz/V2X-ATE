@@ -1,0 +1,3452 @@
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 115
+iq_imbalance_calibration_factor_B = 2038
+iq_imbalance_calibration_factor_C = 7bc8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 113
+iq_imbalance_calibration_factor_B = 2021
+iq_imbalance_calibration_factor_C = 7c78
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 115
+iq_imbalance_calibration_factor_B = 2047
+iq_imbalance_calibration_factor_C = 7b35
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10e
+iq_imbalance_calibration_factor_B = 2030
+iq_imbalance_calibration_factor_C = 7c18
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 201e
+iq_imbalance_calibration_factor_C = 3c8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2026
+iq_imbalance_calibration_factor_C = 7cea
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7e55
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7e65
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2027
+iq_imbalance_calibration_factor_C = 7cf2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 14c
+iq_imbalance_calibration_factor_B = 2f13
+iq_imbalance_calibration_factor_C = 1e6b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 158
+iq_imbalance_calibration_factor_B = 2a19
+iq_imbalance_calibration_factor_C = 777a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 11c
+iq_imbalance_calibration_factor_B = 2060
+iq_imbalance_calibration_factor_C = 7f94
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2025
+iq_imbalance_calibration_factor_C = 7cb6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7f06
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2034
+iq_imbalance_calibration_factor_C = 7c93
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7ed7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ed2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 202c
+iq_imbalance_calibration_factor_C = 7c66
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7ebc
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7e8a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7eb6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e24
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7eb1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 201f
+iq_imbalance_calibration_factor_C = 7c90
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2028
+iq_imbalance_calibration_factor_C = 7c4c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7eba
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 202d
+iq_imbalance_calibration_factor_C = 7c59
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e1c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ec4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7ef3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7d66
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7df5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7e98
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e0b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2026
+iq_imbalance_calibration_factor_C = 7c2e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7e91
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 202d
+iq_imbalance_calibration_factor_C = 7bb4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 7dd3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2024
+iq_imbalance_calibration_factor_C = 7cc2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7e68
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2027
+iq_imbalance_calibration_factor_C = 7c98
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7ef1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2024
+iq_imbalance_calibration_factor_C = 7ca1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ec2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 202b
+iq_imbalance_calibration_factor_C = 7c02
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7ec0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2025
+iq_imbalance_calibration_factor_C = 7c94
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7eb1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2025
+iq_imbalance_calibration_factor_C = 7c8f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2024
+iq_imbalance_calibration_factor_C = 7c26
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 152
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ebc
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7ee2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 2053
+iq_imbalance_calibration_factor_C = 79a8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2026
+iq_imbalance_calibration_factor_C = 7c9a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7f03
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f61
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2022
+iq_imbalance_calibration_factor_C = 7cd4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7ff0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 61
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7e9b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7eee
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2028
+iq_imbalance_calibration_factor_C = 7cd7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7ed4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7edd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2021
+iq_imbalance_calibration_factor_C = 7c83
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2025
+iq_imbalance_calibration_factor_C = 7cad
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 2017
+iq_imbalance_calibration_factor_C = 7cf8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2021
+iq_imbalance_calibration_factor_C = 7caf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10e
+iq_imbalance_calibration_factor_B = 2018
+iq_imbalance_calibration_factor_C = 7d08
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2042
+iq_imbalance_calibration_factor_C = 7ab2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 208d
+iq_imbalance_calibration_factor_C = 787c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 2032
+iq_imbalance_calibration_factor_C = 7c7d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f5f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7ff5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 200c
+iq_imbalance_calibration_factor_C = 7dfd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7e9a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 203d
+iq_imbalance_calibration_factor_C = 7b6f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2040
+iq_imbalance_calibration_factor_C = 7b67
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2049
+iq_imbalance_calibration_factor_C = 7b33
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 202e
+iq_imbalance_calibration_factor_C = 3f6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2011
+iq_imbalance_calibration_factor_C = 7db0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2040
+iq_imbalance_calibration_factor_C = 7b53
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 246
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2012
+iq_imbalance_calibration_factor_C = 7da5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 24
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 159
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2032
+iq_imbalance_calibration_factor_C = 7c99
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 200d
+iq_imbalance_calibration_factor_C = 7e0d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 209e
+iq_imbalance_calibration_factor_C = 791c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 200d
+iq_imbalance_calibration_factor_C = 7e47
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 112
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f8
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 7dbf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 230
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fa3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2018
+iq_imbalance_calibration_factor_C = 7d4d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2018
+iq_imbalance_calibration_factor_C = 7cee
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2054
+iq_imbalance_calibration_factor_C = 7a6b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7ff2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2103
+iq_imbalance_calibration_factor_C = 76ce
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2057
+iq_imbalance_calibration_factor_C = 51a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 206f
+iq_imbalance_calibration_factor_C = 7a15
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2062
+iq_imbalance_calibration_factor_C = 7a8c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2052
+iq_imbalance_calibration_factor_C = 7b60
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2187
+iq_imbalance_calibration_factor_C = 7509
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 178
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7ea5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7ef1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f4a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 202f
+iq_imbalance_calibration_factor_C = 3f8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 119
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fd4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 1c3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f98
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 1d5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2019
+iq_imbalance_calibration_factor_C = 7d6c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 1e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 201e
+iq_imbalance_calibration_factor_C = 330
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2023
+iq_imbalance_calibration_factor_C = 7ca3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 1ef
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7eb2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 75
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 201a
+iq_imbalance_calibration_factor_C = 7d31
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2046
+iq_imbalance_calibration_factor_C = 7b15
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2042
+iq_imbalance_calibration_factor_C = 7b4f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 203b
+iq_imbalance_calibration_factor_C = 7b9b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 201a
+iq_imbalance_calibration_factor_C = 7d36
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 201c
+iq_imbalance_calibration_factor_C = 7d0e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2019
+iq_imbalance_calibration_factor_C = 7d31
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2018
+iq_imbalance_calibration_factor_C = 7d31
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 202d
+iq_imbalance_calibration_factor_C = 7c28
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 190
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 11c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 7df2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 7e62
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = aa
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fbe
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 7dc1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 205c
+iq_imbalance_calibration_factor_C = 7aaa
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 204c
+iq_imbalance_calibration_factor_C = 7ae0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 7dae
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2012
+iq_imbalance_calibration_factor_C = 7d85
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 7db4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 18f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 2051
+iq_imbalance_calibration_factor_C = 7ace
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 182
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 205a
+iq_imbalance_calibration_factor_C = 7abf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 2059
+iq_imbalance_calibration_factor_C = 7a9c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7de3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2014
+iq_imbalance_calibration_factor_C = 7d92
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fe6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2046
+iq_imbalance_calibration_factor_C = 7b5d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2063
+iq_imbalance_calibration_factor_C = 7a66
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2016
+iq_imbalance_calibration_factor_C = 7d67
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e8b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2174
+iq_imbalance_calibration_factor_C = a91
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 201b
+iq_imbalance_calibration_factor_C = 2fe
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2081
+iq_imbalance_calibration_factor_C = 797d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2031
+iq_imbalance_calibration_factor_C = 7bf7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2035
+iq_imbalance_calibration_factor_C = 7bd2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2034
+iq_imbalance_calibration_factor_C = 7c06
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 203c
+iq_imbalance_calibration_factor_C = 7bbc
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2014
+iq_imbalance_calibration_factor_C = 249
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 88
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2068
+iq_imbalance_calibration_factor_C = 7abe
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 98
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e78
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7e52
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7e86
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e6b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7e6c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7e7d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e75
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e69
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f93
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2031
+iq_imbalance_calibration_factor_C = 7bf4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = b9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 98
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7f39
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7ed8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2019
+iq_imbalance_calibration_factor_C = 7d57
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2021
+iq_imbalance_calibration_factor_C = 7d33
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2023
+iq_imbalance_calibration_factor_C = 7ceb
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2012
+iq_imbalance_calibration_factor_C = 7daf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f35
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = d4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2015
+iq_imbalance_calibration_factor_C = 2a3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 97
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2041
+iq_imbalance_calibration_factor_C = 7bbf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7e85
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 7e03
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 200d
+iq_imbalance_calibration_factor_C = 7e2d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2043
+iq_imbalance_calibration_factor_C = 7bfc
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 201b
+iq_imbalance_calibration_factor_C = 307
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fdd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7e90
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7ed0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2064
+iq_imbalance_calibration_factor_C = 7ae0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 200a
+iq_imbalance_calibration_factor_C = 7e73
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2046
+iq_imbalance_calibration_factor_C = 7afd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fda
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 205e
+iq_imbalance_calibration_factor_C = 7a1a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7f0c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10e
+iq_imbalance_calibration_factor_B = 2026
+iq_imbalance_calibration_factor_C = 3bd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2026
+iq_imbalance_calibration_factor_C = 7c5c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 94
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = c7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7e92
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e6c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 1e8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 111
+iq_imbalance_calibration_factor_B = 201f
+iq_imbalance_calibration_factor_C = 7c7d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 201c
+iq_imbalance_calibration_factor_C = 7d00
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2053
+iq_imbalance_calibration_factor_C = 7ab1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 204d
+iq_imbalance_calibration_factor_C = 7bc6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2053
+iq_imbalance_calibration_factor_C = 7a64
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 7e81
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7eef
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 203e
+iq_imbalance_calibration_factor_C = 7c0e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 218f
+iq_imbalance_calibration_factor_C = 75af
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2057
+iq_imbalance_calibration_factor_C = 7a43
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2011
+iq_imbalance_calibration_factor_C = 7da8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 204c
+iq_imbalance_calibration_factor_C = 5d9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 20c0
+iq_imbalance_calibration_factor_C = 761e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2050
+iq_imbalance_calibration_factor_C = 7b59
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 21a5
+iq_imbalance_calibration_factor_C = 7433
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 1b3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 201b
+iq_imbalance_calibration_factor_C = 7ce7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 10
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 7e20
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 67
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2100
+iq_imbalance_calibration_factor_C = 76c2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 1a3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7ea8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7e4d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 206c
+iq_imbalance_calibration_factor_C = 7a65
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2074
+iq_imbalance_calibration_factor_C = 7983
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7e59
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 204a
+iq_imbalance_calibration_factor_C = 7bb1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 201c
+iq_imbalance_calibration_factor_C = 2d8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2018
+iq_imbalance_calibration_factor_C = 279
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7ef3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2011
+iq_imbalance_calibration_factor_C = 7d67
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 206f
+iq_imbalance_calibration_factor_C = 7a13
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fa4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2024
+iq_imbalance_calibration_factor_C = 7c8b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2024
+iq_imbalance_calibration_factor_C = 7cda
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 26
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2027
+iq_imbalance_calibration_factor_C = 7ce7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 24
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 202a
+iq_imbalance_calibration_factor_C = 7cbc
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2017
+iq_imbalance_calibration_factor_C = 7d22
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f64
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ee6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2129
+iq_imbalance_calibration_factor_C = 76f5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 19
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 125
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2069
+iq_imbalance_calibration_factor_C = 7a6d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7ffd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fb4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2057
+iq_imbalance_calibration_factor_C = 5b1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7e12
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7eea
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f7
+iq_imbalance_calibration_factor_B = 2012
+iq_imbalance_calibration_factor_C = 7d39
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7eab
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2067
+iq_imbalance_calibration_factor_C = 7ad0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = a40
+iq_imbalance_calibration_factor_B = 208f
+iq_imbalance_calibration_factor_C = 95d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 20a5
+iq_imbalance_calibration_factor_C = 7950
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2014
+iq_imbalance_calibration_factor_C = 243
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = a31
+iq_imbalance_calibration_factor_B = 2125
+iq_imbalance_calibration_factor_C = 326d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2019
+iq_imbalance_calibration_factor_C = 7d07
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 201c
+iq_imbalance_calibration_factor_C = 7ce1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f3
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f58
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f5
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f28
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 1a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7e69
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2082
+iq_imbalance_calibration_factor_C = 7a34
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 202d
+iq_imbalance_calibration_factor_C = 7c1a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 7df8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fc3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2016
+iq_imbalance_calibration_factor_C = 285
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e4a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2011
+iq_imbalance_calibration_factor_C = 7dad
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7f12
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 203d
+iq_imbalance_calibration_factor_C = 7b4e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f3a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 203a
+iq_imbalance_calibration_factor_C = 7b4e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2036
+iq_imbalance_calibration_factor_C = 4cf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 203c
+iq_imbalance_calibration_factor_C = 7c2c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2031
+iq_imbalance_calibration_factor_C = 3a0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 201c
+iq_imbalance_calibration_factor_C = 7cbf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 201c
+iq_imbalance_calibration_factor_C = 7cc3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 2012
+iq_imbalance_calibration_factor_C = 7dcf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2075
+iq_imbalance_calibration_factor_C = 784d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 203c
+iq_imbalance_calibration_factor_C = 7b64
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7f07
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 200c
+iq_imbalance_calibration_factor_C = 7daa
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7f09
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 1b9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2034
+iq_imbalance_calibration_factor_C = 7bbf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2028
+iq_imbalance_calibration_factor_C = 36b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 203b
+iq_imbalance_calibration_factor_C = 7c30
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 110
+iq_imbalance_calibration_factor_B = 207a
+iq_imbalance_calibration_factor_C = 77f5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2070
+iq_imbalance_calibration_factor_C = 7a5a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 11d
+iq_imbalance_calibration_factor_B = 2038
+iq_imbalance_calibration_factor_C = 7baf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2039
+iq_imbalance_calibration_factor_C = 7c3f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 123
+iq_imbalance_calibration_factor_B = 2039
+iq_imbalance_calibration_factor_C = 7bd7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 113
+iq_imbalance_calibration_factor_B = 2037
+iq_imbalance_calibration_factor_C = 7c51
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7efd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 16
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f69
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2033
+iq_imbalance_calibration_factor_C = 3bc
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 201e
+iq_imbalance_calibration_factor_C = 7d2d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 110
+iq_imbalance_calibration_factor_B = 2022
+iq_imbalance_calibration_factor_C = 7c51
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 201c
+iq_imbalance_calibration_factor_C = 7d49
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2018
+iq_imbalance_calibration_factor_C = 7d5c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2022
+iq_imbalance_calibration_factor_C = 7d0a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10e
+iq_imbalance_calibration_factor_B = 2023
+iq_imbalance_calibration_factor_C = 7c3a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f48
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 5d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 63
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 1b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7e7f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2153
+iq_imbalance_calibration_factor_C = 751b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7ffc
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f6
+iq_imbalance_calibration_factor_B = 204d
+iq_imbalance_calibration_factor_C = 7aae
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 205d
+iq_imbalance_calibration_factor_C = 7b2b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 206d
+iq_imbalance_calibration_factor_C = 7b45
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f7
+iq_imbalance_calibration_factor_B = 2067
+iq_imbalance_calibration_factor_C = 79f7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f8
+iq_imbalance_calibration_factor_B = 205f
+iq_imbalance_calibration_factor_C = 79fa
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2064
+iq_imbalance_calibration_factor_C = 7af2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 205f
+iq_imbalance_calibration_factor_C = 7a5c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 11e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 206f
+iq_imbalance_calibration_factor_C = 7b26
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fe9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 2048
+iq_imbalance_calibration_factor_C = 4f4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 203e
+iq_imbalance_calibration_factor_C = 3e6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2042
+iq_imbalance_calibration_factor_C = 3c2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 200d
+iq_imbalance_calibration_factor_C = 7db1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2045
+iq_imbalance_calibration_factor_C = 3d9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2011
+iq_imbalance_calibration_factor_C = 7e3f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 207c
+iq_imbalance_calibration_factor_C = 7a2f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 2016
+iq_imbalance_calibration_factor_C = 7d93
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 43
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 86
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 20ef
+iq_imbalance_calibration_factor_C = 908
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 201a
+iq_imbalance_calibration_factor_C = 7d63
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7f49
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 7e0b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 110
+iq_imbalance_calibration_factor_B = 2014
+iq_imbalance_calibration_factor_C = 7d3e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2041
+iq_imbalance_calibration_factor_C = 521
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2013
+iq_imbalance_calibration_factor_C = 7da0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 110
+iq_imbalance_calibration_factor_B = 2017
+iq_imbalance_calibration_factor_C = 7cf3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2046
+iq_imbalance_calibration_factor_C = 521
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2046
+iq_imbalance_calibration_factor_C = 7ad9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2078
+iq_imbalance_calibration_factor_C = 7a8f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 204f
+iq_imbalance_calibration_factor_C = 7ada
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2078
+iq_imbalance_calibration_factor_C = 7a62
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f9a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7ffe
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7fa4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 7e1d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fab
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7e1e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 20cf
+iq_imbalance_calibration_factor_C = 78c3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = d1
+iq_imbalance_calibration_factor_B = 2592
+iq_imbalance_calibration_factor_C = 6f53
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f5e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7f68
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ecc
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2077
+iq_imbalance_calibration_factor_C = 791c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 204e
+iq_imbalance_calibration_factor_C = 7ab1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2048
+iq_imbalance_calibration_factor_C = 79ea
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 202f
+iq_imbalance_calibration_factor_C = 7cd3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f71
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fab
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 202e
+iq_imbalance_calibration_factor_C = 4d0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 14e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2053
+iq_imbalance_calibration_factor_C = 61a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 189
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 21d9
+iq_imbalance_calibration_factor_C = 7215
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 205c
+iq_imbalance_calibration_factor_C = 7ad6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2031
+iq_imbalance_calibration_factor_C = 7c71
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 20d1
+iq_imbalance_calibration_factor_C = 78e5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2037
+iq_imbalance_calibration_factor_C = 7c87
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 20b2
+iq_imbalance_calibration_factor_C = 78d0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2048
+iq_imbalance_calibration_factor_C = 7ae8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2026
+iq_imbalance_calibration_factor_C = 7be0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2017
+iq_imbalance_calibration_factor_C = 7eaa
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ebb
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 200d
+iq_imbalance_calibration_factor_C = 7e5a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10e
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7e34
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7f2a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 7ead
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7eef
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 200a
+iq_imbalance_calibration_factor_C = 7dec
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7edf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = e1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 187
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e56
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7fe8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 211f
+iq_imbalance_calibration_factor_C = 774f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 11a
+iq_imbalance_calibration_factor_B = 202e
+iq_imbalance_calibration_factor_C = 7dad
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7ea5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 110
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 7f77
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7fb0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 110
+iq_imbalance_calibration_factor_B = 2016
+iq_imbalance_calibration_factor_C = 7db0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 2027
+iq_imbalance_calibration_factor_C = 7f00
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7f57
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7f59
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 66
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f63
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 116
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f16
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7fe6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f79
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 201c
+iq_imbalance_calibration_factor_C = 7cec
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7f50
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2020
+iq_imbalance_calibration_factor_C = 7ee3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ede
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2020
+iq_imbalance_calibration_factor_C = 7f94
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 7dd2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 7dd9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 37
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f7c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 202a
+iq_imbalance_calibration_factor_C = 7d25
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2023
+iq_imbalance_calibration_factor_C = 7cf3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2026
+iq_imbalance_calibration_factor_C = 7c52
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2025
+iq_imbalance_calibration_factor_C = 7cb0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 118
+iq_imbalance_calibration_factor_B = 2015
+iq_imbalance_calibration_factor_C = 7d5c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7d73
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = da
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 129
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 171
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 101
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = e6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = d7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2043
+iq_imbalance_calibration_factor_C = 7b74
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2046
+iq_imbalance_calibration_factor_C = 7b73
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2096
+iq_imbalance_calibration_factor_C = 79f9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7e8b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2054
+iq_imbalance_calibration_factor_C = 7b4d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2064
+iq_imbalance_calibration_factor_C = 7ad7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 206e
+iq_imbalance_calibration_factor_C = 7ae8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 206b
+iq_imbalance_calibration_factor_C = 7ab2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2066
+iq_imbalance_calibration_factor_C = 7a01
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 207d
+iq_imbalance_calibration_factor_C = 7a82
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2031
+iq_imbalance_calibration_factor_C = 7cba
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2028
+iq_imbalance_calibration_factor_C = 7cb5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2036
+iq_imbalance_calibration_factor_C = 7bd4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2056
+iq_imbalance_calibration_factor_C = 7af9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2071
+iq_imbalance_calibration_factor_C = 7aa1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 211c
+iq_imbalance_calibration_factor_C = 7746
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2168
+iq_imbalance_calibration_factor_C = 7661
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2045
+iq_imbalance_calibration_factor_C = 7b3e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 200d
+iq_imbalance_calibration_factor_C = 7de6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 7dc8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 20ce
+iq_imbalance_calibration_factor_C = 77a2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 202b
+iq_imbalance_calibration_factor_C = 33f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2019
+iq_imbalance_calibration_factor_C = 229
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2023
+iq_imbalance_calibration_factor_C = 7d11
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 119
+iq_imbalance_calibration_factor_B = 20dc
+iq_imbalance_calibration_factor_C = 864
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 20ed
+iq_imbalance_calibration_factor_C = 784c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 11f
+iq_imbalance_calibration_factor_B = 20f4
+iq_imbalance_calibration_factor_C = 891
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 19a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ec2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2044
+iq_imbalance_calibration_factor_C = 7c39
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 161
+iq_imbalance_calibration_factor_B = 2026
+iq_imbalance_calibration_factor_C = 7c2a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 200a
+iq_imbalance_calibration_factor_C = 7e4d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 203f
+iq_imbalance_calibration_factor_C = 7bfa
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7eaa
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 204a
+iq_imbalance_calibration_factor_C = 7b7c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 119
+iq_imbalance_calibration_factor_B = 201d
+iq_imbalance_calibration_factor_C = 361
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2336
+iq_imbalance_calibration_factor_C = 719d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = a5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = d8
+iq_imbalance_calibration_factor_B = 2086
+iq_imbalance_calibration_factor_C = 7ac2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 114
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7d84
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 201c
+iq_imbalance_calibration_factor_C = 7d70
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 202b
+iq_imbalance_calibration_factor_C = 7ced
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7daa
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7ff7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 11a
+iq_imbalance_calibration_factor_B = 2022
+iq_imbalance_calibration_factor_C = 7ca0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 7e37
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 203f
+iq_imbalance_calibration_factor_C = 7a6c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f78
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 112
+iq_imbalance_calibration_factor_B = 2022
+iq_imbalance_calibration_factor_C = 7dd3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 201a
+iq_imbalance_calibration_factor_C = 7c9b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 12c
+iq_imbalance_calibration_factor_B = 2027
+iq_imbalance_calibration_factor_C = 7bbc
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 200c
+iq_imbalance_calibration_factor_C = 7e5c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e6a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 200a
+iq_imbalance_calibration_factor_C = 7fcd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7ddf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2013
+iq_imbalance_calibration_factor_C = 7de7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 1b4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 7dfa
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 112
+iq_imbalance_calibration_factor_B = 2023
+iq_imbalance_calibration_factor_C = 7ca9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 200c
+iq_imbalance_calibration_factor_C = 7dcd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2078
+iq_imbalance_calibration_factor_C = 60d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 201f
+iq_imbalance_calibration_factor_C = 7d5b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 200c
+iq_imbalance_calibration_factor_C = 7e36
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 111
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 7da6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10e
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 23
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7fa0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2030
+iq_imbalance_calibration_factor_C = 7df4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = e1
+iq_imbalance_calibration_factor_B = 20c2
+iq_imbalance_calibration_factor_C = 7862
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 11e
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 81
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7ea3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 12b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2024
+iq_imbalance_calibration_factor_C = 7c10
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 4e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2117
+iq_imbalance_calibration_factor_C = 780d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 20fb
+iq_imbalance_calibration_factor_C = 780c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2019
+iq_imbalance_calibration_factor_C = 7d34
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 13a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 210b
+iq_imbalance_calibration_factor_C = 7757
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fdf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 212b
+iq_imbalance_calibration_factor_C = 777d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 24
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 214d
+iq_imbalance_calibration_factor_C = 73c6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2047
+iq_imbalance_calibration_factor_C = 7d96
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7d6f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2103
+iq_imbalance_calibration_factor_C = 77dd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2043
+iq_imbalance_calibration_factor_C = 3f4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 204d
+iq_imbalance_calibration_factor_C = 7b30
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f96
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 45
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 4b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2100
+iq_imbalance_calibration_factor_C = 77cd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 7d8a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 204f
+iq_imbalance_calibration_factor_C = 7b55
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 206b
+iq_imbalance_calibration_factor_C = 7bb4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2078
+iq_imbalance_calibration_factor_C = 6a8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 15f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2080
+iq_imbalance_calibration_factor_C = 5df
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2018
+iq_imbalance_calibration_factor_C = 28a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 7e03
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f3d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fee
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2013
+iq_imbalance_calibration_factor_C = 7d8f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 7d91
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 196
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2033
+iq_imbalance_calibration_factor_C = 3d7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 20cc
+iq_imbalance_calibration_factor_C = 78b8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 200d
+iq_imbalance_calibration_factor_C = 7e56
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 18
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 20ed
+iq_imbalance_calibration_factor_C = 7828
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 5c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2109
+iq_imbalance_calibration_factor_C = 7616
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fe0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2111
+iq_imbalance_calibration_factor_C = 76a8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 1d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 2c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 200c
+iq_imbalance_calibration_factor_C = 7e1a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 75
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2127
+iq_imbalance_calibration_factor_C = 7665
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 200d
+iq_imbalance_calibration_factor_C = 7dbc
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 205f
+iq_imbalance_calibration_factor_C = 7afe
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2054
+iq_imbalance_calibration_factor_C = 7b6d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 7e59
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 7e30
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2053
+iq_imbalance_calibration_factor_C = 7ae3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 201d
+iq_imbalance_calibration_factor_C = 7d06
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7e7a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 178
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2050
+iq_imbalance_calibration_factor_C = 7aa6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f44
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7ea9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 4a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 20b3
+iq_imbalance_calibration_factor_C = 789a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = bb
+iq_imbalance_calibration_factor_B = 2050
+iq_imbalance_calibration_factor_C = 7b60
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 202a
+iq_imbalance_calibration_factor_C = 7cb5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = e3
+iq_imbalance_calibration_factor_B = 2100
+iq_imbalance_calibration_factor_C = 7877
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2092
+iq_imbalance_calibration_factor_C = 799b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = fe
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = ac
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 76
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f6b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2014
+iq_imbalance_calibration_factor_C = 7d6d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2038
+iq_imbalance_calibration_factor_C = 7b56
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 112
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7ea9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2036
+iq_imbalance_calibration_factor_C = 7c28
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 7e0c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2075
+iq_imbalance_calibration_factor_C = 670
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = cc
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 206
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2022
+iq_imbalance_calibration_factor_C = 3a0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 25
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 205f
+iq_imbalance_calibration_factor_C = 7ae6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 204f
+iq_imbalance_calibration_factor_C = 7b98
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 201b
+iq_imbalance_calibration_factor_C = 31a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2050
+iq_imbalance_calibration_factor_C = 7ae9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 201c
+iq_imbalance_calibration_factor_C = 7d20
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 2033
+iq_imbalance_calibration_factor_C = 7b5f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f3
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7eeb
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f88
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = c7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2050
+iq_imbalance_calibration_factor_C = 7a33
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2159
+iq_imbalance_calibration_factor_C = 7577
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 178
+iq_imbalance_calibration_factor_B = 2047
+iq_imbalance_calibration_factor_C = 6f7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2047
+iq_imbalance_calibration_factor_C = 7b32
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7f03
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2014
+iq_imbalance_calibration_factor_C = 7d28
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2011
+iq_imbalance_calibration_factor_C = 7dc8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 202f
+iq_imbalance_calibration_factor_C = 7cd0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 201b
+iq_imbalance_calibration_factor_C = 2e9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = df
+iq_imbalance_calibration_factor_B = 23a5
+iq_imbalance_calibration_factor_C = 7005
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2018
+iq_imbalance_calibration_factor_C = 250
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = df
+iq_imbalance_calibration_factor_B = 23d0
+iq_imbalance_calibration_factor_C = 6f04
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 114
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fd6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2026
+iq_imbalance_calibration_factor_C = 316
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 113
+iq_imbalance_calibration_factor_B = 2029
+iq_imbalance_calibration_factor_C = 7c96
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 11d
+iq_imbalance_calibration_factor_B = 204a
+iq_imbalance_calibration_factor_C = 409
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 201e
+iq_imbalance_calibration_factor_C = 7ccb
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 110
+iq_imbalance_calibration_factor_B = 202d
+iq_imbalance_calibration_factor_C = 7bfa
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2041
+iq_imbalance_calibration_factor_C = 40f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f7d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7fa9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ec6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 111
+iq_imbalance_calibration_factor_B = 2013
+iq_imbalance_calibration_factor_C = 7d91
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2040
+iq_imbalance_calibration_factor_C = 360
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fc5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 113
+iq_imbalance_calibration_factor_B = 2033
+iq_imbalance_calibration_factor_C = 38f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 10f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7fb0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f38
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 204e
+iq_imbalance_calibration_factor_C = 432
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 111
+iq_imbalance_calibration_factor_B = 2011
+iq_imbalance_calibration_factor_C = 7dd9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ee9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = c3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 6d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 87
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = a8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 49
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 18
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f8
+iq_imbalance_calibration_factor_B = 2068
+iq_imbalance_calibration_factor_C = 7b4c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fa0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ee
+iq_imbalance_calibration_factor_B = 208b
+iq_imbalance_calibration_factor_C = 78c9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f3
+iq_imbalance_calibration_factor_B = 207d
+iq_imbalance_calibration_factor_C = 7a7b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f2
+iq_imbalance_calibration_factor_B = 207d
+iq_imbalance_calibration_factor_C = 7aaf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f2
+iq_imbalance_calibration_factor_B = 207c
+iq_imbalance_calibration_factor_C = 7acc
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f1
+iq_imbalance_calibration_factor_B = 206e
+iq_imbalance_calibration_factor_C = 7aab
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f1
+iq_imbalance_calibration_factor_B = 206c
+iq_imbalance_calibration_factor_C = 79c7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f1
+iq_imbalance_calibration_factor_B = 2079
+iq_imbalance_calibration_factor_C = 7a9b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7fb3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f3
+iq_imbalance_calibration_factor_B = 2071
+iq_imbalance_calibration_factor_C = 7a64
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fde
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 200b
+iq_imbalance_calibration_factor_C = 7e30
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 118
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7ec1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 222
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7e9e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fde
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fc3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fda
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 56
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 16
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 7dc1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2012
+iq_imbalance_calibration_factor_C = 7ddb
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 7e5f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 200c
+iq_imbalance_calibration_factor_C = 7e5c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 200a
+iq_imbalance_calibration_factor_C = 7dea
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2020
+iq_imbalance_calibration_factor_C = 7c9c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 7dd0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 203a
+iq_imbalance_calibration_factor_C = 7be5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = b0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2021
+iq_imbalance_calibration_factor_C = 7c44
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2012
+iq_imbalance_calibration_factor_C = 266
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 7de9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f6
+iq_imbalance_calibration_factor_B = 201a
+iq_imbalance_calibration_factor_C = 2cb
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2050
+iq_imbalance_calibration_factor_C = 56a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2019
+iq_imbalance_calibration_factor_C = 7d76
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 204a
+iq_imbalance_calibration_factor_C = 57a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2017
+iq_imbalance_calibration_factor_C = 7d2d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2026
+iq_imbalance_calibration_factor_C = 20b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2019
+iq_imbalance_calibration_factor_C = 1f5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f5
+iq_imbalance_calibration_factor_B = 201e
+iq_imbalance_calibration_factor_C = 36d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 20a8
+iq_imbalance_calibration_factor_C = 799a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7fc1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ee
+iq_imbalance_calibration_factor_B = 203d
+iq_imbalance_calibration_factor_C = 491
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ea7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 7e78
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = ee
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ef
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fa6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f8
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = c9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = b5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 2240
+iq_imbalance_calibration_factor_C = 548
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 110
+iq_imbalance_calibration_factor_B = 2027
+iq_imbalance_calibration_factor_C = 7c67
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2020
+iq_imbalance_calibration_factor_C = 7d4d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 15b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2018
+iq_imbalance_calibration_factor_C = 260
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = ce
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 24d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 1c7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 20a5
+iq_imbalance_calibration_factor_C = 77f2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ec6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7f32
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2036
+iq_imbalance_calibration_factor_C = 7bcb
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 208d
+iq_imbalance_calibration_factor_C = 791e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2035
+iq_imbalance_calibration_factor_C = 7b73
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 203e
+iq_imbalance_calibration_factor_C = 7b41
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f8
+iq_imbalance_calibration_factor_B = 21de
+iq_imbalance_calibration_factor_C = 7500
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f6a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2020
+iq_imbalance_calibration_factor_C = 7cc9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2011
+iq_imbalance_calibration_factor_C = 7ed9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7e93
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 112
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 62
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 37
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 107
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 11
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 11c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7edd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 200a
+iq_imbalance_calibration_factor_C = 1bb
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 200c
+iq_imbalance_calibration_factor_C = 1ca
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 200a
+iq_imbalance_calibration_factor_C = 17c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 188
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 15
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2013
+iq_imbalance_calibration_factor_C = 7dea
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2012
+iq_imbalance_calibration_factor_C = 7d71
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 7d64
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 7e24
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 7d93
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7da5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7ec7
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2022
+iq_imbalance_calibration_factor_C = 7c82
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2012
+iq_imbalance_calibration_factor_C = 7dfd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 200a
+iq_imbalance_calibration_factor_C = 7e10
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 209a
+iq_imbalance_calibration_factor_C = 67b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 202c
+iq_imbalance_calibration_factor_C = 3d6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 201b
+iq_imbalance_calibration_factor_C = 7ce3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ed
+iq_imbalance_calibration_factor_B = 2081
+iq_imbalance_calibration_factor_C = 53a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 200c
+iq_imbalance_calibration_factor_C = 7e57
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ef
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 65
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = eb
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fc9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10a
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 30
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f6
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 8c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10e
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 1b8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f8
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 7e12
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f53
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10e
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7e94
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 4a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7eb9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 110
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7eb9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 113
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7eff
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ef
+iq_imbalance_calibration_factor_B = 2020
+iq_imbalance_calibration_factor_C = 7c99
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 17f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 20a8
+iq_imbalance_calibration_factor_C = 6a2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10b
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 136
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ea9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2013
+iq_imbalance_calibration_factor_C = 1ec
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 7e80
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f1
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f1e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 207c
+iq_imbalance_calibration_factor_C = 71c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 67
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10e
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 20a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 45
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fa8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 108
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f0
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7db4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 18c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2036
+iq_imbalance_calibration_factor_C = 428
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 110
+iq_imbalance_calibration_factor_B = 2011
+iq_imbalance_calibration_factor_C = 230
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f8
+iq_imbalance_calibration_factor_B = 2009
+iq_imbalance_calibration_factor_C = 7df6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 2012
+iq_imbalance_calibration_factor_C = 20e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7f58
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 111
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 1c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 114
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 7dd8
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2014
+iq_imbalance_calibration_factor_C = 2bb
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f84
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 190
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 114
+iq_imbalance_calibration_factor_B = 200d
+iq_imbalance_calibration_factor_C = 7dff
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 67
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fd
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 12f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2025
+iq_imbalance_calibration_factor_C = 317
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 53
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 151
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 233
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 200c
+iq_imbalance_calibration_factor_C = 7dd0
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ea
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = e9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fcd
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 109
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = b3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 112
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 7e58
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fec
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 139
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 35
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f8
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = df
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 12e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fe2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7d79
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2021
+iq_imbalance_calibration_factor_C = 33f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2037
+iq_imbalance_calibration_factor_C = 7cab
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 12b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7eda
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = ce
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f2
+iq_imbalance_calibration_factor_B = 2013
+iq_imbalance_calibration_factor_C = 7d91
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 7f1b
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f7
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fbf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 100
+iq_imbalance_calibration_factor_B = 2039
+iq_imbalance_calibration_factor_C = 7b66
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 2014
+iq_imbalance_calibration_factor_C = 1d5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f8
+iq_imbalance_calibration_factor_B = 2089
+iq_imbalance_calibration_factor_C = 78de
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 1a6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2066
+iq_imbalance_calibration_factor_C = 79fb
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 201f
+iq_imbalance_calibration_factor_C = 7ccf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2045
+iq_imbalance_calibration_factor_C = 4fe
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 7e5f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fa
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 125
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2015
+iq_imbalance_calibration_factor_C = 7de6
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 200f
+iq_imbalance_calibration_factor_C = 7e05
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = ff
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f8e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7db9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f8
+iq_imbalance_calibration_factor_B = 2007
+iq_imbalance_calibration_factor_C = 1b9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = dc
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 33
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7ed4
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 17e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 2005
+iq_imbalance_calibration_factor_C = 7ee2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f6
+iq_imbalance_calibration_factor_B = 200c
+iq_imbalance_calibration_factor_C = 7e2e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f4
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 7dac
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = a5
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2008
+iq_imbalance_calibration_factor_C = 1a1
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 8f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 8e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = ee
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f4
+iq_imbalance_calibration_factor_B = 20b4
+iq_imbalance_calibration_factor_C = 79b2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 201e
+iq_imbalance_calibration_factor_C = 7cda
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fc
+iq_imbalance_calibration_factor_B = 2011
+iq_imbalance_calibration_factor_C = 225
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f6
+iq_imbalance_calibration_factor_B = 203f
+iq_imbalance_calibration_factor_C = 7b2f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 103
+iq_imbalance_calibration_factor_B = 202b
+iq_imbalance_calibration_factor_C = 7bec
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fe
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f97
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f64
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 117
+iq_imbalance_calibration_factor_B = 201a
+iq_imbalance_calibration_factor_C = 7d5c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f7
+iq_imbalance_calibration_factor_B = 2020
+iq_imbalance_calibration_factor_C = 320
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 201d
+iq_imbalance_calibration_factor_C = 7d9a
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f4
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 113
+iq_imbalance_calibration_factor_B = 200e
+iq_imbalance_calibration_factor_C = 7ddf
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 108
+iq_imbalance_calibration_factor_B = 200d
+iq_imbalance_calibration_factor_C = 293
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f6
+iq_imbalance_calibration_factor_B = 202f
+iq_imbalance_calibration_factor_C = 7d02
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 112
+iq_imbalance_calibration_factor_B = 2013
+iq_imbalance_calibration_factor_C = 7de9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2003
+iq_imbalance_calibration_factor_C = 7f55
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2002
+iq_imbalance_calibration_factor_C = 101
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f7
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 61
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 110
+iq_imbalance_calibration_factor_B = 2006
+iq_imbalance_calibration_factor_C = 1ae
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = fb
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 88
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2010
+iq_imbalance_calibration_factor_C = 1f3
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10f
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 4f
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 106
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = db
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f8
+iq_imbalance_calibration_factor_B = 2017
+iq_imbalance_calibration_factor_C = 299
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2019
+iq_imbalance_calibration_factor_C = 7d54
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10e
+iq_imbalance_calibration_factor_B = 2011
+iq_imbalance_calibration_factor_C = 2da
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10c
+iq_imbalance_calibration_factor_B = 2038
+iq_imbalance_calibration_factor_C = 3da
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = f9
+iq_imbalance_calibration_factor_B = 2004
+iq_imbalance_calibration_factor_C = 7ebb
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7fd2
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 102
+iq_imbalance_calibration_factor_B = 200a
+iq_imbalance_calibration_factor_C = 7e30
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 11d
+iq_imbalance_calibration_factor_B = 201c
+iq_imbalance_calibration_factor_C = 2d9
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 105
+iq_imbalance_calibration_factor_B = 201d
+iq_imbalance_calibration_factor_C = 7d9c
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2015
+iq_imbalance_calibration_factor_C = 7d5e
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10d
+iq_imbalance_calibration_factor_B = 2001
+iq_imbalance_calibration_factor_C = 7f76
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 10e
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 2d
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 104
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 7f97
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 112
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 49
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 101
+iq_imbalance_calibration_factor_B = 2000
+iq_imbalance_calibration_factor_C = 75
+#IQ imbalance calibration factors
+iq_imbalance_calibration_factor_A = 114
+iq_imbalance_calibration_factor_B = 200d
+iq_imbalance_calibration_factor_C = 1ed

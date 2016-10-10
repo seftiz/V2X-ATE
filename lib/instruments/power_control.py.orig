@@ -1,0 +1,106 @@
+"""
+@file packet_sniffer.py
+@brief Packet Sniffers 
+
+controler
+@author    	Shai Shochat
+@version	1.0
+@date		18/01/2013
+"""
+from uuts import common
+from uuts import interface
+import os
+import time
+import logging
+import telnetlib
+import socket
+
+
+log = logging.getLogger(__name__)
+
+
+class PowerControl(object):
+	"""
+	##################  TBD ##################
+	@class PowerControl
+	@brief PowerControl Implementation for ATE
+	@author Shai Shochat
+	@version 0.1
+	@date	10/02/2013
+	"""
+	
+	def __init__(self, type = 'NPS'):
+		pass
+	
+	def __del__(self):
+		pass
+
+	
+class NetworkPowerSwitch(object):
+    """
+    @class NetworkPowerControl
+    @brief Network Power Switch v3.00 
+    @author Shai Shochat
+    @version 0.1
+    @date	10/02/2013
+    """
+
+    def __init__(self, ip , user = "", pwd = "", prompt = "NPS>"):
+        self.ip = ip
+        self._if = None
+        self.user = user
+        self.pwd = pwd
+        self.prompt = prompt
+        self._initialize = False
+		
+		
+    def __del__(self):
+        self._if = None
+	
+
+    def initialize(self):
+        """ initialize sniffer computer, load need drivers """
+        if self._initialize:
+            return 0
+	
+    def _connect_and_set(self, cmd, connector):
+
+
+        self._if = interface.V2xTelnet()
+        self._if.prompt = self.prompt
+
+        rc = self._if.connect( self.ip, 23 , common.DEFAULT_TIMEOUT, retries = 3 )
+        # self._if.read_until_prompt()
+        log.info("Setting plug %d to mode %s", str(connector) , cmd )
+        self._if.send_command(  "/%s %s" % ( cmd, str(connector) )  , True )
+        time.sleep(0.1)
+        self._if.send_command( "/x" ,  False )
+        self._if.close()
+        self._if = None
+        log.info('Disconnected from power switch %s',  self.ip)
+
+        return 0
+
+    def power_up(self, connector):
+        """ Set power up on connector
+        @param[in] Connector Idx as formated by device
+        """
+        return self._connect_and_set( "On", connector )
+
+    def power_down(self, connector):
+        """ Set power down on connector
+        @param[in] Connector Idx as formated by device
+        """
+        return self._connect_and_set( "Off", connector )
+
+    def reboot(self, connector):
+        return self._connect_and_set( "boot", connector )
+
+
+
+powerSwitchTypes = {'nps': NetworkPowerSwitch }
+
+def powerSwitch(type, ip , user = "", pwd = "", prompt = ""):
+    return powerSwitchTypes[type](ip, user, pwd, prompt)
+
+
