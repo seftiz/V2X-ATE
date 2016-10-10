@@ -1,0 +1,11 @@
+TestName,TestActive,BoardNumber,BoardType,IP,RfInterface,Temperature,Rate,Frequency,TxPower,PacketLength,PacketInterval,Bandwidth,ChannelModels,RfFrontEnd,Calibration,ChamberTest,PdfReport
+tc_rx_iq_imbalance,FALSE,21,5,10.10.2.229,0,25,3,5860,10,1000,32,10,0,FALSE,TRUE,FALSE,FALSE
+tc_dcoc,FALSE,,,,1,,4.5,5870,20,,,,,,,,
+tc_sample_gain,FALSE,,,,,,6,5880,23,,,,,,,,
+tc_tx_power,FALSE,,,,,,9,5890,,,,,,,,,
+tc_tx_path,FALSE,,,,,,12,5900,,,,,,,,,
+tc_rx_sensitivity,FALSE,,,,,,18,5910,,,,,,,,,
+tc_rx_lna_vga_status,FALSE,,,,,,24,5920,,,,,,,,,
+tc_sdk_snmp,FALSE,,,,,,27,,,,,,,,,,
+tc_read_system_settings,FALSE,,,,,,54,,,,,,,,,,
+analyze_tests_results,FALSE,,,,,,,,,,,,,,,,
