@@ -238,6 +238,11 @@ def parse_params():
     args = parser.parse_args()
     return args
 
+def v2x_api_test(suite, cpu_type = 'arm'):
+
+    test_param = dict( uut_id1 = (0,0),uut_id2 = (1,0),target_cpu = cpu_type)
+    from tests.sdk4_x import v2x_api_test
+    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
 
 if __name__ == "__main__":
     
@@ -279,13 +284,15 @@ if __name__ == "__main__":
         #eth_fnc_tests( suite, 'arm' )
 
     def sc_suite( suite ):
-        v2x_api_tests( suite, 'arm', total_frames )
+    #    v2x_api_tests( suite, 'arm', total_frames )
+        v2x_api_test(suite)
         #nav_api_tests( suite, 'arm', sampling_time_sec)
-        #can_api_tests( suite, True, 'arm' )
+  #      can_api_tests( suite, True, 'arm' )
         #eth_fnc_tests( suite, 'arm' )
 
     def mc_suite( suite ):
-        v2x_api_tests( suite, 'arc1', total_frames )
+        v2x_api_test(suite)
+   #     v2x_api_tests( suite, 'arc1', total_frames )
         #nav_api_tests( suite, 'arm', sampling_time_sec )
         #nav_api_tests( suite, 'arc1', sampling_time_sec )
         #nav_api_tests( suite, 'arc2', sampling_time_sec )
@@ -381,7 +388,7 @@ if __name__ == "__main__":
     if args.sectonm_automation:
         for uut in globals.setup.units:
             globals.setup.instruments.power_control[ uut.nps.id ].reboot( uut.nps.port )
-    time.sleep(60)
+    time.sleep(1)
     if ('sanity' in args.type):
         print "Starting Sanity scenario"
 

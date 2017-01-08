@@ -98,16 +98,18 @@ class linkApi(object):
         cmd += "-if_idx %d -frame_type %s -protocol_id 0x%x" % ( (if_idx+1), frame_type, proto_id)
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
-        if 'ERROR' in data:
-            raise Exception( data )
+        return data
+        #if 'ERROR' in data:
+        #    raise Exception( data )
 
 
     def socket_delete(self):
         cmd = "%s socket delete" % self._name
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
-        if 'ERROR' in data:
-            raise Exception( data )
+        return data
+        #if 'ERROR' in data:
+         #   raise Exception( data )
 
 
     def transmit(self, payload_len = None, tx_data = None, dest_addr = None, frames = 1, rate_hz = 1, user_priority = None, data_rate = None, power_dbm8 = None):
@@ -190,6 +192,128 @@ class linkApi(object):
         """ Set already active session to a new connection """
         cmd = "{} socket set -addr {}".format( self._name, address )
         self._if.send_command(cmd)
+
+
+    # chani added : 
+
+    def socket_create_api_test(self, if_idx, frame_type, proto_id):
+        cmd = "%s api_test socket_create " % self._name
+        cmd += "-if_idx %d -frame_type %s -protocol_id 0x%x" % ( (if_idx+1), frame_type, proto_id)
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data
+
+    def default_service_get(self):
+        
+        cmd = "%s api_test service_get" % self._name        
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data         
+  
+    def service_delete_api_test(self ) :
+        cmd = "%s service delete" % self._name
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data 
+
+    def dot4_channel_start(self, request, wait ):
+        cmd = "%s api_test dot4_channel_start" % self._name
+        cmd += (" -if_index %s" % request[0]) #if_index
+        cmd += (" -op_class %s" % request[1]) #op_class
+        cmd += (" -channel_num %s" % request[2]) #channel_num
+        cmd += (" -time_slot %s" % request[3]) #time_slot
+        cmd += (" -immediate_access %s" % request[4]) #immediate_access
+        cmd += (" -wait_type %s" % wait[0])
+        cmd += (" -wait_usec %s" % wait[1])
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data       
+
+    def dot4_channel_end(self, request, wait ):
+        cmd = "%s api_test dot4_channel_end" % self._name
+        cmd += (" -if_index %s" % request[0]) #if_index
+        cmd += (" -op_class %s" % request[1]) #op_class
+        cmd += (" -channel_num %s" % request[2]) #channel_num
+        cmd += (" -wait_type %s" % wait[0])
+        cmd += (" -wait_usec %s" % wait[1])
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data       
+
+    def dot4_channel_end_receive(self, indication, wait):
+        cmd = "%s api_test dot4_channel_end_receive" % self._name
+        cmd += (" -if_index %s"  % indication[0]) #if_index
+        cmd += (" -op_class %s"  % indication[1]) #op_class
+        cmd += (" -channel_num %s"  % indication[2]) #channel_num
+        cmd += (" -reason %s"  % indication[3]) #reason
+        cmd += (" -wait_type %s" % wait[0])
+        cmd += (" -wait_usec %s" % wait[1])
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data       
+
+    def netif_profile_set(self,  netif_index, profile ):
+        cmd = "%s api_test netif_profile set " % self._name        
+        cmd += (" -netif_index %s"  % netif_index)
+        cmd += (" -if_index %s"  % profile[0]) #if_index
+        cmd += (" -op_class %s"  % profile[1]) #op_class
+        cmd += (" -channel_num %s"  % profile[2]) #channel_num
+        cmd += (" -datarate %s"  % profile[3]) #datarate
+        cmd += (" -power_dbm8 %s"  % profile[4]) #power_dbm8
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        if 'ERROR' in data:
+            raise Exception( data )
+
+    def send(self ,params ,wait ):
+        cmd = "%s api_test send" % self._name        
+        cmd += (" -source_address %s"  % params[0]) #source_address
+        cmd += (" -dest_address %s"  % params[1]) #dest_address
+        cmd += (" -uset_priority %s"  % params[2]) #uset_priority
+        cmd += (" -op_class %s"  % params[3]) #op_class
+        cmd += (" -channel_num %s"  % params[4]) #channel_num
+        cmd += (" -datarate %s"  % params[5]) #datarate
+        cmd += (" -power_dbm8 %s"  % params[6]) #power_dbm8
+        cmd += (" -wait_type %s" % wait[0])
+        cmd += (" -wait_usec %s" % wait[1])
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data
+    
+    def receive(self, data_size, wait ):
+        cmd = "%s api_test receive " % self._name        
+        cmd += (" -data_size %s"  % data_size)        
+        cmd += (" -wait_type %s" % wait[0])
+        cmd += (" -wait_usec %s" % wait[1])
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data       
+    
+    def sample_subscriber_create(self, config ):
+        cmd = "%s api_test sample_subscriber_create " % self._name
+        cmd += (" -if_index %s"  % config[0] ) #if_index
+        cmd += (" -type %s"  % config[1]) #type
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data       
+
+    def sample_subscriber_delete(self, subscriber ):
+        cmd = "%s api_test sample_subscriber_delete " % self._name
+        cmd += (" -pointer %s"  % subscriber)
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data        
+
+    def sample_int32_receive(self, subscriber, value_ptr, wait):
+        cmd = "%s api_test sample_int32_receive " % self._name
+        cmd += (" -subscriber %s"  % subscriber)
+        cmd += (" -value_ptr %s"  % value_ptr)
+        cmd += (" -wait %s"  % wait)
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data
+        
+"""cheni added - end """
 
 class canApi(linkApi):
 
