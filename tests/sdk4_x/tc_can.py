@@ -193,7 +193,7 @@ class TC_CAN_API(common.V2X_SDKBaseTest):
         ret = cli.can.transmit(can_id = can_frame.can_id_and_flags , can_data = data_str, data_size = can_frame.dlc)
 
         if "ERROR : can_send:" in ret:
-            log.debug("TC_CAN_API: Can tx frame received error")
+            log.debug("TC_CAM_API: Can tx frame received error")
             sim_rx_frame = globals.canBusFrame( 0, 0, [] )
 
         else:

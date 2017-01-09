@@ -88,7 +88,7 @@
 					"cli_active"	: 0,
 					"external_host"	: "192.168.120.5",
                     "ip"            : "192.168.120.220",
-					"mac_addr"		: "02:0b:6b:ef:2f:12",
+					"mac_addr"		: "00:0B:6B:EE:2F:11",
                     "pc"            : { "device": 1, "port" : 3 },
                     "terminal"      : { "device": "NONE", "id" : "10.10.1.52", "port" : 10003 },
 					"can_interfaces": [
@@ -133,7 +133,7 @@
 					"cli_active"	: 0,
 					"external_host"	: "",
                     "ip"            : "192.168.120.221",
-					"mac_addr"		: "02:0b:6b:f0:2f:12",
+					"mac_addr"		: "00:0B:6B:EE:2F:12",
                     "pc"            : { "device": 1, "port" : 4 },
                     "terminal"      : { "device": "NONE", "id" : "10.10.1.52", "port" : 10004 },
 					"can_interfaces": [
