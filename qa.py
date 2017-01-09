@@ -223,6 +223,15 @@ def eth_fnc_tests( suite, cpu_type = 'arm' ):
     suite.addTest(common.ParametrizedTestCase.parametrize(tc_ethernet.TC_ETHERNET_UDP, param = test_param ) )
     suite.addTest(common.ParametrizedTestCase.parametrize(tc_ethernet.TC_ETHERNET_RAW, param = test_param ) )
 
+def wlanMib_api_tests( suite , cpu_type = 'arm' ):
+    from tests.sdk4_x import tc_wlanMib_api
+    
+    test_param = dict( uut_id = (0,0), frames_rate = 500, frames_num = 1000, err_part = 0) 
+    suite.addTest(common.ParametrizedTestCase.parametrize(tc_wlanMib_api.TC_WlanMib_API,param=test_param) )
+   
+    #test_param = dict( uut_id = (0,0), frames_rate = 500, frames_num = 1000, err_part = 0) 
+    #suite.addTest(common.ParametrizedTestCase.parametrize(tc_wlanMib_api.TC_WlanMib_LOAD, param = test_param ))
+
 def parse_params():
 
     parser = argparse.ArgumentParser( description='Automatic QA CLI build process script' )
@@ -279,7 +288,8 @@ if __name__ == "__main__":
         #eth_fnc_tests( suite, 'arm' )
 
     def sc_suite( suite ):
-        v2x_api_tests( suite, 'arm', total_frames )
+        #v2x_api_tests( suite, 'arm', total_frames )
+        wlanMib_api_tests( suite, 'arm')
         #nav_api_tests( suite, 'arm', sampling_time_sec)
         #can_api_tests( suite, True, 'arm' )
         #eth_fnc_tests( suite, 'arm' )
@@ -381,7 +391,7 @@ if __name__ == "__main__":
     if args.sectonm_automation:
         for uut in globals.setup.units:
             globals.setup.instruments.power_control[ uut.nps.id ].reboot( uut.nps.port )
-    time.sleep(60)
+    #time.sleep(60)
     if ('sanity' in args.type):
         print "Starting Sanity scenario"
 
