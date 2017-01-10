@@ -599,7 +599,96 @@ class eccApi(linkApi):
         self.sign = self.Sign( self._if )
         self._name = "ecc"
 
+class wlanMibApi(linkApi):
 
+   
+    def __init__(self, interface):
+        super(wlanMibApi, self).__init__(interface)
+        self._name = "wlanMib"
+    
+    def transport_create(self, type = "remote", server_ip = None):
+        cmd = "remote transport create"
+        cmd += (" -ip_addr 192.168.120.220")
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        if 'ERROR' in data:
+            raise Exception( data )
+
+    def service_create(self, type = "remote", server_ip = None ):     
+        cmd = "mng create"
+        cmd += (" -type %s"  % type)
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        if 'ERROR' in data:
+            raise Exception( data )
+
+                 
+
+    '''def service_delete(self):
+        cmd = "%s service delete" % self._name
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        if 'ERROR' in data:
+            raise Exception( data )
+    '''
+
+    def transmit(self,property,valAndType):
+        #mib service-(common to all)
+        cmd = 'mng mibApi test'
+        #get or set
+        cmd += ("%s" % property)
+        #the specific variables
+        size=len(valAndType)
+                
+        if valAndType[0]=="regular" and size==2:
+            cmd += (" -type%d " % i ) 
+            cmd += ("%s " % valAndType[i] )
+            cmd += ("%s" % valAndType[i+1] )
+            cmd += ("%s" % valAndType[i+2] )
+            cmd += (" -value%d " %i) 
+            data = self._if.send_command(cmd)
+            data = self._if.read_until_prompt()
+            return data
+        index = 0 
+        for i in range(0,size,2):
+            index += 1
+            cmd += (" -type%d " % index) 
+            cmd += ("%s " % valAndType[i])
+            cmd += (" -value%d " % index) 
+            cmd += ("%s" % valAndType[i+1])
+        data = self._if.send_command(cmd)
+        data = self._if.read_until_prompt()
+        
+        return data
+
+    def read_counters(self):
+
+        cnts = dict()
+        cmd = "%s counters print" % self._name
+        data1 = self._if.send_command(cmd)
+        
+        data = self._if.read_until_prompt()
+        if not len(data):
+            return cnts
+
+        data = data.split('\r\n')
+        """
+        TX : module 400, session 0
+        RX : module 400, session 0
+        """
+        cnts['tx'] = list()
+        cnts['rx'] = list()
+
+        for line in data:
+            if line.find('TX') >= 0:
+                cnts['tx'].append( int(line.split(',')[0].split('=')[1].strip()))
+                cnts['tx'].append( int(line.split(',')[1].split('=')[1].strip()))
+
+            if line.find('RX') >= 0:
+                cnts['rx'].append( int(line.split(',')[0].split('=')[1].strip()))
+                cnts['rx'].append( int(line.split(',')[1].split('=')[1].strip()))
+
+        return cnts
    
 
 
@@ -646,13 +735,14 @@ class qaCliApi(object):
         self.can = canApi( self._if)
         self.nav = navApi( self._if )
         self.ecc = eccApi( self._if )
- 
+        self.wlanMib = wlanMibApi( self._if)
+        
     def __del__(self):
         self.link = None
         self.can = None
         self.nav = None
         self.ecc = None
-
+        self.wlanMib = None
 
     def interface(self):
         """ Get interface connection for the V2X CLI

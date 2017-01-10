@@ -15,7 +15,7 @@
     <RootNamespace>ate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments> -v sdk-4.8.1-beta9-mc-non-quick -t mc</CommandLineArguments>
+    <CommandLineArguments> -v sdk-4.8.1-beta9-mc-non-quick -t sc -q</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -95,6 +95,9 @@
     <Compile Include="tests\sdk4_x\tc_secton_mode.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tests\sdk4_x\tc_wlanMib_api.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tests\sdk4_x\__init__.py" />
     <Compile Include="tests\stacks\marben\tc_preformence.py" />
     <Compile Include="tests\__init__.py" />
@@ -153,6 +156,7 @@
     <Folder Include="uuts\craton\snmp\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="configuration\cfg_169.254.128.138.json" />
     <Content Include="configuration\cfg_10.10.1.108.json" />
     <Content Include="configuration\cfg_10.10.1.112.json" />
     <Content Include="configuration\cfg_10.10.1.115.json" />

@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Windows Desktop
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Tests", "Tests.pyproj", "{3B5F67FA-FC72-4E11-8485-C5FCF40E87E9}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Embedded", "embedded\sdk\sdk-4.x\emb\emb.vcxproj", "{16AD765A-170A-4009-B61E-4CE5BC2E57C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,16 +21,6 @@ Global
 		{3B5F67FA-FC72-4E11-8485-C5FCF40E87E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B5F67FA-FC72-4E11-8485-C5FCF40E87E9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3B5F67FA-FC72-4E11-8485-C5FCF40E87E9}.Release|Win32.ActiveCfg = Release|Any CPU
-		{16AD765A-170A-4009-B61E-4CE5BC2E57C6}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{16AD765A-170A-4009-B61E-4CE5BC2E57C6}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{16AD765A-170A-4009-B61E-4CE5BC2E57C6}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{16AD765A-170A-4009-B61E-4CE5BC2E57C6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{16AD765A-170A-4009-B61E-4CE5BC2E57C6}.Debug|Win32.Build.0 = Debug|Win32
-		{16AD765A-170A-4009-B61E-4CE5BC2E57C6}.Release|Any CPU.ActiveCfg = Release|Win32
-		{16AD765A-170A-4009-B61E-4CE5BC2E57C6}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{16AD765A-170A-4009-B61E-4CE5BC2E57C6}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{16AD765A-170A-4009-B61E-4CE5BC2E57C6}.Release|Win32.ActiveCfg = Release|Win32
-		{16AD765A-170A-4009-B61E-4CE5BC2E57C6}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
