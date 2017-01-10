@@ -48,6 +48,8 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self.Failures = []
         self.uut_v2x_if = []
         self._uut = {}
+        self.error_count = 0
+        self.pass_count = 0
         super(V2X_API_TEST, self).__init__(methodName, param)
 
     def get_test_parameters( self ):
@@ -127,12 +129,12 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         # Open new v2x-cli
        
         self.v2x_cli = self.uut1.create_qa_cli("v2x_cli", target_cpu = self.target_cpu )
-        self.v2x_cli.link.service_create("remote")
-        self.v2x_cli.link.socket_create(0, "data", 1234 )
+        self._rc = self.v2x_cli.link.service_create("remote")
+        self._rc = self.v2x_cli.link.socket_create(0, "data", 1234 )
 
         self.v2x_cli2 = self.uut2.create_qa_cli("v2x_cli", target_cpu = self.target_cpu )
-        self.v2x_cli2.link.service_create("hw")
-        self.v2x_cli2.link.socket_create(0, "data", 1234 )
+        self._rc = self.v2x_cli2.link.service_create("hw")
+        self._rc = self.v2x_cli2.link.socket_create(0, "data", 1234 )
 
 
     def instruments_initilization(self):
@@ -168,6 +170,10 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         pass
 
     def print_results(self):
+        self.error_count
+        self.pass_count
+        self.add_limit( "number of saccessed functions"  , 0 ,self.pass_count , 0 , 'GE')
+        self.add_limit( "number of failed functions"  , 0 ,self.error_count , 0 , 'LE')
         pass 
  
     def _generate_basic_scenario(self):
@@ -189,15 +195,15 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self._rc = self.v2x_cli.link.dot4_channel_end_receive(self._indication,self._wait)
         self.info_linit("dot4_channel_end_receive",self._rc)
         
-        self._send_params = self._prms.send_param_random()
-        self._wait = self._prms.wait_random()
-        self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
-        self.info_linit("send",self._rc)
+        #self._receive_params = self._prms.receive_param_random()
+        #self._wait = self._prms.wait_random()
+        #self._rc = self.v2x_cli2.link.receive(frames = 1, timeout = 0x5000, print_frame = 1)
+        #self.info_linit("receive",self._rc)
 
-        self._receive_params = self._prms.receive_param_random()
-        self._wait = self._prms.wait_random()
-        self._rc = self.v2x_cli2.link.receive(self._receive_params,self._wait)
-        self.info_linit("receive",self._rc)
+        #self._send_params = self._prms.send_param_random(dest_address = "192.168.120.221")
+        #self._wait = self._prms.wait_random()
+        #self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
+        #self.info_linit("send",self._rc)
 
         self._rc = self.v2x_cli.link.socket_delete()
         self.info_linit("socket_delete",self._rc)
@@ -207,17 +213,30 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self.info_linit("socket_create",self._rc)
        
     def _send_receive_scenario(self) :
-        self._prms = V2X_API_TEST_v_generator()
+        self._prms_ran = V2X_API_TEST_v_generator()
+        self._prms = V2X_API_TEST_Extreme_cases_generator()
 
-        self._send_params = self._prms.send_param_random()
-        self._wait = self._prms.wait_random()
+        self._receive_params = self._prms_ran.receive_param_random()
+        self._wait = self._prms_ran.wait_random()        
+        self._rc_receive = self.v2x_cli2.link.receive(frames = 1, print_frame = 1, timeout = 0x5000)              
+        #self.info_linit("receive",self._rc_receive)
+        if 'Note : System will wait for' in self._rc_receive:
+            self.add_limit( "receive" + " PASS" , 0 , 0, None , 'EQ')         
+            self.pass_count += 1
+        elif 'ERROR' in self._rc_receive:
+            self.err1 = rc.split("ERROR")
+            self.err2 = self.err1[1]
+            self.err3 = self.err2.split("\r")
+            self.add_limit( "receive" + " ERROR" + self.err3[0]  , 0 , 1, None , 'EQ') 
+            self.error_count += 1            
+        else :
+            self.add_limit( "receive" + " unknown state"   , 0 , 1, None , 'EQ')
+            self.error_count += 1
+
+        self._send_params = self._prms.send_param(dest_address = "192.168.120.221")
+        self._wait = self._prms_ran.wait_random()
         self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
         self.info_linit("send",self._rc)
-
-        self._receive_params = self._prms.receive_param_random()
-        self._wait = self._prms.wait_random()
-        self._rc = self.v2x_cli2.link.receive(self._receive_params,self._wait)
-        self.info_linit("receive",self._rc)
              
     def _send_receive_invalid_scenario(self) :
         self._prms = V2X_API_TEST_inv_generator()
@@ -314,21 +333,42 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self._wait = self._prms.wait()
         self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
         self.info_linit("send",self._rc)
-       
+
+        self._send_params = self._prms.send_param()
+        self._wait = self._prms.wait(wait = 0)
+        self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
+        self.info_linit("send",self._rc)
+
+        self._send_params = self._prms.send_param()
+        self._wait = self._prms.wait(wait = 1)
+        self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
+        self.info_linit("send",self._rc)
+
+        self._send_params = self._prms.send_param()
+        self._wait = self._prms.wait(wait_usec = 0)
+        self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
+        self.info_linit("send",self._rc)
+
+        self._send_params = self._prms.send_param()
+        self._wait = self._prms.wait(wait_usec = 0xffffffff)
+        self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
+        self.info_linit("send",self._rc)
+
     def _socket_scenario(self):
         self._prms = V2X_API_TEST_v_generator()
-        for x in (0,20) :
-            self._config = self._prms.socket_config();
-            self._rc = self.v2x_cli.link.socket_create_api_test(self._config[0],self._config[1],self._config[2])
+        self._config = self._prms.socket_config();
+        for x in range(0,20) :
+            self._config[2] += 1
+            self._rc = self.v2x_cli.link.socket_create(self._config[0],self._config[1],self._config[2])
             self.info_linit("socket_create",self._rc)
             self._rc = self.v2x_cli.link.socket_delete()
             self.info_linit("socket_delete",self._rc)
 
     def _socket_invalid_scenario(self):
         self._prms = V2X_API_TEST_inv_generator()
-        for x in (0,20) :
+        for x in range(0,20) :
             self._config = self._prms.socket_config();
-            self._rc = self.v2x_cli.link.socket_create_api_test(self._config[0],self._config[1],self._config[2])
+            self._rc = self.v2x_cli.link.socket_create(self._config[0],self._config[1],self._config[2])
             self.info_linit("socket_create",self._rc,1)
             self._rc = self.v2x_cli.link.socket_delete()
             self.info_linit("socket_delete",self._rc,1)
@@ -491,6 +531,16 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self._wait = self._prms.wait(wait = 1)
         self._rc = self.v2x_cli.link.dot4_channel_start(self._request,self._wait)
         self.info_linit("dot4_channel_start",self._rc)
+
+        self._request = self._prms.request_start()
+        self._wait = self._prms.wait(wait_usec = 0)
+        self._rc = self.v2x_cli.link.dot4_channel_start(self._request,self._wait)
+        self.info_linit("dot4_channel_start",self._rc)
+        
+        self._request = self._prms.request_start()
+        self._wait = self._prms.wait(wait_usec = 0xffffffff)
+        self._rc = self.v2x_cli.link.dot4_channel_start(self._request,self._wait)
+        self.info_linit("dot4_channel_start",self._rc)
         
         self._request = self._prms.request_end()
         self._wait = self._prms.wait(wait = 0)
@@ -499,6 +549,16 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         
         self._request = self._prms.request_end()
         self._wait = self._prms.wait(wait = 1)
+        self._rc = self.v2x_cli.link.dot4_channel_end(self._request,self._wait)
+        self.info_linit("dot4_channel_end",self._rc)
+
+        self._request = self._prms.request_end()
+        self._wait = self._prms.wait(wait_usec = 0)
+        self._rc = self.v2x_cli.link.dot4_channel_end(self._request,self._wait)
+        self.info_linit("dot4_channel_end",self._rc)
+        
+        self._request = self._prms.request_end()
+        self._wait = self._prms.wait(wait_usec = 0xffffffff)
         self._rc = self.v2x_cli.link.dot4_channel_end(self._request,self._wait)
         self.info_linit("dot4_channel_end",self._rc)
        
@@ -509,6 +569,16 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         
         self._indication = self._prms.indication()
         self._wait = self._prms.wait(wait = 1)
+        self._rc = self.v2x_cli.link.dot4_channel_end_receive(self._indication,self._wait) 
+        self.info_linit("dot4_channel_end_receive",self._rc)
+
+        self._indication = self._prms.indication()
+        self._wait = self._prms.wait(wait_usec = 0)
+        self._rc = self.v2x_cli.link.dot4_channel_end_receive(self._indication,self._wait) 
+        self.info_linit("dot4_channel_end_receive",self._rc)
+        
+        self._indication = self._prms.indication()
+        self._wait = self._prms.wait(wait_usec = 0xffffffff)
         self._rc = self.v2x_cli.link.dot4_channel_end_receive(self._indication,self._wait) 
         self.info_linit("dot4_channel_end_receive",self._rc)
        
@@ -523,26 +593,32 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         if pass_or_fail :
             if 'PASS' in rc:
                 self.add_limit( func_name + " ERROR - the function run with invalid argoment"   , 0 , 1, None , 'EQ') 
+                self.error_count += 1
             elif 'ERROR' in rc:
                 self.err1 = rc.split("ERROR")
                 self.err2 = self.err1[1]
                 self.err3 = self.err2.split("\r")
                 self.add_limit( func_name + " PASS : the error message - " + self.err3[0]  , 0 , 0, None , 'EQ')
+                self.pass_count += 1
             else :
                 self.add_limit( func_name + " unknown state"   , 0 , 1, None , 'EQ')
+                self.error_count += 1
         else :
             if 'ERROR' in rc:
                 self.err1 = rc.split("ERROR")
                 self.err2 = self.err1[1]
                 self.err3 = self.err2.split("\r")
                 self.add_limit( func_name + " ERROR" + self.err3[0]  , 0 , 1, None , 'EQ') 
+                self.error_count += 1
             elif 'PASS' in rc:
                 self.err1 = rc.split("PASS")
                 self.err2 = self.err1[1]
                 self.err3 = self.err2.split("\r")
                 self.add_limit( func_name + " PASS" + self.err3[0] , 0 , 0, None , 'EQ') 
+                self.pass_count += 1
             else :
                 self.add_limit( func_name + " unknown state"   , 0 , 1, None , 'EQ')
+                self.error_count += 1
 
 
 """ GENERATOR : """
@@ -619,13 +695,13 @@ class V2X_API_TEST_v_generator():
             self._datarate = 96 
         if self._datarate_ran == 11 :
             self._datarate = 108   
-        self._power_dbm8 = random.randint(0,0xFFFF)
+        self._power_dbm8 = random.randint(-20,20)
         return [self._if_index,self._op_class,self._channel_num,self._datarate,self._power_dbm8]
 
     def send_param_random(self):
         self._source_address = random.randint(0, 0xFFFFFFFFFFFF)
         self._dest_address = random.randint(0, 0xFFFFFFFFFFFF)
-        self._user_priority = random.randint(0,0xFF)
+        self._user_priority = random.randint(0,7)
         self._op_class = random.randint(1,4)
         self._channel_num = random.randint(0,0xFF)
         self._datarate_ran =  random.randint(0,0xb) 
@@ -653,7 +729,7 @@ class V2X_API_TEST_v_generator():
             self._datarate = 96 
         if self._datarate_ran == 11 :
             self._datarate = 108   
-        self._power_dbm8 = random.randint(0,0xFFFF)
+        self._power_dbm8 = random.randint(-20,20)
         self._expiry_time_ms = random.randint(0,0x7FFF)
         return [self._source_address,self._dest_address,self._user_priority,self._op_class,self._channel_num,self._datarate,self._power_dbm8,self._expiry_time_ms]
 
@@ -748,13 +824,13 @@ class V2X_API_TEST_inv_generator():
             self._datarate = random.randint(73,95)
         if self._datarate_ran == 11 :
             self._datarate = random.randint(97,107)  
-        self._power_dbm8 = random.randint(1,0xFFFF)
+        self._power_dbm8 = random.randint(21,0xFFFF)
         return [_if_index,_op_class,_channel_num,self._datarate,_power_dbm8]
 
     def send_param_random(self):
         self._source_address = random.randint(0, 0xFFFFFFFFFFFF)
         self._dest_address = random.randint(0, 0xFFFFFFFFFFFF)
-        self._user_priority = random.randint(0x100,0xFFF)
+        self._user_priority = random.randint(8,0xFF)
         self._op_class = random.randint(5,0xFF)
         self._channel_num = random.randint(0x100,0xFFF)
         self._datarate_ran =  random.randint(0,0xb) 
@@ -782,7 +858,7 @@ class V2X_API_TEST_inv_generator():
             self._datarate = random.randint(73,95)
         if self._datarate_ran == 11 :
             self._datarate = random.randint(97,107)  
-        self._power_dbm8 = random.randint(0,0xFFFF)
+        self._power_dbm8 = random.randint(21,0xFFFF)
         self._expiry_time_ms = random.randint(0,0x7FFF)
         return [self._source_address,self._dest_address,self._user_priority,self._op_class,self._channel_num,self._datarate,self._power_dbm8,self._expiry_time_ms]
 
@@ -856,7 +932,7 @@ class V2X_API_TEST_Extreme_cases_generator():
         self._wait_usec = wait_usec
         return [self._wait_type,self._wait_usec]
 
-    def send_param(self, source_address = random.randint(0, 0xFFFFFFFFFFFF), dest_address = random.randint(0, 0xFFFFFFFFFFFF), user_priority = random.randint(0,0xFF), op_class = random.randint(1,4), channel_num = random.randint(0,0xFF), datarate_ran = random.randint(0,0xb), power_dbm8 = random.randint(0,0xFFFF), expiry_time_ms = random.randint(0,0x7FFF)):
+    def send_param(self, source_address = random.randint(0, 0xFFFFFFFFFFFF), dest_address = random.randint(0, 0xFFFFFFFFFFFF), user_priority = random.randint(0,7), op_class = random.randint(1,4), channel_num = random.randint(0,0xFF), datarate_ran = random.randint(0,0xb), power_dbm8 = random.randint(-20,20), expiry_time_ms = random.randint(0,0x7FFF)):
         self._source_address = source_address
         self._dest_address = dest_address
         self._user_priority = user_priority

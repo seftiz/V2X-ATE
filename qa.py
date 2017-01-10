@@ -284,7 +284,7 @@ if __name__ == "__main__":
         #eth_fnc_tests( suite, 'arm' )
 
     def sc_suite( suite ):
-    #    v2x_api_tests( suite, 'arm', total_frames )
+        #v2x_api_tests( suite, 'arm', total_frames )
         v2x_api_test(suite)
         #nav_api_tests( suite, 'arm', sampling_time_sec)
   #      can_api_tests( suite, True, 'arm' )
@@ -292,7 +292,7 @@ if __name__ == "__main__":
 
     def mc_suite( suite ):
         v2x_api_test(suite)
-   #     v2x_api_tests( suite, 'arc1', total_frames )
+        #v2x_api_tests( suite, 'arc1', total_frames )
         #nav_api_tests( suite, 'arm', sampling_time_sec )
         #nav_api_tests( suite, 'arc1', sampling_time_sec )
         #nav_api_tests( suite, 'arc2', sampling_time_sec )

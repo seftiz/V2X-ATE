@@ -135,12 +135,13 @@ class linkApi(object):
 
     def receive(self, frames, timeout = None, print_frame = None):
         cmd = "link socket rx -frames %s" % frames
-        cmd += (" -print %d"  % print_frame) if not print_frame is None else ""
-        cmd += (" -timeout_ms %d"  % timeout) if not timeout is None else ""
+        cmd += (" -print %s"  % print_frame) if not print_frame is None else ""
+        cmd += (" -timeout_ms %s"  % timeout) if not timeout is None else ""
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
-        if 'ERROR' in data:
-            raise Exception( data )
+        return data
+        #if 'ERROR' in data:
+        #    raise Exception( data )
 
 
     def reset_counters(self):
@@ -267,8 +268,8 @@ class linkApi(object):
 
     def send(self ,params ,wait ):
         cmd = "%s api_test send" % self._name        
-        cmd += (" -source_address %s"  % params[0]) #source_address
-        cmd += (" -dest_address %s"  % params[1]) #dest_address
+        #cmd += (" -source_address %s"  % params[0]) #source_address
+        cmd += (" -dest_addr %s"  % params[1]) #dest_address
         cmd += (" -uset_priority %s"  % params[2]) #uset_priority
         cmd += (" -op_class %s"  % params[3]) #op_class
         cmd += (" -channel_num %s"  % params[4]) #channel_num
@@ -279,16 +280,17 @@ class linkApi(object):
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
         return data
-    
+    """ 
     def receive(self, data_size, wait ):
-        cmd = "%s api_test receive " % self._name        
+        cmd = "%s api_test receive" % self._name        
         cmd += (" -data_size %s"  % data_size)        
         cmd += (" -wait_type %s" % wait[0])
         cmd += (" -wait_usec %s" % wait[1])
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
         return data       
-    
+    """
+
     def sample_subscriber_create(self, config ):
         cmd = "%s api_test sample_subscriber_create " % self._name
         cmd += (" -if_index %s"  % config[0] ) #if_index
