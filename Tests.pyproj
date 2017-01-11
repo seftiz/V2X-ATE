@@ -98,6 +98,7 @@
     <Compile Include="tests\sdk4_x\tc_wlanMib_api.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tests\sdk4_x\v2x_api_test.py" />
     <Compile Include="tests\sdk4_x\__init__.py" />
     <Compile Include="tests\stacks\marben\tc_preformence.py" />
     <Compile Include="tests\__init__.py" />

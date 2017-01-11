@@ -112,13 +112,13 @@ class TC_WlanMib_API(common.V2X_SDKBaseTest):
                 self._test_extreme_points("Get","exact",valAndType,i)
                 
                 #set test
-                #prop="set"
-                #valAndType=erroneous._generate_basic_scenario_data(prop,"correct",i)
-                #self._test_extreme_points("Set","correct",valAndType,i)
-                #valAndType=erroneous._generate_basic_scenario_data(prop,"incorrect",i)
-                #self._test_extreme_points("Set","incorrect",valAndType,i)
-                #valAndType=erroneous._generate_basic_scenario_data(prop,"exact",i)
-                #self._test_extreme_points("Set","exact",valAndType,i)
+                prop="set"
+                valAndType=erroneous._generate_basic_scenario_data(prop,"correct",i)
+                self._test_extreme_points("Set","correct",valAndType,i)
+                valAndType=erroneous._generate_basic_scenario_data(prop,"incorrect",i)
+                self._test_extreme_points("Set","incorrect",valAndType,i)
+                valAndType=erroneous._generate_basic_scenario_data(prop,"exact",i)
+                self._test_extreme_points("Set","exact",valAndType,i)
         
             if len(self._errors):
                 log.debug("TC_WlanMib_API - Test errors :")
@@ -148,7 +148,7 @@ class TC_WlanMib_API(common.V2X_SDKBaseTest):
             else:
                 self.stats.testIncorrectSuccess += 1
         else:
-             if inspectionType == "incorrect":
+             if inspectionType == "incorrect" and num_of_variables != "three":
                 self.stats.functionFailed.append(func_name[0]+ " " + inspectionType + " num_of_variables " + str(num_of_variables))
              elif inspectionType=="correct":
                 self.stats.testCorrectSuccess += 1      
@@ -180,15 +180,11 @@ class TC_WlanMib_ERRONEOUS(TC_WlanMib_API):
         self.exactInstance = Generate_ExactValues()
         self.correctInstance = Generate_CorrectValues()
         self.inCorrectInstance = Generate_InCorrectValues()
-        self._one_arg_func_dict=dict(enum="mib_configSaveStatus_t",regular=("int","int32"))
+        self._one_arg_func_dict=dict(enum="mib_configSaveStatus_t",regular=("int","int32","uint32"))
         self._two_arg_func_list=dict(fIndex=dict(regular=("int32","int","uint32"),eui48="eui48",enum=("mib_antennaStatus_t","mib_wlanDcocStatus_t",
                                              "mib_wlanPhyOFDM","mib_wlanRfTestMode_t")),
                                      int32=dict(regular=("int32","uint8")))
         self._three_arg_func_dict=dict(fIndex="fIndex",regular="char",size_t="size_t")
-
-    def create_random(self,min,max):
-        value=random.randint(min,max)
-        return value
     
     def _generate_basic_scenario_data(self,property,inspectionType,num):
         valuesAndTypes=list()
@@ -215,10 +211,6 @@ class TC_WlanMib_ERRONEOUS(TC_WlanMib_API):
                valAndType.append(j)             
                func=(getattr(self,funcName,i+" "+j))
                valAndType.append(func(i+" "+j))
-       if property_inspectionType[0] == "get":
-           valAndType.append("uint32")
-           func=getattr(self,funcName,"regular"+" "+"uint32")
-           valAndType.append(func("regular"+" "+"uint32"))
        return valAndType
 
     def get_two_var_functions(self,_property_inspectionType):
@@ -329,8 +321,8 @@ class Generate_CorrectValues():
         
     def __init__(self, methodName = 'runTest', param = None):
         self._findexFlag=False
-        self.regular_var_list = (dict(char=127,uint8=255,int=32767,int32=10,uint32=4294967295,size_t=65535)
-                 ,dict(char=-128,uint8=0,int=0,int32=-2147483648,uint32=0,size_t=0))
+        self.regular_var_list = (dict(char=127,uint8=255,int=32767,int32=100,uint32=100,size_t=65535)
+                 ,dict(char=-128,uint8=0,int=0,int32=0,uint32=0,size_t=0))
     
     def create_random(self,max,min):
         value=random.randint(min,max)
@@ -370,8 +362,8 @@ class Generate_InCorrectValues():
     def __init__(self, methodName = 'runTest', param = None):
         self.flags=[False,False,False]
         self.exactInstance = Generate_ExactValues()
-        self.regular_var_list = (dict(char=127,uint8=255,int=32767,int32=100,uint32=4294967295,size_t=65535)
-                 ,dict(char=-128,uint8=0,int=-32768,int32=0,uint32=0,size_t=0))
+        self.regular_var_list = (dict(char=127,uint8=255,int=32767,int32=2147483646,uint32=4294967295,size_t=65535)
+                 ,dict(char=-128,uint8=0,int=-32555,int32=-2147483647,uint32=0,size_t=0))
     
     def create_random(self,min,max):
         value=random.randint(min,max)
@@ -419,8 +411,8 @@ class Generate_ExactValues():
     @date	12/19/2016
     """
     def __init__(self, methodName = 'runTest', param = None):
-        self.regular_var_list = (dict(char=127,uint8=255,int=32767,int32=100,uint32=4294967295,size_t=65535)
-                 ,dict(char=-128,uint8=0,int=0,int32=-2147483648,uint32=0,size_t=0))
+        self.regular_var_list = (dict(char=127,uint8=255,int=100,int32=100,uint32=100,size_t=65535)
+                 ,dict(char=-128,uint8=0,int=0,int32=0,uint32=0,size_t=0))
    
     def get_min_eui48_type(self):
         return self.regular_var_list[0].get("uint8") * 8
