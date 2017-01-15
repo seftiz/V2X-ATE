@@ -1,11 +1,12 @@
 """
-@file       tc_v2x.py
+@file       v2x_api_test.py
 @brief        
 @author    	Chani Rubinstain
 @version	0.1
 @date		December 2016
 """
 import os, sys, socket
+from test.test_threading_local import target
 
 
 # Get current main file path and add to all searchings
@@ -118,14 +119,6 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         except KeyError as e:
             raise globals.Error("uut index and interface input is missing or corrupted, usage : uut_id=(0,1)")
 
-        self.uut_v2x_if.append(self.uut1.can_interfaces[self.uut_id1[1]])
-        if not self.uut_v2x_if[0].active:
-            raise globals.Error("V2X device {} is not active.".format(self.uut_v2x_if[0].device_id))
-
-        self.uut_v2x_if.append(self.uut2.can_interfaces[self.uut_id2[1]])
-        if not self.uut_v2x_if[1].active:
-            raise globals.Error("V2X device {} is not active.".format(self.uut_v2x_if[1].device_id))
-
         # Open new v2x-cli
        
         self.v2x_cli = self.uut1.create_qa_cli("v2x_cli", target_cpu = self.target_cpu )
@@ -143,17 +136,15 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self.v2x_sim = globals.setup.instruments.v2x_bus
 
         if self.v2x_sim is None:
-            raise globals.Error("v2x bus simulator is not initailize, please check your configuration")
-                           
-        self.v2x_sim.channel_open( self.uut_v2x_if[0].sim_port )
-        self.v2x_sim.channel_open( self.uut_v2x_if[1].sim_port )
-
+            raise globals.Error("v2x bus simulator is not initailize, please check your configuration")                         
+        
     def main(self):
 
         self._generate_basic_scenario()           # run the v2x function with valid data prameters
               
         self._send_receive_scenario()             # run send and receive functions with valid data prameters 
-        self._send_receive_invalid_scenario()     # run send and receive functions with invalid data prameters
+        self._send_random_scenario()              # run send function with random
+        self._send_invalid_scenario()             # run send function with invalid data prameters
         self._send_edge_cases()                   # run send function in edge cases
 
         self._dot4_invalid_scenario()             # run the dot4_channel functions with invalid data parameters
@@ -195,16 +186,6 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self._rc = self.v2x_cli.link.dot4_channel_end_receive(self._indication,self._wait)
         self.info_linit("dot4_channel_end_receive",self._rc)
         
-        #self._receive_params = self._prms.receive_param_random()
-        #self._wait = self._prms.wait_random()
-        #self._rc = self.v2x_cli2.link.receive(frames = 1, timeout = 0x5000, print_frame = 1)
-        #self.info_linit("receive",self._rc)
-
-        #self._send_params = self._prms.send_param_random(dest_address = "192.168.120.221")
-        #self._wait = self._prms.wait_random()
-        #self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
-        #self.info_linit("send",self._rc)
-
         self._rc = self.v2x_cli.link.socket_delete()
         self.info_linit("socket_delete",self._rc)
 
@@ -215,41 +196,38 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
     def _send_receive_scenario(self) :
         self._prms_ran = V2X_API_TEST_v_generator()
         self._prms = V2X_API_TEST_Extreme_cases_generator()
+        thread_list = []
 
         self._receive_params = self._prms_ran.receive_param_random()
         self._wait = self._prms_ran.wait_random()        
-        self._rc_receive = self.v2x_cli2.link.receive(frames = 1, print_frame = 1, timeout = 0x5000)              
-        #self.info_linit("receive",self._rc_receive)
-        if 'Note : System will wait for' in self._rc_receive:
-            self.add_limit( "receive" + " PASS" , 0 , 0, None , 'EQ')         
-            self.pass_count += 1
-        elif 'ERROR' in self._rc_receive:
-            self.err1 = rc.split("ERROR")
-            self.err2 = self.err1[1]
-            self.err3 = self.err2.split("\r")
-            self.add_limit( "receive" + " ERROR" + self.err3[0]  , 0 , 1, None , 'EQ') 
-            self.error_count += 1            
-        else :
-            self.add_limit( "receive" + " unknown state"   , 0 , 1, None , 'EQ')
-            self.error_count += 1
+          
+        self.receive_thread = threading.Thread(target = self.v2x_cli2.link.receive, args = (1,))
+        thread_list.append(self.receive_thread)
+      
+        self.send_thread = threading.Thread(target = self.v2x_cli.link.send)
+        thread_list.append(self.send_thread)
 
-        self._send_params = self._prms.send_param(dest_address = "192.168.120.221")
-        self._wait = self._prms_ran.wait_random()
-        self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
-        self.info_linit("send",self._rc)
-             
-    def _send_receive_invalid_scenario(self) :
+        for thread in thread_list:
+                thread.start()
+
+        for thread in thread_list:
+                ret = thread.join() 
+                
+    def _send_random_scenario(self) :
+        self._prms = V2X_API_TEST_v_generator()
+        for x in range (0,20) :
+            self._send_params = self._prms.send_param_random()
+            self._wait = self._prms.wait_random()
+            self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
+            self.info_linit("send",self._rc)
+              
+    def _send_invalid_scenario(self) :
         self._prms = V2X_API_TEST_inv_generator()
-
-        self._send_params = self._prms.send_param_random()
-        self._wait = self._prms.wait_random()
-        self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
-        self.info_linit("send",self._rc,1)
-
-        self._receive_params = self._prms.receive_param_random()
-        self._wait = self._prms.wait_random()
-        self._rc = self.v2x_cli2.link.receive(self._receive_params,self._wait) 
-        self.info_linit("receive",self._rc,1)
+        for x in range (0,20) :
+            self._send_params = self._prms.send_param_random()
+            self._wait = self._prms.wait_random()
+            self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
+            self.info_linit("send",self._rc,1)
 
     def _send_edge_cases(self):
         self._prms = V2X_API_TEST_Extreme_cases_generator()
@@ -646,29 +624,29 @@ class V2X_API_TEST_v_generator():
         self._netif_index = 0 #integer
 
     def request_start_random (self):
-        self._if_index = random.randint(0,2)
-        self._op_class = random.randint(1,4)
+        self._if_index = random.randint(1,2)
+        self._op_class = random.randint(0,4)
         self._channel_num = random.randint(0,0xFF)
-        self._time_slot = random.randint(0,3)
+        self._time_slot = random.randint(0,1)
         self._immediate_access = random.randint(0,0xFF)
         return [self._if_index,self._op_class,self._channel_num,self._time_slot,self._immediate_access]
 
     def request_end_random (self):
-        self._if_index = random.randint(0,2)
-        self._op_class = random.randint(1,4)
+        self._if_index = random.randint(1,2)
+        self._op_class = random.randint(0,4)
         self._channel_num = random.randint(0,0xFF)
         return [self._if_index,self._op_class,self._channel_num]
 
     def indication_random (self):
-        self._if_index = random.randint(0,2)
-        self._op_class = random.randint(1,4)
+        self._if_index = random.randint(1,2)
+        self._op_class = random.randint(0,4)
         self._channel_num = random.randint(0,0xFF)
         self._reason = random.randint(0,1)
         return [self._if_index,self._op_class,self._channel_num,self._reason]
 
     def profile_random(self):
         self._if_index = random.randint(0,2)
-        self._op_class = random.randint(1,4)
+        self._op_class = random.randint(0,4)
         self._channel_num = random.randint(0,0xFF) 
         self._datarate_ran =  random.randint(0,0xb) 
         if self._datarate_ran == 0 :
