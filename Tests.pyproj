@@ -15,7 +15,7 @@
     <RootNamespace>ate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments> -v sdk-4.8.1-beta9-mc-non-quick -t sc -q</CommandLineArguments>
+    <CommandLineArguments> -v sdk-4.11.1-alpha4-quick -t sc -q</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -157,13 +157,14 @@
     <Folder Include="uuts\craton\snmp\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="configuration\cfg_10.10.1.135.json" />
     <Content Include="configuration\cfg_169.254.128.138.json" />
     <Content Include="configuration\cfg_10.10.1.108.json" />
     <Content Include="configuration\cfg_10.10.1.112.json" />
     <Content Include="configuration\cfg_10.10.1.115.json" />
     <Content Include="configuration\cfg_10.10.1.124.json" />
     <Content Include="configuration\cfg_10.10.1.125.json" />
-    <Content Include="configuration\cfg_10.10.1.119.json" />
+    <Content Include="configuration\cfg_10.10.1.135" />
   </ItemGroup>
   <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
