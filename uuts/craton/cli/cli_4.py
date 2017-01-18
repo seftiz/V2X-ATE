@@ -139,6 +139,7 @@ class linkApi(object):
         cmd += (" -timeout_ms %s"  % timeout) if not timeout is None else ""
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
+        #queue.put(data)
         return data
         #if 'ERROR' in data:
         #    raise Exception( data )
