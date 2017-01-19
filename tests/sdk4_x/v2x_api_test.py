@@ -1,11 +1,12 @@
 """
-@file       tc_v2x.py
+@file       v2x_api_test.py
 @brief        
 @author    	Chani Rubinstain
 @version	0.1
 @date		December 2016
 """
 import os, sys, socket
+from test.test_threading_local import target
 
 
 # Get current main file path and add to all searchings
@@ -23,6 +24,8 @@ from lib import instruments_manager, packet_analyzer
 #from lib import canbus_manager as canbus
 from tests import common
 import webbrowser, re
+import Queue
+from lib import HTMLTestRunner
 
 log = logging.getLogger(__name__)
 
@@ -38,7 +41,7 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
     @date	15/12/2016
     """ 
 
-    def __init__(self, methodName = 'runTest', param = None):
+    def __init__(self, methodName = 'runTest', param = None,scen = None):
         self.v2x_cli = None
         self.v2x_cli2 = None
         self.v2x_sim = None
@@ -118,23 +121,30 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         except KeyError as e:
             raise globals.Error("uut index and interface input is missing or corrupted, usage : uut_id=(0,1)")
 
-        self.uut_v2x_if.append(self.uut1.can_interfaces[self.uut_id1[1]])
-        if not self.uut_v2x_if[0].active:
-            raise globals.Error("V2X device {} is not active.".format(self.uut_v2x_if[0].device_id))
-
-        self.uut_v2x_if.append(self.uut2.can_interfaces[self.uut_id2[1]])
-        if not self.uut_v2x_if[1].active:
-            raise globals.Error("V2X device {} is not active.".format(self.uut_v2x_if[1].device_id))
-
         # Open new v2x-cli
-       
-        self.v2x_cli = self.uut1.create_qa_cli("v2x_cli", target_cpu = self.target_cpu )
-        self._rc = self.v2x_cli.link.service_create("remote")
-        self._rc = self.v2x_cli.link.socket_create(0, "data", 1234 )
 
+        self.v2x_cli = self.uut1.create_qa_cli("v2x_cli", target_cpu = self.target_cpu )
+        if self.uut1.external_host != "":
+            self._rc = self.v2x_cli.link.service_create("remote")
+        else:
+            self._rc = self.v2x_cli.link.service_create("hw") 
+        self._rc = self.v2x_cli.link.socket_create(0, "data", 1234 )
+ 
         self.v2x_cli2 = self.uut2.create_qa_cli("v2x_cli", target_cpu = self.target_cpu )
-        self._rc = self.v2x_cli2.link.service_create("hw")
+        if self.uut2.external_host != "":
+            self._rc = self.v2x_cli2.link.service_create("remote")
+        else:
+            self._rc = self.v2x_cli2.link.service_create("hw") 
         self._rc = self.v2x_cli2.link.socket_create(0, "data", 1234 )
+
+       
+        #self.v2x_cli = self.uut1.create_qa_cli("v2x_cli", target_cpu = self.target_cpu )
+        #self._rc = self.v2x_cli.link.service_create("remote")
+        #self._rc = self.v2x_cli.link.socket_create(0, "data", 1234 )
+
+        #self.v2x_cli2 = self.uut2.create_qa_cli("v2x_cli", target_cpu = self.target_cpu )
+        #self._rc = self.v2x_cli2.link.service_create("hw")
+        #self._rc = self.v2x_cli2.link.socket_create(0, "data", 1234 )
 
 
     def instruments_initilization(self):
@@ -143,27 +153,41 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self.v2x_sim = globals.setup.instruments.v2x_bus
 
         if self.v2x_sim is None:
-            raise globals.Error("v2x bus simulator is not initailize, please check your configuration")
-                           
-        self.v2x_sim.channel_open( self.uut_v2x_if[0].sim_port )
-        self.v2x_sim.channel_open( self.uut_v2x_if[1].sim_port )
-
+            raise globals.Error("v2x bus simulator is not initailize, please check your configuration")                         
+        
     def main(self):
 
-        self._generate_basic_scenario()           # run the v2x function with valid data prameters
-              
-        self._send_receive_scenario()             # run send and receive functions with valid data prameters 
-        self._send_receive_invalid_scenario()     # run send and receive functions with invalid data prameters
-        self._send_edge_cases()                   # run send function in edge cases
+        self.scen = self.param.get('scen', None )
 
-        self._dot4_invalid_scenario()             # run the dot4_channel functions with invalid data parameters
-        self._dot4_edge_cases()                   # run the dot4_channel functions in edge cases 
-        self._dot4_specific_scenario()            # run the dot4_channel functions in the state machine
+        if self.scen.find("basic") is not -1:
+            self._generate_basic_scenario()           # run the v2x function with valid data prameters
+        
 
-        self._socket_scenario()                   # run creat and deleat socket in stress
-        self._socket_invalid_scenario()           # run creat and deleat socket with invalid parameters
+        if self.scen.find("send_receive") is not -1 or self.scen.find("send_all") is not -1 :      
+            self._send_receive_scenario()             # run send and receive functions with valid data prameters 
+        if self.scen.find("send_random") is not -1 or self.scen.find("send_all") is not -1 :
+            self._send_random_scenario()              # run send function with random
+        if self.scen.find("send_invalid") is not -1 or self.scen.find("send_all") is not -1 :
+            self._send_invalid_scenario()             # run send function with invalid data prameters
+        if self.scen.find("send_edge_cases")is not -1 or self.scen.find("send_all") is not -1:
+            self._send_edge_cases()                   # run send function in edge cases
+        
+        if self.scen.find("dot4_valid") is not -1 or self.scen.find("dot4_all") is not -1 :
+            self._dot4_valid_scenario()   
+        if self.scen.find("dot4_invalid") is not -1 or self.scen.find("dot4_all") is not -1:
+            self._dot4_invalid_scenario()             # run the dot4_channel functions with invalid data parameters
+        if self.scen.find("dot4_edge_cases") is not -1 or self.scen.find("dot4_all") is not -1:
+            self._dot4_edge_cases()                   # run the dot4_channel functions in edge cases 
+        if self.scen.find("dot4_specific") is not -1 or self.scen.find("dot4_all") is not -1:
+            self._dot4_specific_scenario()            # run the dot4_channel functions in the state machine
 
-        self._service_get_delete()                # get default service and delete service in stress
+        if self.scen.find("socket") is not -1:
+            self._socket_scenario()                   # run creat and deleat socket in stress
+        if self.scen.find("socket") is not -1:
+            self._socket_invalid_scenario()           # run creat and deleat socket with invalid parameters
+
+        if self.scen.find("service_get") is not -1:        
+            self._service_get_delete()                # get default service and delete service in stress
         
 
     def analyze_results(self):
@@ -195,16 +219,6 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self._rc = self.v2x_cli.link.dot4_channel_end_receive(self._indication,self._wait)
         self.info_linit("dot4_channel_end_receive",self._rc)
         
-        #self._receive_params = self._prms.receive_param_random()
-        #self._wait = self._prms.wait_random()
-        #self._rc = self.v2x_cli2.link.receive(frames = 1, timeout = 0x5000, print_frame = 1)
-        #self.info_linit("receive",self._rc)
-
-        #self._send_params = self._prms.send_param_random(dest_address = "192.168.120.221")
-        #self._wait = self._prms.wait_random()
-        #self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
-        #self.info_linit("send",self._rc)
-
         self._rc = self.v2x_cli.link.socket_delete()
         self.info_linit("socket_delete",self._rc)
 
@@ -215,41 +229,40 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
     def _send_receive_scenario(self) :
         self._prms_ran = V2X_API_TEST_v_generator()
         self._prms = V2X_API_TEST_Extreme_cases_generator()
+        thread_list = []
 
         self._receive_params = self._prms_ran.receive_param_random()
         self._wait = self._prms_ran.wait_random()        
-        self._rc_receive = self.v2x_cli2.link.receive(frames = 1, print_frame = 1, timeout = 0x5000)              
-        #self.info_linit("receive",self._rc_receive)
-        if 'Note : System will wait for' in self._rc_receive:
-            self.add_limit( "receive" + " PASS" , 0 , 0, None , 'EQ')         
-            self.pass_count += 1
-        elif 'ERROR' in self._rc_receive:
-            self.err1 = rc.split("ERROR")
-            self.err2 = self.err1[1]
-            self.err3 = self.err2.split("\r")
-            self.add_limit( "receive" + " ERROR" + self.err3[0]  , 0 , 1, None , 'EQ') 
-            self.error_count += 1            
-        else :
-            self.add_limit( "receive" + " unknown state"   , 0 , 1, None , 'EQ')
-            self.error_count += 1
+          
+        queue = Queue.Queue()
+        self.receive_thread = threading.Thread(target = self.v2x_cli2.link.receive, args = (1,5000,1))
+        thread_list.append(self.receive_thread)
+      
+        self.send_thread = threading.Thread(target = self.v2x_cli.link.send)
+        thread_list.append(self.send_thread)
 
-        self._send_params = self._prms.send_param(dest_address = "192.168.120.221")
-        self._wait = self._prms_ran.wait_random()
-        self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
-        self.info_linit("send",self._rc)
-             
-    def _send_receive_invalid_scenario(self) :
+        for thread in thread_list:
+                thread.start()
+
+        for thread in thread_list:
+                thread.join()
+        aaa = queue.get()          
+                
+    def _send_random_scenario(self) :
+        self._prms = V2X_API_TEST_v_generator()
+        for x in range (0,20) :
+            self._send_params = self._prms.send_param_random()
+            self._wait = self._prms.wait_random()
+            self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
+            self.info_linit("send",self._rc)
+              
+    def _send_invalid_scenario(self) :
         self._prms = V2X_API_TEST_inv_generator()
-
-        self._send_params = self._prms.send_param_random()
-        self._wait = self._prms.wait_random()
-        self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
-        self.info_linit("send",self._rc,1)
-
-        self._receive_params = self._prms.receive_param_random()
-        self._wait = self._prms.wait_random()
-        self._rc = self.v2x_cli2.link.receive(self._receive_params,self._wait) 
-        self.info_linit("receive",self._rc,1)
+        for x in range (0,20) :
+            self._send_params = self._prms.send_param_random()
+            self._wait = self._prms.wait_random()
+            self._rc = self.v2x_cli.link.send(self._send_params,self._wait)
+            self.info_linit("send",self._rc,1)
 
     def _send_edge_cases(self):
         self._prms = V2X_API_TEST_Extreme_cases_generator()
@@ -490,7 +503,25 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self._wait = self._prms.wait()
         self._rc = self.v2x_cli.link.dot4_channel_start(self._request,self._wait)
         self.info_linit("dot4_channel_start",self._rc,1)
-        
+  
+    def _dot4_valid_scenario(self) :
+        self._prms = V2X_API_TEST_v_generator()
+        for x in range(0,20):
+            self._request = self._prms.request_start_random()
+            self._wait = self._prms.wait_random()
+            self._rc = self.v2x_cli.link.dot4_channel_start(self._request,self._wait)
+            self.info_linit("dot4_channel_start",self._rc)
+            
+            self._request = self._prms.request_end_random()
+            self._wait = self._prms.wait_random()
+            self._rc = self.v2x_cli.link.dot4_channel_end(self._request,self._wait)
+            self.info_linit("dot4_channel_end",self._rc)
+            
+            self._indication = self._prms.indication_random()
+            self._wait = self._prms.wait_random()
+            self._rc = self.v2x_cli.link.dot4_channel_end_receive(self._indication,self._wait) 
+            self.info_linit("dot4_channel_end_receive",self._rc) 
+      
     def _dot4_invalid_scenario(self):
         self._prms = V2X_API_TEST_inv_generator()
         for x in range(0,20):
@@ -590,35 +621,36 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
             self.info_linit("service_delete",self._rc)
 
     def info_linit(self,func_name, rc, pass_or_fail = 0 ) :
+        self.html = HTMLTestRunner._TestResult()
         if pass_or_fail :
             if 'PASS' in rc:
                 self.add_limit( func_name + " ERROR - the function run with invalid argoment"   , 0 , 1, None , 'EQ') 
-                self.error_count += 1
+                self.error_count += 1                
             elif 'ERROR' in rc:
                 self.err1 = rc.split("ERROR")
                 self.err2 = self.err1[1]
                 self.err3 = self.err2.split("\r")
                 self.add_limit( func_name + " PASS : the error message - " + self.err3[0]  , 0 , 0, None , 'EQ')
-                self.pass_count += 1
+                self.pass_count += 1                               
             else :
                 self.add_limit( func_name + " unknown state"   , 0 , 1, None , 'EQ')
-                self.error_count += 1
+                self.error_count += 1                
         else :
             if 'ERROR' in rc:
                 self.err1 = rc.split("ERROR")
                 self.err2 = self.err1[1]
                 self.err3 = self.err2.split("\r")
-                self.add_limit( func_name + " ERROR" + self.err3[0]  , 0 , 1, None , 'EQ') 
-                self.error_count += 1
+                self.add_limit( func_name + "\n ERROR" + self.err3[0]  , 0 , 1, None , 'EQ') 
+                self.error_count += 1                
             elif 'PASS' in rc:
                 self.err1 = rc.split("PASS")
                 self.err2 = self.err1[1]
                 self.err3 = self.err2.split("\r")
                 self.add_limit( func_name + " PASS" + self.err3[0] , 0 , 0, None , 'EQ') 
-                self.pass_count += 1
+                self.pass_count += 1                
             else :
                 self.add_limit( func_name + " unknown state"   , 0 , 1, None , 'EQ')
-                self.error_count += 1
+                self.error_count += 1                
 
 
 """ GENERATOR : """
@@ -646,29 +678,29 @@ class V2X_API_TEST_v_generator():
         self._netif_index = 0 #integer
 
     def request_start_random (self):
-        self._if_index = random.randint(0,2)
-        self._op_class = random.randint(1,4)
+        self._if_index = random.randint(1,2)
+        self._op_class = random.randint(0,4)
         self._channel_num = random.randint(0,0xFF)
-        self._time_slot = random.randint(0,3)
+        self._time_slot = random.randint(0,1)
         self._immediate_access = random.randint(0,0xFF)
         return [self._if_index,self._op_class,self._channel_num,self._time_slot,self._immediate_access]
 
     def request_end_random (self):
-        self._if_index = random.randint(0,2)
-        self._op_class = random.randint(1,4)
+        self._if_index = random.randint(1,2)
+        self._op_class = random.randint(0,4)
         self._channel_num = random.randint(0,0xFF)
         return [self._if_index,self._op_class,self._channel_num]
 
     def indication_random (self):
-        self._if_index = random.randint(0,2)
-        self._op_class = random.randint(1,4)
+        self._if_index = random.randint(1,2)
+        self._op_class = random.randint(0,4)
         self._channel_num = random.randint(0,0xFF)
         self._reason = random.randint(0,1)
         return [self._if_index,self._op_class,self._channel_num,self._reason]
 
     def profile_random(self):
         self._if_index = random.randint(0,2)
-        self._op_class = random.randint(1,4)
+        self._op_class = random.randint(0,4)
         self._channel_num = random.randint(0,0xFF) 
         self._datarate_ran =  random.randint(0,0xb) 
         if self._datarate_ran == 0 :

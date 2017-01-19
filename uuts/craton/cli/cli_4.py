@@ -140,6 +140,7 @@ class linkApi(object):
         cmd += (" -timeout_ms %s"  % timeout) if not timeout is None else ""
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
+        #queue.put(data)
         return data
         #if 'ERROR' in data:
         #    raise Exception( data )
@@ -267,17 +268,17 @@ class linkApi(object):
         if 'ERROR' in data:
             raise Exception( data )
 
-    def send(self ,params ,wait ):
+    def send(self ,params = None ,wait = None ):
         cmd = "%s api_test send" % self._name        
         #cmd += (" -source_address %s"  % params[0]) #source_address
-        cmd += (" -dest_addr %s"  % params[1]) #dest_address
-        cmd += (" -uset_priority %s"  % params[2]) #uset_priority
-        cmd += (" -op_class %s"  % params[3]) #op_class
-        cmd += (" -channel_num %s"  % params[4]) #channel_num
-        cmd += (" -datarate %s"  % params[5]) #datarate
-        cmd += (" -power_dbm8 %s"  % params[6]) #power_dbm8
-        cmd += (" -wait_type %s" % wait[0])
-        cmd += (" -wait_usec %s" % wait[1])
+        cmd += (" -dest_addr %s"  % params[1])if not params is None else "" 
+        cmd += (" -uset_priority %s"  % params[2])if not params is None else "" 
+        cmd += (" -op_class %s"  % params[3])if not params is None else "" 
+        cmd += (" -channel_num %s"  % params[4])if not params is None else "" 
+        cmd += (" -datarate %s"  % params[5])if not params is None else "" 
+        cmd += (" -power_dbm8 %s"  % params[6])if not params is None else "" 
+        cmd += (" -wait_type %s" % wait[0])if not params is None else ""
+        cmd += (" -wait_usec %s" % wait[1])if not params is None else ""
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
         return data
