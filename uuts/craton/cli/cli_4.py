@@ -14,6 +14,7 @@ from uuts.craton.cli import navigation
 import os
 from lib import globals
 from lib import utilities
+import time
 
 log = logging.getLogger(__name__)
 
@@ -601,7 +602,6 @@ class eccApi(linkApi):
 
 class wlanMibApi(linkApi):
 
-   
     def __init__(self, interface):
         super(wlanMibApi, self).__init__(interface)
         self._name = "wlanMib"
@@ -632,13 +632,13 @@ class wlanMibApi(linkApi):
             raise Exception( data )
     '''
 
-    def transmit(self,property,valAndType):
+    def transmit(self,property,valAndType,sleepFlag):
         #mib service-(common to all)
         cmd = 'mng mibApi test'
         #get or set
         cmd += ("%s" % property)
         #the specific variables
-        size=len(valAndType)
+        size = len(valAndType)
                 
         if valAndType[0]=="regular" and size==2:
             cmd += (" -type%d " % i ) 
@@ -657,6 +657,8 @@ class wlanMibApi(linkApi):
             cmd += (" -value%d " % index) 
             cmd += ("%s" % valAndType[i+1])
         data = self._if.send_command(cmd)
+        if sleepFlag and property == "Get":
+            time.sleep(60)
         data = self._if.read_until_prompt()
         
         return data

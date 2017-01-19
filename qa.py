@@ -226,13 +226,21 @@ def eth_fnc_tests( suite, cpu_type = 'arm' ):
 def wlanMib_api_tests( suite , cpu_type = 'arm' ):
     from tests.sdk4_x import tc_wlanMib_api
     
-    test_param = dict( uut_id = (0,0), frames_rate = 500, frames_num = 1000, err_part = 0) 
+    test_param = dict( property = "get" , inspectionType = "correct") 
+    suite.addTest(common.ParametrizedTestCase.parametrize(tc_wlanMib_api.TC_WlanMib_API,param=test_param) )
+    test_param = dict( property = "get" , inspectionType = "exact") 
+    suite.addTest(common.ParametrizedTestCase.parametrize(tc_wlanMib_api.TC_WlanMib_API,param=test_param) )
+  
+    test_param = dict( property = "set" , inspectionType = "correct") 
+    suite.addTest(common.ParametrizedTestCase.parametrize(tc_wlanMib_api.TC_WlanMib_API,param=test_param) )
+    test_param = dict( property = "set" , inspectionType = "exact") 
+    suite.addTest(common.ParametrizedTestCase.parametrize(tc_wlanMib_api.TC_WlanMib_API,param=test_param) )
+    test_param = dict(  property = "set" , inspectionType = "incorrect") 
+    suite.addTest(common.ParametrizedTestCase.parametrize(tc_wlanMib_api.TC_WlanMib_API,param=test_param) )
+
+    test_param = dict(  property = "get" , inspectionType = "incorrect") 
     suite.addTest(common.ParametrizedTestCase.parametrize(tc_wlanMib_api.TC_WlanMib_API,param=test_param) )
    
-    #test_param = dict( uut_id = (0,0), frames_rate = 500, frames_num = 1000, err_part = 0) 
-    #suite.addTest(common.ParametrizedTestCase.parametrize(tc_wlanMib_api.TC_WlanMib_LOAD, param = test_param ))
-
-
 def parse_params():
 
     parser = argparse.ArgumentParser( description='Automatic QA CLI build process script' )
