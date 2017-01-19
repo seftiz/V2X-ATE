@@ -53,6 +53,7 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self._uut = {}
         self.error_count = 0
         self.pass_count = 0
+        self.if_index = 1
         super(V2X_API_TEST, self).__init__(methodName, param)
 
     def get_test_parameters( self ):
@@ -63,23 +64,15 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self.uut_id1 = self.param.get('uut_id1', None )
         self.uut_id2 = self.param.get('uut_id2', None )
         if self.uut_id1 is None:
-            raise globals.Error("uut index and v2x interface id input is missing or corrupted, usage : uut_id1=(0,0)")
+            raise globals.Error("uut index and v2x interface id input is missing or corrupted, usage : uut_id1=0")
         if self.uut_id2 is None:
-            raise globals.Error("uut index and v2x interface id input is missing or corrupted, usage : uut_id2=(0,1)")
+            raise globals.Error("uut index and v2x interface id input is missing or corrupted, usage : uut_id2=1")
 
         print "Test parameters for %s :" % self.__class__.__name__
-
-        if len(self.uut_id1) == 2:
-           print "{} = {}\t\t{} = {}".format ("uut_id1", self.uut_id1[0], "v2x device_id", self.uut_id1[1])
-        else:
-           print "{} = {}\t\t{} = {}\t\t{} = {}".format ("uut_id1", self.uut_id1[0], "v2x device_id", self.uut_id1[1], "v2x device2_id", self.uut_id1[2])
-
-        if len(self.uut_id2) == 2:
-           print "{} = {}\t\t{} = {}".format ("uut_id2", self.uut_id2[0], "v2x device_id", self.uut_id2[1])
-        else:
-           print "{} = {}\t\t{} = {}\t\t{} = {}".format ("uut_id2", self.uut_id2[0], "v2x device_id", self.uut_id2[1], "v2x device2_id", self.uut_id2[2])
-    
-
+        
+        print "{} = {}".format ("uut_id1", self.uut_id1)
+        print "{} = {}".format ("uut_id2", self.uut_id2)
+        
     def setUp(self):
         super(V2X_API_TEST, self).setUp()
 
@@ -106,20 +99,17 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
 
 
     def unit_configuration(self):
-
-        self.uut_index1 = self.uut_id1[0]
-        self.uut_index2 = self.uut_id2[0]
-
+    
         # Verify uut idx exits
         try:
-            self.uut1 = globals.setup.units.unit(self.uut_index1)
+            self.uut1 = globals.setup.units.unit(self.uut_id1)
         except KeyError as e:
-            raise globals.Error("uut index and interface input is missing or corrupted, usage : uut_id=(0,0)")
+            raise globals.Error("uut index and interface input is missing or corrupted, usage : uut_id1=0")
 
         try:
-            self.uut2 = globals.setup.units.unit(self.uut_index2)
+            self.uut2 = globals.setup.units.unit(self.uut_id2)
         except KeyError as e:
-            raise globals.Error("uut index and interface input is missing or corrupted, usage : uut_id=(0,1)")
+            raise globals.Error("uut index and interface input is missing or corrupted, usage : uut_id=1")
 
         # Open new v2x-cli
 
@@ -128,25 +118,15 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
             self._rc = self.v2x_cli.link.service_create("remote")
         else:
             self._rc = self.v2x_cli.link.service_create("hw") 
-        self._rc = self.v2x_cli.link.socket_create(0, "data", 1234 )
+        self._rc = self.v2x_cli.link.socket_create(self.if_index - 1, "data", 1234 )
  
         self.v2x_cli2 = self.uut2.create_qa_cli("v2x_cli", target_cpu = self.target_cpu )
         if self.uut2.external_host != "":
             self._rc = self.v2x_cli2.link.service_create("remote")
         else:
             self._rc = self.v2x_cli2.link.service_create("hw") 
-        self._rc = self.v2x_cli2.link.socket_create(0, "data", 1234 )
-
-       
-        #self.v2x_cli = self.uut1.create_qa_cli("v2x_cli", target_cpu = self.target_cpu )
-        #self._rc = self.v2x_cli.link.service_create("remote")
-        #self._rc = self.v2x_cli.link.socket_create(0, "data", 1234 )
-
-        #self.v2x_cli2 = self.uut2.create_qa_cli("v2x_cli", target_cpu = self.target_cpu )
-        #self._rc = self.v2x_cli2.link.service_create("hw")
-        #self._rc = self.v2x_cli2.link.socket_create(0, "data", 1234 )
-
-
+        self._rc = self.v2x_cli2.link.socket_create(self.if_index -1, "data", 1234 )
+        
     def instruments_initilization(self):
         
         # Receving and start v2x bus simulator
@@ -173,7 +153,7 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
             self._send_edge_cases()                   # run send function in edge cases
         
         if self.scen.find("dot4_valid") is not -1 or self.scen.find("dot4_all") is not -1 :
-            self._dot4_valid_scenario()   
+            self._dot4_valid_scenario()
         if self.scen.find("dot4_invalid") is not -1 or self.scen.find("dot4_all") is not -1:
             self._dot4_invalid_scenario()             # run the dot4_channel functions with invalid data parameters
         if self.scen.find("dot4_edge_cases") is not -1 or self.scen.find("dot4_all") is not -1:
@@ -222,32 +202,64 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self._rc = self.v2x_cli.link.socket_delete()
         self.info_linit("socket_delete",self._rc)
 
-        self._config = self._prms.socket_config();
+        self._config = self._prms.socket_config()
         self._rc = self.v2x_cli.link.socket_create_api_test(self._config[0],self._config[1],self._config[2])
         self.info_linit("socket_create",self._rc)
        
     def _send_receive_scenario(self) :
-        self._prms_ran = V2X_API_TEST_v_generator()
-        self._prms = V2X_API_TEST_Extreme_cases_generator()
+        
+        self._send_receive(frames = 1,timeout = 5000 ,print_frame = 1)
+
+        self._send_receive(frames = 20,timeout = 5000 ,print_frame = 1) 
+
+        self._send_receive(frames = 20,timeout = 0 ,print_frame = 1)
+
+        self._send_receive(frames = 150 ,timeout = 486 ,print_frame = 1)
+
+        self._send_receive(frames = 0,timeout = 500 ,print_frame = 1,v_or_inv = 1) 
+
+        self._send_receive(frames = 0,timeout = 0 ,print_frame = 1,v_or_inv = 1) 
+
+        self._send_receive(frames = 20,timeout = 5000 ,print_frame = 0)
+            
+
+    def _send_receive(self,frames, timeout, print_frame,v_or_inv = 0):
         thread_list = []
 
-        self._receive_params = self._prms_ran.receive_param_random()
-        self._wait = self._prms_ran.wait_random()        
-          
-        queue = Queue.Queue()
-        self.receive_thread = threading.Thread(target = self.v2x_cli2.link.receive, args = (1,5000,1))
+        self.Rx_count_start = self.uut2.managment.get_wlan_frame_rx_cnt(self.if_index) 
+
+        #self.add_limit( "receive - Rx count : " + str(self.Rx_count_start) , 0 , 0, None , 'EQ') 
+               
+        self.receive_thread = threading.Thread(target = self.v2x_cli2.link.receive, args = (frames,timeout,print_frame))
         thread_list.append(self.receive_thread)
-      
-        self.send_thread = threading.Thread(target = self.v2x_cli.link.send)
+        self.send_thread = threading.Thread(target = self._some_sends, args = (frames,))
         thread_list.append(self.send_thread)
+        #self.send_thread = threading.Thread(target = self.v2x_cli.link.transmit, args = (None,None,None,frames))
+        
 
         for thread in thread_list:
-                thread.start()
+            thread.start()
 
         for thread in thread_list:
-                thread.join()
-        aaa = queue.get()          
-                
+            thread.join()     
+          
+        self.Rx_count = self.uut2.managment.get_wlan_frame_rx_cnt(self.if_index)
+
+        if  v_or_inv :
+            if(self.Rx_count == self.Rx_count_start) :
+                self.add_limit('function name : receive \nPASS : the Rx not get the Tx frames, Rx_count : ' + str(self.Rx_count) , 0 , 0, None , 'EQ')
+            else :
+                self.add_limit('function name : receive \nERROR : unknown state, Rx_count : ' + str(self.Rx_count) , 0 , 1, None , 'EQ')
+        else :
+            if(self.Rx_count == (self.Rx_count_start + frames)) :
+                self.add_limit('function name : receive \nPASS : the Rx function get Tx frame, Rx_count : ' + str(self.Rx_count) , 0 , 0, None , 'EQ')
+            else :
+                self.add_limit('function name : receive \nERROR : the Rx function not get Tx frame, Rx_count : ' + str(self.Rx_count) , 0 , 1, None , 'EQ')
+
+    def _some_sends(self, num_frames):
+        for x in range (0,num_frames) :
+            self._rc = self.v2x_cli.link.send()    
+                           
     def _send_random_scenario(self) :
         self._prms = V2X_API_TEST_v_generator()
         for x in range (0,20) :
@@ -624,32 +636,32 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self.html = HTMLTestRunner._TestResult()
         if pass_or_fail :
             if 'PASS' in rc:
-                self.add_limit( func_name + " ERROR - the function run with invalid argoment"   , 0 , 1, None , 'EQ') 
+                self.add_limit( "function name : " + func_name + " ERROR - the function run with invalid argoment"   , 0 , 1, None , 'EQ') 
                 self.error_count += 1                
             elif 'ERROR' in rc:
                 self.err1 = rc.split("ERROR")
                 self.err2 = self.err1[1]
                 self.err3 = self.err2.split("\r")
-                self.add_limit( func_name + " PASS : the error message - " + self.err3[0]  , 0 , 0, None , 'EQ')
+                self.add_limit( "function name : " + func_name + " PASS : the error message - " + self.err3[0]  , 0 , 0, None , 'EQ')
                 self.pass_count += 1                               
             else :
-                self.add_limit( func_name + " unknown state"   , 0 , 1, None , 'EQ')
+                self.add_limit( "function name : " + func_name + " unknown state"   , 0 , 1, None , 'EQ')
                 self.error_count += 1                
         else :
             if 'ERROR' in rc:
                 self.err1 = rc.split("ERROR")
                 self.err2 = self.err1[1]
                 self.err3 = self.err2.split("\r")
-                self.add_limit( func_name + "\n ERROR" + self.err3[0]  , 0 , 1, None , 'EQ') 
+                self.add_limit( "function name : " + func_name + " ERROR" + self.err3[0]  , 0 , 1, None , 'EQ') 
                 self.error_count += 1                
             elif 'PASS' in rc:
                 self.err1 = rc.split("PASS")
                 self.err2 = self.err1[1]
                 self.err3 = self.err2.split("\r")
-                self.add_limit( func_name + " PASS" + self.err3[0] , 0 , 0, None , 'EQ') 
+                self.add_limit( "function name : " + func_name + " PASS" + self.err3[0] , 0 , 0, None , 'EQ') 
                 self.pass_count += 1                
             else :
-                self.add_limit( func_name + " unknown state"   , 0 , 1, None , 'EQ')
+                self.add_limit( "function name : " + func_name + " unknown state"   , 0 , 1, None , 'EQ')
                 self.error_count += 1                
 
 
