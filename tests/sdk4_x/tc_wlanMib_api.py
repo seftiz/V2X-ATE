@@ -38,7 +38,12 @@ class TC_WlanMib_API(common.V2X_SDKBaseTest):
         self.wlanMib_cli = None
         self.stats = Statistics()
         self.uut_wlanMib_if = []
-                
+
+        self.t_property = str()  
+        self.n_variables = str() 
+        self.inspectionType = str()
+        
+        self.remoteFlag = str()  
         super(TC_WlanMib_API, self).__init__(methodName, param)
 
     def test_wlanMib(self):
@@ -59,10 +64,10 @@ class TC_WlanMib_API(common.V2X_SDKBaseTest):
     def get_test_parameters( self ):
         super(TC_WlanMib_API, self).get_test_parameters()
 
-        self.uut_id = self.param.get('uut_id',None)
-        if self.uut_id is None:
-            raise globals.Error("uut index and interface id input is missing or corrupted, usage : uut_id=(0,1)")
-
+        self.t_property = self.param.get('property',None)
+                
+        self.inspectionType = self.param.get('inspectionType',None)
+       
         print "Test parameters for %s :" % self.__class__.__name__
        
     def runTest(self):
@@ -82,7 +87,7 @@ class TC_WlanMib_API(common.V2X_SDKBaseTest):
 
     def unit_configuration(self):
 
-        self.uut_index = self.uut_id[0]
+        self.uut_index = 0
 
         # Verify uut idx exits
         try:
@@ -92,7 +97,9 @@ class TC_WlanMib_API(common.V2X_SDKBaseTest):
 
         # Open new v2x-cli
         self.wlanMib_cli = self.uut.create_qa_cli("wlanMib_cli", target_cpu = self.target_cpu )
-        self.wlanMib_cli.wlanMib.transport_create()
+        
+        if self.remoteFlag.count == 0: 
+            self.remoteFlag = self.wlanMib_cli.wlanMib.transport_create()
         self.wlanMib_cli.wlanMib.service_create()
         
         self.wlanMib_cli.link.reset_counters()
@@ -101,68 +108,79 @@ class TC_WlanMib_API(common.V2X_SDKBaseTest):
         try:
             erroneous = TC_WlanMib_ERRONEOUS()
                      
-            for i in ("one","two","three"):
-                #get test
-                prop="get"
-                valAndType=erroneous._generate_basic_scenario_data(prop,"correct",i)
-                self._test_extreme_points("Get","correct",valAndType,i)
-                valAndType=erroneous._generate_basic_scenario_data(prop,"incorrect",i)
-                self._test_extreme_points("Get","incorrect",valAndType,i)
-                valAndType=erroneous._generate_basic_scenario_data(prop,"exact",i)
-                self._test_extreme_points("Get","exact",valAndType,i)
-                
-                #set test
-                prop="set"
-                valAndType=erroneous._generate_basic_scenario_data(prop,"correct",i)
-                self._test_extreme_points("Set","correct",valAndType,i)
-                valAndType=erroneous._generate_basic_scenario_data(prop,"incorrect",i)
-                self._test_extreme_points("Set","incorrect",valAndType,i)
-                valAndType=erroneous._generate_basic_scenario_data(prop,"exact",i)
-                self._test_extreme_points("Set","exact",valAndType,i)
-        
-            if len(self._errors):
-                log.debug("TC_WlanMib_API - Test errors :")
-                for error in self._errors:
-                    log.debug(error)
+            #get/set test
+            prop = self.t_property
+            if prop == "get":
+                for i in ("one","two"):
+                    valAndType=erroneous._generate_basic_scenario_data(prop,self.inspectionType,i)
+                    self._test_extreme_points("Get",self.inspectionType,valAndType,i)
+            else:
+                for i in ("one","two"):
+                    valAndType=erroneous._generate_basic_scenario_data(prop,self.inspectionType,i)
+                    self._test_extreme_points("Set",self.inspectionType,valAndType,i)    
 
         except Exception as e:
             raise e
 
     def _test_extreme_points(self,property,inspectionType,valAndType,num_of_variables):
-
+        self.inspectionType = inspectionType
         #key- func name
         #value- type and his value
+        func_name = []
         
-        self._errors = dict()
         #WlanMib CLI transmit
-        ret = self.wlanMib_cli.wlanMib.transmit(property,valAndType)
-        string = ret.split("func")
-        func_name = string[1].split(":")
-        if "ERROR" in ret:
-            if inspectionType == "correct" or inspectionType == "exact":
-                self.stats.functionFailed.append(func_name[0]+ " " + inspectionType + " num_of_variables " + str(num_of_variables))
-                if property == "get":
-                    log.debug("TC_wlanMib_API: function get %s received error" % func_name[0])
-                else:
-                    log.debug("TC_wlanMib_API: function set %s received error" % func_name[0])
-            else:
-                self.stats.testIncorrectSuccess += 1
+        if inspectionType == "incorrect":
+            ret = self.wlanMib_cli.wlanMib.transmit(property,valAndType,True)
         else:
-             if inspectionType == "incorrect" and num_of_variables != "three":
-                self.stats.functionFailed.append(func_name[0]+ " " + inspectionType + " num_of_variables " + str(num_of_variables))
-             elif inspectionType=="correct":
-                self.stats.testCorrectSuccess += 1      
-             else:
-                self.stats.testExactSuccess += 1
+            ret = self.wlanMib_cli.wlanMib.transmit(property,valAndType,False)
+
+        string = ret.split("func")
+        
+        for i in range(1,len(string)-1):
+            return_code = string[i].split("rc ")
+            save_str = return_code[1].split("for")
+            if return_code[1].find("0") == 0:
+                if inspectionType == "correct":
+                    self.stats.testCorrectSuccess += 1
+                elif inspectionType == "exact":
+                    self.stats.testExactSuccess += 1
+                else:
+                    temp = save_str[1].split("\r")
+                    values = [int(s) for s in temp[0].split() if s.isdigit()]
+                    if len(values) > 1:
+                        self.stats.testIncorrectFailed.append(return_code[0] + "for values " + hex(int(values[0])) + hex(int(values[1])))
+                    else:
+                        self.stats.testIncorrectFailed.append(return_code[0] + "for value " + hex(int(values[0])))
+            else:
+                if inspectionType == "correct" or inspectionType == "exact":
+                    self.stats.functionFailed.append(return_code[0] + "rc " + save_str[0])
+                else:
+                    self.stats.testIncorrectSuccess += 1
+                    
     def analyze_results(self):
         pass
 
     def print_results(self):
-        self.add_limit("Test Correct Values Success ", 0 , self.stats.testCorrectSuccess , 0 , 'GE')
-        self.add_limit("Test InCorrect values Success ", 0 , self.stats.testIncorrectSuccess , 0 , 'GE')
-        self.add_limit("Test Exact Values Success ", 0 , self.stats.testExactSuccess , 0 , 'GE')
+        n_inspectionType = str()
+        
+        if self.inspectionType.find("correct") ==0 :
+            n_inspectionType = "valid values"
+        elif self.inspectionType.find("incorrect") ==0 :
+            n_inspectionType = "invalid values"
+        else:
+            n_inspectionType = "extrrme values"
+
+        if n_inspectionType == "invalid values":
+            self.add_limit("Mib %s functions %s" % (self.t_property.swapcase(), n_inspectionType), 1 , 59 - len(self.stats.testIncorrectFailed) , 59, 'GE')
+        else:
+            self.add_limit("Mib %s functions %s" % (self.t_property.swapcase(), n_inspectionType), 1 , 59 - len(self.stats.functionFailed) , 59, 'GE')
+        
+        #function name , sent values
+        for i in self.stats.testIncorrectFailed:
+            self.add_limit("%s" % i , 0 , 1 , 1, 'EQ')
+        #function name , return code
         for i in self.stats.functionFailed:
-            self.add_limit("Function Failed " + i , 0 , 1 , 0, 'QE')
+            self.add_limit("%s" % i , 0 , 1 , 1, 'EQ')
         
 ############ END Class TC_WlanMib_API ############
 
@@ -321,7 +339,7 @@ class Generate_CorrectValues():
         
     def __init__(self, methodName = 'runTest', param = None):
         self._findexFlag=False
-        self.regular_var_list = (dict(char=127,uint8=255,int=32767,int32=100,uint32=100,size_t=65535)
+        self.regular_var_list = (dict(char=127,uint8=255,int=100,int32=100,uint32=100,size_t=65535)
                  ,dict(char=-128,uint8=0,int=0,int32=0,uint32=0,size_t=0))
     
     def create_random(self,max,min):
@@ -475,10 +493,7 @@ class TC_WlanMib_LOAD(TC_WlanMib_API):
         super(TC_WlanMib_LOAD, self).unit_configuration()
 
         self.loudWlanMib_cli = self.uut.create_qa_cli("loudWlanMib_cli",  target_cpu = self.target_cpu)
-        ret = self.loudWlanMib_cli.wlanMib.socket_create(self.uut_can_if[0].device_id, {} )
-        if "ERROR :" in ret:
-            raise globals.Error("Can socket create received error {}".format(ret))
-
+        
         self.wlanMib_cli.link.reset_counters()
 
 
@@ -508,21 +523,12 @@ class TC_WlanMib_LOAD(TC_WlanMib_API):
         rxThread.join()
 
     def print_results(self):
-        '''
-        print the counters in this pattern
-        for xx send to 'funcName' return ttt successes and hhh failures
-        '''
-        wlanMib_counters = self.wlanMib_cli.wlanMib.read_counters()
+        self.add_limit("Test Correct Values Success ", 0 , self.stats.testCorrectSuccess , 0 , 'GE')
+        self.add_limit("Test InCorrect values Success ", 0 , self.stats.testIncorrectSuccess , 0 , 'GE')
+        self.add_limit("Test Exact Values Success ", 0 , self.stats.testExactSuccess , 0 , 'GE')
+        for i in self.stats.functionFailed:
+            self.add_limit("Function Failed " + i , 0 , 1 , 0, 'QE')
 
-        if len(wlanMib_counters) == 0:
-            wlanMib_counters = self.wlanMib_cli.wlanMib.read_counters()
-
-        print >> self.result._original_stdout, "wlanMib CLI Counters : {}".format(wlanMib_counters)
-
-        if len(wlanMib_counters) :
-           self.add_limit("Function Success"+self.stats.typeTest, self.stats.functionFailed,0, 0, 'EQ')
-           self.add_limit("Function Failed"+self.stats.typeTest,  self.stats.functionFailed, 0,0, 'EQ')
-           
 ########### END class TC_WlanMib_LOAD ##########
 
 class Statistics(object):
@@ -532,6 +538,7 @@ class Statistics(object):
         self.testCorrectSuccess = 0
         self.testExactSuccess = 0 
         self.testIncorrectSuccess = 0
+        self.testIncorrectFailed = list()
         self.functionFailed = list()
         
 if __name__ == "__main__":
