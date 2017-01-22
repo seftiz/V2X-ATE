@@ -80,7 +80,9 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         super(V2X_API_TEST, self).tearDown()
 
     def test_v2x(self):
-
+        """ v2x api test        
+            @brief      test the api level
+        """
         self.log = logging.getLogger(__name__)
   
         print >> self.result._original_stdout, "Starting : {}".format(self._testMethodName)
@@ -216,9 +218,9 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
 
         self._send_receive(frames = 150 ,timeout = 486 ,print_frame = 1)
 
-        self._send_receive(frames = 0,timeout = 500 ,print_frame = 1,v_or_inv = 1) 
+        self._send_receive(frames = 0,timeout = 500 ,print_frame = 1, v_or_inv = 1) 
 
-        self._send_receive(frames = 0,timeout = 0 ,print_frame = 1,v_or_inv = 1) 
+        self._send_receive(frames = 0,timeout = 0 ,print_frame = 1, v_or_inv = 1) 
 
         self._send_receive(frames = 20,timeout = 5000 ,print_frame = 0)
             
