@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3b5f67fa-fc72-4e11-8485-c5fcf40e87e9}</ProjectGuid>
+    <ProjectHome>
+    </ProjectHome>
+    <StartupFile>qa.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>Tests</Name>
+    <RootNamespace>ate</RootNamespace>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+<<<<<<< HEAD
+    <CommandLineArguments> -v sdk-4.11.1-alpha4-sc -t sc -q</CommandLineArguments>
+=======
+    <CommandLineArguments> -v sdk-4.11.1-alpha4-quick -t sc -q</CommandLineArguments>
+>>>>>>> 61e2d289622f20764155323048a86776c7e8c64c
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="lib\canbus_manager.py" />
+    <Compile Include="lib\globals.py" />
+    <Compile Include="lib\gps_simulator.py" />
+    <Compile Include="lib\HTMLTestRunner.py" />
+    <Compile Include="lib\instruments\Komodo\komodo_py.py" />
+    <Compile Include="lib\instruments\Komodo\__init__.py" />
+    <Compile Include="lib\instruments\litepoint_iq2010.py" />
+    <Compile Include="lib\instruments\packet_sniffer.py" />
+    <Compile Include="lib\instruments\power_control.py" />
+    <Compile Include="lib\instruments\sirit\sirit_config_tool.py" />
+    <Compile Include="lib\instruments\spectracom_gsg_6.py" />
+    <Compile Include="lib\instruments\UsbeeRx\usbee_rx.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="lib\instruments\Vector\CanCaseXL\canlib_xl.py" />
+    <Compile Include="lib\instruments\Vector\CanCaseXL\__init__.py" />
+    <Compile Include="lib\instruments\Vector\vector.py" />
+    <Compile Include="lib\instruments\Vector\__init__.py" />
+    <Compile Include="lib\instruments\__init__.py" />
+    <Compile Include="lib\instruments_manager.py" />
+    <Compile Include="lib\instruments\Komodo\komodo_if.py" />
+    <Compile Include="lib\interfaces.py" />
+    <Compile Include="lib\packet_analyzer.py" />
+    <Compile Include="lib\ssh.py" />
+    <Compile Include="lib\station_setup.py" />
+    <Compile Include="lib\utilities.py" />
+    <Compile Include="lib\uut.py" />
+    <Compile Include="lib\winpcapy.py" />
+    <Compile Include="lib\wiresharkXML.py" />
+    <Compile Include="lib\__init__.py" />
+    <Compile Include="main.py" />
+    <Compile Include="debug.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="qa.py" />
+    <Compile Include="tests\audi\can_2_g5.py" />
+    <Compile Include="tests\audi\gnss_2_g5.py" />
+    <Compile Include="tests\dsrc_definitions.py" />
+    <Compile Include="tests\common.py" />
+    <Compile Include="tests\gm\gm_can_definitions.py" />
+    <Compile Include="tests\gm\lan\tc_gmlan.py" />
+    <Compile Include="tests\gm\lan\uart_handler.py" />
+    <Compile Include="tests\gm\lan\__init__.py" />
+    <Compile Include="tests\gm\tc_can2bsm.py" />
+    <Compile Include="tests\gm\__init__.py" />
+    <Compile Include="tests\sdk2_0\tc_bsm_1.py" />
+    <Compile Include="tests\sdk2_0\tc_vca_1.py" />
+    <Compile Include="tests\sdk2_0\__init__.py" />
+    <Compile Include="tests\sdk2_1\tc_bsm_hardbreaking.py" />
+    <Compile Include="tests\sdk2_1\tc_navapi.py" />
+    <Compile Include="tests\sdk2_1\tc_sec_1609_2_1.py" />
+    <Compile Include="tests\sdk2_1\__init__.py" />
+    <Compile Include="tests\sdk3_0\tc_frame_struct.py" />
+    <Compile Include="tests\sdk3_0\tc_link_api.py" />
+    <Compile Include="tests\sdk3_0\tc_sdk_wsmp.py" />
+    <Compile Include="tests\sdk3_0\tc_throughput.py" />
+    <Compile Include="tests\sdk3_0\__init__.py" />
+    <Compile Include="tests\sdk4_x\tc_can.py" />
+    <Compile Include="tests\sdk4_x\tc_ethernet.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tests\sdk4_x\tc_secton_mode.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tests\sdk4_x\tc_wlanMib_api.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="tests\sdk4_x\v2x_api_test.py" />
+    <Compile Include="tests\sdk4_x\__init__.py" />
+    <Compile Include="tests\stacks\marben\tc_preformence.py" />
+    <Compile Include="tests\__init__.py" />
+    <Compile Include="utilities\build_qa_cli.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\can_bus_test.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\gps_to_udp.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\panagea4_sniffer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="utilities\plug-reboot.py" />
+    <Compile Include="utilities\sync_pc_clock_with_gps.py" />
+    <Compile Include="uuts\common.py" />
+    <Compile Include="uuts\craton\cli\cli_3.py" />
+    <Compile Include="uuts\craton\cli\cli_4.py" />
+    <Compile Include="uuts\craton\cli\gps.py" />
+    <Compile Include="uuts\craton\cli\navigation.py" />
+    <Compile Include="uuts\craton\fw_debug.py" />
+    <Compile Include="uuts\craton\cli\__init__.py" />
+    <Compile Include="uuts\craton\managment.py" />
+    <Compile Include="uuts\craton\snmp\snmp.py" />
+    <Compile Include="uuts\craton\snmp\__init__.py" />
+    <Compile Include="uuts\craton\__init__.py" />
+    <Compile Include="uuts\interface.py" />
+    <Compile Include="uuts\__init__.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="lib\" />
+    <Folder Include="lib\instruments\" />
+    <Folder Include="lib\instruments\Komodo\" />
+    <Folder Include="configuration\" />
+    <Folder Include="lib\instruments\UsbeeRx\" />
+    <Folder Include="lib\instruments\pynmea\" />
+    <Folder Include="lib\instruments\sirit\" />
+    <Folder Include="lib\instruments\Vector\" />
+    <Folder Include="lib\instruments\Vector\CanCaseXL\" />
+    <Folder Include="tests\" />
+    <Folder Include="tests\gm\" />
+    <Folder Include="tests\gm\lan\" />
+    <Folder Include="tests\audi\" />
+    <Folder Include="tests\sdk3_0\" />
+    <Folder Include="tests\sdk2_1" />
+    <Folder Include="tests\sdk2_0" />
+    <Folder Include="tests\sdk4_x\" />
+    <Folder Include="tests\stacks\" />
+    <Folder Include="tests\stacks\marben\" />
+    <Folder Include="utilities\" />
+    <Folder Include="uuts" />
+    <Folder Include="uuts\craton\" />
+    <Folder Include="uuts\craton\cli\" />
+    <Folder Include="uuts\craton\snmp\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="configuration\cfg_10.10.1.135.json" />
+    <Content Include="configuration\cfg_169.254.128.138.json" />
+    <Content Include="configuration\cfg_10.10.1.108.json" />
+    <Content Include="configuration\cfg_10.10.1.112.json" />
+    <Content Include="configuration\cfg_10.10.1.115.json" />
+    <Content Include="configuration\cfg_10.10.1.124.json" />
+    <Content Include="configuration\cfg_10.10.1.125.json" />
+    <Content Include="configuration\cfg_10.10.1.135" />
+  </ItemGroup>
+  <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />
+</Project>

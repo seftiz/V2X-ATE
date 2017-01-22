@@ -1,0 +1,215 @@
+{
+    "StationParamerters" : {
+				"log_dir" : "c:\\temp",
+				"reports_dir" : "c:\\temp"
+
+	},
+	
+	"Instruments":{
+
+        "Sniffer" : {
+					"active"	: 0,
+                    "id"		: 1,
+                    "type"		: "sirit",
+                    "ip"		: "10.10.1.119",
+					"user"		: "root",
+                    "pwd"		: "123",
+                    "interface"	: 1
+
+        },
+
+		"PcapConvertServer" : {
+					"active"	: 0,
+ 					"ip"		: "10.10.1.119",
+					"port"		: 8000
+		},
+
+        "Serial2Ip" : {
+   					"active"	: 0,
+	                "id"		: 1,
+                    "type"		: "Trs",
+                    "name"		: "Ser2Ip1",
+                    "ip"		: "10.10.0.11"
+        }, 
+
+        "PowerControl" : {
+					"active"	: 0,
+                    "id"		: 1,
+                    "type"		: "nps",
+                    "ip"		: "10.10.0.2",
+                    "user"		: "",
+                    "pwd"		: "",
+                    "prompt"	: "NPS >",
+                    "ports"		: 7
+        },
+        "GpsSimulator" : {
+					"active"	: 0,
+                    "id"		: 1,
+                    "type"		: "spectracom_gsg_6",
+                    "addr"		: "10.10.1.50"
+        }
+     
+            
+    },
+
+	"units_LINUX" : [
+                {
+                    "id"            : 0,
+                    "type"          : "GM",
+					"version"		: "GM1.3",
+					"cli_active"	: 1,
+                    "ip"            : "10.10.0.176",
+                    "pc"            : { "device": 1, "port" : 8 },
+                    "terminal"      : { "device": "COM", "id" : 9, "port" : 115200 },
+                    "rf_interfaces" : [
+										{	"id"			: 1,
+											"mac_addr"		: "00:00:00:00:00:00",
+											"freq"			: 5890,
+											"power"			: 0,
+											"link"			: "(1,0)"
+										}, 
+										{	"id"			: 2,
+											"mac_addr"		: "00:00:00:00:00:00",
+											"freq"			: 5920, 
+											"power"			: 0,
+											"link"			: "(1,1)"
+										}
+					]
+                }
+				],
+
+    "units" : [
+                {
+                    "active"		: 1,
+					"id"            : 0,
+                    "type"          : "EVK4",
+					"os"			: "threadx",
+					"version"		: "SDK4.x",
+					"cli_active"	: 0,
+					"external_host"	: "192.168.120.5",
+                    "ip"            : "192.168.120.220",
+					"mac_addr"		: "02:0b:6b:ef:2f:12",
+                    "pc"            : { "device": 1, "port" : 3 },
+                    "terminal"      : { "device": "NONE", "id" : "10.10.1.52", "port" : 10003 },
+					"can_interfaces": [
+										{	
+											"active"	: 1,
+											"id"        : 0,
+											"simulator"	: "CanBusServer", 
+											"sim_id"	: 1, 
+											"sim_port"	: 0, 
+											"device_id"	: "0"
+										},
+										{	
+											"active"	: 0,
+											"id"        : 1,
+											"simulator"	: "CanBusServer", 
+											"sim_id"	: 1, 
+											"sim_port"	: 1,
+											"device_id"	: "1"
+										}
+					],
+                    "rf_interfaces" : [
+										{	"id"			: 0,
+											"mac_addr"		: "02:0b:6b:ef:2f:11",
+											"freq"			: 5890,
+											"power"			: 0,
+											"link"			: "(1,0)"
+										}, 
+										{	"id"			: 1,
+											"mac_addr"		: "02:0b:6b:f0:2f:11",
+											"freq"			: 5920, 
+											"power"			: 0,
+											"link"			: "(1,1)"
+										}
+					]
+                },
+				{
+                    "active"		: 1,
+					"id"            : 1,
+                    "type"          : "EVK4",
+					"version"		: "SDK4.x",
+					"os"			: "threadx",
+					"cli_active"	: 0,
+					"external_host"	: "",
+                    "ip"            : "192.168.120.221",
+					"mac_addr"		: "02:0b:6b:f0:2f:12",
+                    "pc"            : { "device": 1, "port" : 4 },
+                    "terminal"      : { "device": "NONE", "id" : "10.10.1.52", "port" : 10004 },
+					"can_interfaces": [
+										{	
+											"active"	: 1,
+											"id"        : 0,
+											"simulator"	: "CanBusServer", 
+											"sim_id"	: 1, 
+											"sim_port"	: 0, 
+											"device_id"	: "0"
+										},
+										{	
+											"active"	: 1,
+											"id"        : 1,
+											"simulator"	: "CanBusServer", 
+											"sim_id"	: 1, 
+											"sim_port"	: 1,
+											"device_id"	: "1"
+										}
+					],
+                    "rf_interfaces" : [
+										{	"id"			: 0,
+											"mac_addr"		: "02:0b:6b:ef:2f:12",
+											"freq"			: 5890,
+											"power"			: 0,
+											"link"			: "(0,0)"
+										}, 
+										{	"id"			: 1,
+											"mac_addr"		: "02:0b:6b:f0:2f:12",
+											"freq"			: 5920, 
+											"power"			: 0,
+											"link"			: "(0,1)"
+										}
+							
+
+
+					]
+                }
+                
+        ],
+		"units_debug" : [
+			{
+                "id"            : 0,
+                "type"          : "EVK4",
+				"version"		: "SDK3.2",
+				"os"			: "threadx",
+				"cli_active"	: 0,
+				"external_host"	: "",
+                "ip"            : "10.10.0.236",
+				"mac_addr"		: "00:00:00:00:00:00",
+                "pc"            : { "device": 1, "port" : 4 },
+                "terminal"      : { "device": "Serial2Ip", "id" : 1, "port" : 2059 },
+				"can"			: { "device" : "CanBusServer", "id" : 1, "port" : 1 },
+                "rf_interfaces" : [
+									{	"id"			: 1,
+										"mac_addr"		: "92:56:92:01:00:ca",
+										"freq"			: 5890,
+										"power"			: 0,
+										"link"			: "(0,0)"
+									}, 
+									{	"id"			: 2,
+										"mac_addr"		: "92:56:92:02:00:ca",
+										"freq"			: 5920, 
+										"power"			: 0,
+										"link"			: "(0,1)"
+									}
+							
+
+
+				]
+            }
+                
+    ]
+}
+
+
+
+
+
