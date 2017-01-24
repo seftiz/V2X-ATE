@@ -257,9 +257,28 @@ def parse_params():
     return args
 
 def v2x_api_test(suite, cpu_type = 'arm'):
+    
+    scenario = "basic"
+    test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
+    from tests.sdk4_x import v2x_api_test
+    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
+    
+    scenario = "send_receive"
+    test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
+    from tests.sdk4_x import v2x_api_test
+    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
 
-    scenario = "basic, send_all, dot4_all, socket, service_get"
-    #scenario = "dot4_all"
+    scenario = "dot4_channel"
+    test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
+    from tests.sdk4_x import v2x_api_test
+    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
+
+    scenario = "socket"
+    test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
+    from tests.sdk4_x import v2x_api_test
+    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
+
+    scenario = "service_get"
     test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
     from tests.sdk4_x import v2x_api_test
     suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
