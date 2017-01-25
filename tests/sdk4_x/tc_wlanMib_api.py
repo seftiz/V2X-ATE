@@ -7,11 +7,7 @@
 """
 import os, sys, socket
 
-# Get current main file path and add to all searchings
-if __name__ == "__main__":
 
-    dirname, filename = os.path.split(os.path.abspath(__file__))
-    sys.path.append("c:\\temp\\qa")
 
 import unittest, logging, socket, json, json2html
 from datetime import datetime
@@ -22,8 +18,6 @@ from tests import common
 import webbrowser, re
 
 log = logging.getLogger(__name__)
-
-WLAN_MIB_DATA_FILE_NAME = "c:\\temp\WlanMib_data_file.txt"
 
 class TC_WlanMib_API(common.V2X_SDKBaseTest):
     """
@@ -37,8 +31,7 @@ class TC_WlanMib_API(common.V2X_SDKBaseTest):
     def __init__(self, methodName = 'runTest', param = None):
         self.wlanMib_cli = None
         self.stats = Statistics()
-        self.uut_wlanMib_if = []
-
+        
         self.t_property = str()  
         self.n_variables = str() 
         self.inspectionType = str()
@@ -67,8 +60,6 @@ class TC_WlanMib_API(common.V2X_SDKBaseTest):
         self.t_property = self.param.get('property',None)
                 
         self.inspectionType = self.param.get('inspectionType',None)
-       
-        print "Test parameters for %s :" % self.__class__.__name__
        
     def runTest(self):
         pass
@@ -148,12 +139,19 @@ class TC_WlanMib_API(common.V2X_SDKBaseTest):
                     temp = save_str[1].split("\r")
                     values = [int(s) for s in temp[0].split() if s.isdigit()]
                     if len(values) > 1:
-                        self.stats.testIncorrectFailed.append(return_code[0] + "for values " + hex(int(values[0])) + hex(int(values[1])))
+                        self.stats.testIncorrectFailed.append(return_code[0] + "RC " + save_str[0] + "FOR INVALID VALUES wlanRfIndex" + " " + hex(int(values[0])) + " AND wlan" + return_code[0].split("wlan")[1] + hex(int(values[1])))
                     else:
-                        self.stats.testIncorrectFailed.append(return_code[0] + "for value " + hex(int(values[0])))
+                        self.stats.testIncorrectFailed.append(return_code[0] + "RC " + save_str[0] + "FOR INVALID VALUE wlan" + return_code[0].split("wlan")[1] + " " + hex(int(values[0])))
             else:
                 if inspectionType == "correct" or inspectionType == "exact":
-                    self.stats.functionFailed.append(return_code[0] + "rc " + save_str[0])
+                    
+                    temp = save_str[1].split("\r")
+                    values = [int(s) for s in temp[0].split() if s.isdigit()]
+                    if len(values) > 1:
+                        self.stats.functionFailed.append(return_code[0] + "RC " + save_str[0]+ "FOR VALUES wlanRfIndex" + " " + hex(int(values[0])) + " AND wlan" + return_code[0].split("wlan")[1] + hex(int(values[1])))
+                    else:
+                        self.stats.functionFailed.append(return_code[0] + "RC " + save_str[0] + "FOR VALUE wlan" + return_code[0].split("wlan")[1] + " " + hex(int(values[0])))
+
                 else:
                     self.stats.testIncorrectSuccess += 1
                     
@@ -199,9 +197,9 @@ class TC_WlanMib_ERRONEOUS(TC_WlanMib_API):
         self.correctInstance = Generate_CorrectValues()
         self.inCorrectInstance = Generate_InCorrectValues()
         self._one_arg_func_dict=dict(enum="mib_configSaveStatus_t",regular=("int","int32","uint32"))
-        self._two_arg_func_list=dict(fIndex=dict(regular=("int32","int","uint32"),eui48="eui48",enum=("mib_antennaStatus_t","mib_wlanDcocStatus_t",
+        self._two_arg_func_list=dict(fIndex=dict(regular=("int32","int","uint32","int32"),eui48="eui48",enum=("mib_antennaStatus_t","mib_wlanDcocStatus_t",
                                              "mib_wlanPhyOFDM","mib_wlanRfTestMode_t")),
-                                     int32=dict(regular=("int32","uint8")))
+                                     int=dict(regular=("uint32","uint8")))
         self._three_arg_func_dict=dict(fIndex="fIndex",regular="char",size_t="size_t")
     
     def _generate_basic_scenario_data(self,property,inspectionType,num):
@@ -481,6 +479,7 @@ class TC_WlanMib_LOAD(TC_WlanMib_API):
 
     def __init__(self, methodName = 'runTest', param = None):
         super(TC_WlanMib_LOAD, self).__init__(methodName, param)
+        self.uut_wlanMib_if = []
         self.loudWlanMib_cli
 
     def get_test_parameters( self ):
@@ -540,70 +539,5 @@ class Statistics(object):
         self.testIncorrectSuccess = 0
         self.testIncorrectFailed = list()
         self.functionFailed = list()
-        
-if __name__ == "__main__":
-
-    # Receiving Wlan Mib API
-    com_ip = socket.gethostbyname(socket.gethostname())
-    cfg_file_name = "cfg_%s.json" % com_ip
-    cfg_dir_name = "c:\\temp\\qa\\configuration\\" 
-    cfg_file = os.path.join(cfg_dir_name, cfg_file_name)
-
-    if not os.path.exists( cfg_file ):
-        raise globals.Error("configuration file \'%s\' is missing." % (cfg_file) )
-
-    json_file = open(cfg_file)
-    try:
-        json_data = json.load(json_file)
-    except Exception as err:
-        raise globals.Error("Failed to parse json data %s, err %s" % (cfg_file, err))
-
-    globals.setup = station_setup.Setup( json_data )
-    
-    # Create timestamp for log and report file
-    scn_time = "%s" % (datetime.now().strftime("%d%m%Y_%H%M%S"))
-    """ @var logger handle for loging library """
-    log_file = os.path.join(globals.setup.station_parameters.log_dir, "st_log_%s.txt" % (scn_time) )
-    print "note : log file created, all messages will redirect to : \n%s" % log_file
-    logging.basicConfig(filename=log_file, filemode='w', level=logging.NOTSET)
-
-    globals.setup.load_setup_configuration_file()
-
-    suite = unittest.TestSuite()
-
-    globals.screen = sys.stdout
-
-    test_param = dict( uut_id = (0,0))
-    suite.addTest(common.ParametrizedTestCase.parametrize(TC_WlanMib_API, param = test_param ))
-
-    
-
-    # define report file
-    report_file = os.path.join(globals.setup.station_parameters.reports_dir, "report_%s.html" % (scn_time) ) 
-    fp = file(report_file, 'wb')
-
-    # use html atlk test runner
-    runner = HTMLTestRunner.HTMLTestRunner(
-                                            stream=fp,
-                                            verbosity=2,
-                                            title='auto-talks system testing',
-                                            description = 'CAN tests only', 
-                                            uut_info = globals.setup.units.get_versions()
-                                            )
-
-    try:
-        result = runner.run(suite)
-
-    except Exception as e:       
-        print "Received Exception"
-    finally:
-        # close report file
-        fp.close()
-    
-   
-        print "test sequence completed, please review report file %s" % report_file
-        # open an HTML file on my own (Windows) computer
-        url = "file://" + report_file
-        webbrowser.open(url,new=2)
- 
+     
 

@@ -304,9 +304,9 @@ if __name__ == "__main__":
         #eth_fnc_tests( suite, 'arm' )
 
     def sc_suite( suite ):
-        v2x_api_test(suite)
+        #v2x_api_test(suite)
         #v2x_api_tests( suite, 'arm', total_frames )
-        #wlanMib_api_tests( suite, 'arm')
+        wlanMib_api_tests( suite, 'arm')
         #nav_api_tests( suite, 'arm', sampling_time_sec)
   #      can_api_tests( suite, True, 'arm' )
         #eth_fnc_tests( suite, 'arm' )
