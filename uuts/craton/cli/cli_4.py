@@ -134,12 +134,14 @@ class linkApi(object):
 
         # No response till end of transmission 
 
-    def receive(self, frames, timeout = None, print_frame = None):
+    def receive(self, frames, timeout = None, print_frame = None,out_queue = None):
         cmd = "link socket rx -frames %s" % frames
         cmd += (" -print %s"  % print_frame) if not print_frame is None else ""
         cmd += (" -timeout_ms %s"  % timeout) if not timeout is None else ""
         self._if.send_command(cmd)
-        data = self._if.read_until_prompt( timeout  = 1)       
+        data = self._if.read_until_prompt( timeout  = 5000) 
+        if out_queue is not None : 
+            out_queue.put(data)  
         return data
         #if 'ERROR' in data:
         #    raise Exception( data )

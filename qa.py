@@ -258,12 +258,12 @@ def parse_params():
 
 def v2x_api_test(suite, cpu_type = 'arm'):
     
-    scenario = "basic"
-    test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
-    from tests.sdk4_x import v2x_api_test
-    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
+    #scenario = "basic"
+    #test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
+    #from tests.sdk4_x import v2x_api_test
+    #suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
     
-    scenario = "send_receive"
+    scenario = "send and receive"
     test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
     from tests.sdk4_x import v2x_api_test
     suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))

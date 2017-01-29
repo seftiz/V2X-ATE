@@ -26,6 +26,7 @@ from tests import common
 import webbrowser, re
 import Queue
 from lib import HTMLTestRunner
+import tempfile
 
 log = logging.getLogger(__name__)
 
@@ -46,10 +47,11 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self.v2x_cli2 = None
         self.error_count = [0,0,0]
         self.pass_count = [0,0,0]
-        self.scen_count = [0,0,0]
         self.if_index = 1
         self.func_string = ""
         self.func_fail = list()
+        self.gps_disconnect_flag = 0
+        self.fail_cnt = []
         super(V2X_API_TEST, self).__init__(methodName, param)
 
     def get_test_parameters( self ):
@@ -81,6 +83,7 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self.setUp()
 
         self.get_test_parameters()
+        self.instruments_initilization()
         self.unit_configuration()
 
         self.main()
@@ -119,30 +122,38 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         else:
             self._rc = self.v2x_cli2.link.service_create("hw") 
         self._rc = self.v2x_cli2.link.socket_create(self.if_index -1, "data", 1234 )
+
+        self.gps_lock = self.wait_for_gps_lock(self.uut1,5)
+        if self.gps_lock :
+           pass
+        else :
+            self.gps_disconnect_flag +=1
+            self.scen = self.param.get('scen', None )
+            if self.scen.find("dot4_channel") is not -1:
+                print "test setup dosn't include GPS - Dot4 API will not be tested except for NO GPS correct rc test"
         
     def instruments_initilization(self):
-        pass
-                                
-        
+        # Initilize GPS                         
+        self.gps_file = os.path.join( tempfile.gettempdir(),  self._testMethodName + "_" + time.strftime("%Y%m%d-%H%M%S") + "." + 'txt')
+                 
+                                               
     def main(self):
 
         self.scen = self.param.get('scen', None )
 
-        if self.scen.find("basic") is not -1:
-            self._generate_basic_scenario()           # run the v2x function with valid data prameters
-        
-
-        if self.scen.find("send_receive") is not -1 :      
+        if self.scen.find("send and receive") is not -1 :      
             self._send_receive_scenario()             # run send and receive functions with valid data prameters         
             self._send_random_scenario()              # run send function with random        
             self._send_invalid_scenario()             # run send function with invalid data prameters        
             self._send_edge_cases()                   # run send function in edge cases
         
-        if self.scen.find("dot4_channel") is not -1 :
+        if self.scen.find("dot4_channel") is not -1 and self.gps_disconnect_flag is 0 :
             self._dot4_valid_scenario()        
             self._dot4_invalid_scenario()             # run the dot4_channel functions with invalid data parameters        
             self._dot4_edge_cases()                   # run the dot4_channel functions in edge cases        
             self._dot4_specific_scenario()            # run the dot4_channel functions in the state machine
+        if self.scen.find("dot4_channel") is not -1 and self.gps_disconnect_flag is 1 :
+            self._dot4_without_gps_connection()
 
         if self.scen.find("socket") is not -1:
             self._socket_scenario()                   # run creat and deleat socket in stress
@@ -158,34 +169,41 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
 
     def print_results(self):
         
-        for i in self.func_fail :
-            self.add_limit(i,0,1,None,'EQ')
+        j=0
+        for i in self.func_fail :            
+            self.add_limit(i,0,self.fail_cnt[j],None,'EQ')
+            j+=1
 
         self.scen = self.param.get('scen', None )
-        if self.pass_count[0] or self.error_count[0]:
-            self.add_limit( "V2X " +self.scen+ " scenario : valid values ", 1 ,self.pass_count[0] , self.pass_count[0] + self.error_count[0] , 'GE')
-        if self.pass_count[1] or self.error_count[1]:
-            self.add_limit( "V2X " +self.scen+ " scenario : invalid values ", 1 ,self.pass_count[1] , self.pass_count[1] + self.error_count[1] , 'GE')
-        if self.pass_count[2] or self.error_count[2]:
-            self.add_limit( "V2X " +self.scen+ " scenario : extremes valus " , 1 ,self.pass_count[2] , self.pass_count[2] + self.error_count[2] , 'GE')
- 
+        if self.scen.find("dot4_channel") is not -1 and self.gps_disconnect_flag is 1 :
+            if self.pass_count[1] or self.error_count[1]:
+                self.add_limit("V2X API dot4_channel functions : run witout GPS connection and return ERROR message", 1 ,self.pass_count[1] , self.pass_count[1] + self.error_count[1] , 'GE')
+        else:        
+            if self.pass_count[0] or self.error_count[0]:
+                self.add_limit( "V2X API " +self.scen+ " functions : valid values ", 1 ,self.pass_count[0] , self.pass_count[0] + self.error_count[0] , 'GE')
+            if self.pass_count[1] or self.error_count[1]:
+                self.add_limit( "V2X API " +self.scen+ " functions : invalid values ", 1 ,self.pass_count[1] , self.pass_count[1] + self.error_count[1] , 'GE')
+            if self.pass_count[2] or self.error_count[2]:
+                self.add_limit( "V2X API " +self.scen+ " functions : extremes valus " , 1 ,self.pass_count[2] , self.pass_count[2] + self.error_count[2] , 'GE')
+
+        
     def _generate_basic_scenario(self):
 
         self._prms = V2X_API_TEST_v_generator()
-
-        self._request = self._prms.request_start_random()
-        self._wait = self._prms.wait_random()
-        self._rc = self.v2x_cli.link.dot4_channel_start(self._request,self._wait)
-        self.info_linit("v2x_dot4_channel_start",self._rc) 
+        if self.gps_disconnect_flag :
+            self._request = self._prms.request_start_random()
+            self._wait = self._prms.wait_random()
+            self._rc = self.v2x_cli.link.dot4_channel_start(self._request,self._wait)
+            self.info_linit("v2x_dot4_channel_start",self._rc) 
         
-        self._request = self._prms.request_end_random()
-        self._wait = self._prms.wait_random()
-        self._rc = self.v2x_cli.link.dot4_channel_end(self._request,self._wait)
-        self.info_linit("v2x_dot4_channel_end",self._rc)
+            self._request = self._prms.request_end_random()
+            self._wait = self._prms.wait_random()
+            self._rc = self.v2x_cli.link.dot4_channel_end(self._request,self._wait)
+            self.info_linit("v2x_dot4_channel_end",self._rc)
         
-        self._indication = self._prms.indication_random()
-        self._wait = self._prms.wait_random()
-        self._rc = self.v2x_cli.link.dot4_channel_end_receive(self._indication,self._wait)
+        #self._indication = self._prms.indication_random()
+        #self._wait = self._prms.wait_random()
+        #self._rc = self.v2x_cli.link.dot4_channel_end_receive(self._indication,self._wait)
         #self.info_linit("v2x_dot4_channel_end_receive",self._rc)   # - dont checked in this environment
         
         self._rc = self.v2x_cli.link.socket_delete()
@@ -205,19 +223,23 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
 
         self._send_receive(frames = 150 ,timeout = 486 ,print_frame = 1)
 
-        self._send_receive(frames = 0,timeout = 500 ,print_frame = 1, v_or_inv = 1) 
+        self._send_receive(frames = 150,timeout = 5000 ,print_frame = 0)
 
-        self._send_receive(frames = 0,timeout = 0 ,print_frame = 1, v_or_inv = 1) 
+        self._rc = self.v2x_cli.link.receive(frames = 1)
+        self.info_linit("v2x_receive",self._func_value,1)
 
-        self._send_receive(frames = 20,timeout = 5000 ,print_frame = 0)
+        self._rc = self.v2x_cli.link.receive(frames = 100)
+        self.info_linit("v2x_receive",self._func_value,1)
+        
             
 
     def _send_receive(self,frames, timeout, print_frame,v_or_inv = 0):
         thread_list = []
 
         self.Rx_count_start = self.uut2.managment.get_wlan_frame_rx_cnt(self.if_index) 
-                        
-        self.receive_thread = threading.Thread(target = self.v2x_cli2.link.receive, args = (frames,timeout,print_frame))
+      
+        self._my_queue = Queue.Queue()          
+        self.receive_thread = threading.Thread(target = self.v2x_cli.link.receive, args = (frames,timeout,print_frame,self._my_queue))
         thread_list.append(self.receive_thread)
         self.send_thread = threading.Thread(target = self._some_sends, args = (frames,))
         thread_list.append(self.send_thread)
@@ -226,30 +248,18 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
             thread.start()
 
         for thread in thread_list:
-            thread.join()     
+            thread.join()   
+
+        self._func_value = self._my_queue.get()  
+
+        self.info_linit("v2x_receive",self._func_value,v_or_inv)
           
         self.Rx_count = self.uut2.managment.get_wlan_frame_rx_cnt(self.if_index)
-
-        if  v_or_inv :
-            if(self.Rx_count == self.Rx_count_start) :                
-                self.pass_count[1] += 1
-            else :
-                if 'function name :  v2x_receive - unknown state, the function return pass to invalid state ' not in self.func_string :
-                    self.func_fail.append('function name :  v2x_receive - unknown state, the function return pass to invalid state ' + str(self.Rx_count))
-                    self.func_string += 'function name :  v2x_receive - unknown state, the function return pass to invalid state '                
-                self.error_count[1] += 1
-        else :
-            if(self.Rx_count == (self.Rx_count_start + frames)) :                
-                self.pass_count[0] += 1
-            else :
-                if 'the function v2x_receive not get the Tx frame in valid state' not in self.func_string :
-                    self.func_fail.append('the function v2x_receive not get the Tx frame in valid state' + str(self.Rx_count))
-                    self.func_string += 'the function v2x_receive not get the Tx frame in valid state'                
-                self.error_count[0] += 1
+ 
 
     def _some_sends(self, num_frames):
         for x in range (0,num_frames) :
-            self._rc = self.v2x_cli.link.send()    
+            self._rc = self.v2x_cli2.link.send()    
                            
     def _send_random_scenario(self) :
         self._prms = V2X_API_TEST_v_generator()
@@ -595,7 +605,20 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
         self._wait = self._prms.wait(wait_usec = 0xffffffff)
         self._rc = self.v2x_cli.link.dot4_channel_end(self._request,self._wait)
         self.info_linit("v2x_dot4_channel_end",self._rc,2,"wait_usec", 0xffffffff)
+  
+    def _dot4_without_gps_connection(self):
+        self._prms = V2X_API_TEST_v_generator() 
        
+        self._request = self._prms.request_start_random()
+        self._wait = self._prms.wait_random()
+        self._rc = self.v2x_cli.link.dot4_channel_start(self._request,self._wait)
+        self.info_linit("v2x_dot4_channel_start",self._rc,1)
+            
+        self._request = self._prms.request_end_random()
+        self._wait = self._prms.wait_random()
+        self._rc = self.v2x_cli.link.dot4_channel_end(self._request,self._wait)
+        self.info_linit("v2x_dot4_channel_end",self._rc,1)
+     
     def _service_get_delete(self) :
         for x in range(0,20) :
             self._rc = self.v2x_cli.link.default_service_get()
@@ -605,58 +628,89 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
 
     def info_linit(self,func_name, rc, pass_or_fail = 0, parameter = None , value = None ) :
         self.html = HTMLTestRunner._TestResult()
-        if pass_or_fail == 0:
-            self.scen_count[0] +=1
-        elif pass_or_fail == 1:
-            self.scen_count[1] +=1
-        elif pass_or_fail == 2:
-            self.scen_count[2] +=1
-
-        if pass_or_fail == 1:
+        
+        if "dot4_channel" in func_name and self.gps_disconnect_flag :
             if 'PASS' in rc:
-                if " the function " + func_name + " pass with random invalid argument" not in self.func_string :
-                    self.func_fail.append(" the function " + func_name + " pass with random invalid argument")
-                    self.func_string += " the function " + func_name + " pass with random invalid argument"                 
-                self.error_count[1] += 1                
-            elif 'ERROR' in rc:
-                self.err1 = rc.split("ERROR :")
-                self.err2 = self.err1[1]
-                self.err3 = self.err2.split("\r")                
-                self.pass_count[1] += 1                               
-            else :
-                if " unknown state - the function " + func_name + " not return pass or error message" not in self.func_string :
-                    self.func_fail.append(" unknown state - the function " + func_name + " not return pass or error message")
-                    self.func_string += " unknown state - the function " + func_name + " not return pass or error message"                
-                self.error_count[1] += 1                
-        else :
+                self.add_limit( "the "+ func_name +" function run without GPS connection and return PASS" , 0 , 1, None , 'EQ')
+                self.error_count[1] += 1
             if 'ERROR' in rc:
-                self.err1 = rc.split("ERROR :")
-                self.err2 = self.err1[1]
-                self.err3 = self.err2.split("\r")
-                if pass_or_fail == 2 :
-                    self.add_limit( "the function " + func_name + " run with extreme values inputs and failed, the error message : rc = " + self.err3[0] + " | parameter = " +parameter+ " value = " + hex(int(value)) , 0 , 1, None , 'EQ')
-                    self.error_count[2] += 1 
-                elif pass_or_fail == 0 :
-                    if func_name + self.err3[0] not in self.func_string :
-                        self.func_fail.append("the function  " + func_name + " run with valid inputs and failed, the error message : rc = " + self.err3[0])
-                        self.func_string += func_name + self.err3[0]                      
-                    self.error_count[0] += 1               
-            elif 'PASS' in rc:
-                self.err1 = rc.split("PASS")
-                self.err2 = self.err1[1]
-                self.err3 = self.err2.split("\r")                 
-                if pass_or_fail == 2 :
-                    self.pass_count[2] += 1  
-                elif pass_or_fail == 0 :
-                    self.pass_count[0] += 1              
+                self.pass_count[1] += 1 
+        else :
+            if pass_or_fail == 1:
+                if 'PASS' in rc:
+                    self.err1 = rc.split("PASS")
+                    self.err2 = self.err1[1]
+                    self.err3 = self.err2.split("\r")
+                    j=0 
+                    for i in self.func_fail :
+                        if " the function " + func_name + " pass with random invalid argument : rc = " + self.err3[0] == i :
+                            self.fail_cnt[j] +=1
+                        j +=1
+                    if " the function " + func_name + " pass with random invalid argument : rc = " + self.err3[0] not in self.func_string :
+                        self.func_fail.append(" the function " + func_name + " pass with random invalid argument : rc = " + self.err3[0])
+                        self.func_string += " the function " + func_name + " pass with random invalid argument : rc = " + self.err3[0]
+                        self.fail_cnt.append(1)    
+             
+                    self.error_count[1] += 1                
+                elif 'ERROR' in rc:
+                    self.err1 = rc.split("ERROR :")
+                    self.err2 = self.err1[1]
+                    self.err3 = self.err2.split("\r")                
+                    self.pass_count[1] += 1                               
+                else :
+                    j=0         
+                    for i in self.func_fail :
+                        if " unknown state - the function " + func_name + " not return pass or error message" == i :
+                            self.fail_cnt[j] +=1
+                        j +=1 
+                    if " unknown state - the function " + func_name + " not return pass or error message" not in self.func_string :
+                        self.func_fail.append(" unknown state - the function " + func_name + " not return pass or error message")
+                        self.func_string += " unknown state - the function " + func_name + " not return pass or error message" 
+                        self.fail_cnt.append(1)               
+                    self.error_count[1] += 1                
             else :
-                if " unknown state - the function " + func_name + " not return pass or error message" not in self.func_string :
-                    self.func_fail.append(" unknown state - the function " + func_name + " not return pass or error message")
-                    self.func_string += " unknown state - the function " + func_name + " not return pass or error message"                
-                if pass_or_fail == 2 :
-                    self.error_count[2] += 1 
-                elif pass_or_fail == 0 :
-                    self.error_count[0] += 1                
+                if 'ERROR' in rc:
+                    self.err1 = rc.split("ERROR :")
+                    self.err2 = self.err1[1]
+                    self.err3 = self.err2.split("\r")
+                    if pass_or_fail == 2 :
+                        self.add_limit( "the function " + func_name + " run with extreme values inputs and failed, the error message : rc = " + self.err3[0] + " | parameter = " +parameter+ " value = " + hex(int(value)) , 0 , 1, None , 'EQ')
+                        self.error_count[2] += 1 
+                    elif pass_or_fail == 0 :
+           
+                        j=0         
+                        for i in self.func_fail :
+                            if "the function  " + func_name + " run with valid inputs and failed, the error message : rc = " + self.err3[0] == i :
+                                self.fail_cnt[j] +=1
+                            j +=1                            
+                        if func_name + self.err3[0] not in self.func_string :
+                            self.func_fail.append("the function  " + func_name + " run with valid inputs and failed, the error message : rc = " + self.err3[0])
+                            self.func_string += func_name + self.err3[0] 
+                            self.fail_cnt.append(1)                    
+                        self.error_count[0] += 1  
+             
+                elif 'PASS' in rc:
+                    self.err1 = rc.split("PASS")
+                    self.err2 = self.err1[1]
+                    self.err3 = self.err2.split("\r")                 
+                    if pass_or_fail == 2 :
+                        self.pass_count[2] += 1  
+                    elif pass_or_fail == 0 :
+                        self.pass_count[0] += 1              
+                else :
+                    j=0         
+                    for i in self.func_fail :
+                        if " unknown state - the function " + func_name + " not return pass or error message" == i :
+                            self.fail_cnt[j] +=1
+                        j +=1 
+                    if " unknown state - the function " + func_name + " not return pass or error message" not in self.func_string :
+                        self.func_fail.append(" unknown state - the function " + func_name + " not return pass or error message")
+                        self.func_string += " unknown state - the function " + func_name + " not return pass or error message"
+                        self.fail_cnt.append(1)                
+                    if pass_or_fail == 2 :
+                        self.error_count[2] += 1 
+                    elif pass_or_fail == 0 :
+                        self.error_count[0] += 1                
 
 """ GENERATOR : """
 """-------------"""
