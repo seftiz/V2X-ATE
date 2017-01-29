@@ -122,9 +122,25 @@ class TC_WlanMib_API(common.V2X_SDKBaseTest):
         #WlanMib CLI transmit
         if inspectionType == "incorrect":
             ret = self.wlanMib_cli.wlanMib.transmit(property,valAndType,True)
+        elif inspectionType == "correct" and property == "Get":
+            for i in range(0,100):
+                ret = self.wlanMib_cli.wlanMib.transmit(property,valAndType,False)
+                string = ret.split("func")
+        
+                for i in range(1,len(string)-1):
+                    return_code = string[i].split("rc ")
+                    save_str = return_code[1].split("for")
+                    if return_code[1].find("0") == 0:
+                        self.stats.testCorrectSuccess += 1
+                    else:
+                        temp = save_str[1].split("\r")
+                        values = [int(s) for s in temp[0].split() if s.isdigit()]
+                        if len(values) > 1:
+                            self.stats.functionFailed.append(return_code[0] + "RC " + save_str[0]+ "FOR VALUES wlanRfIndex" + " " + hex(int(values[0])) + " AND wlan" + return_code[0].split("wlan")[1] + hex(int(values[1])))
+                        else:
+                            self.stats.functionFailed.append(return_code[0] + "RC " + save_str[0] + "FOR VALUE wlan" + return_code[0].split("wlan")[1] + " " + hex(int(values[0])))
         else:
             ret = self.wlanMib_cli.wlanMib.transmit(property,valAndType,False)
-
         string = ret.split("func")
         
         for i in range(1,len(string)-1):
@@ -166,13 +182,15 @@ class TC_WlanMib_API(common.V2X_SDKBaseTest):
         elif self.inspectionType.find("incorrect") ==0 :
             n_inspectionType = "invalid values"
         else:
-            n_inspectionType = "extrrme values"
+            n_inspectionType = "extrme values"
 
         if n_inspectionType == "invalid values":
             self.add_limit("Mib %s functions %s" % (self.t_property.swapcase(), n_inspectionType), 1 , 59 - len(self.stats.testIncorrectFailed) , 59, 'GE')
-        else:
+        elif n_inspectionType == "extrme values":
             self.add_limit("Mib %s functions %s" % (self.t_property.swapcase(), n_inspectionType), 1 , 59 - len(self.stats.functionFailed) , 59, 'GE')
-        
+        else:
+            self.add_limit("Mib %s functions %s Num of Tests %d" % (self.t_property.swapcase(), n_inspectionType,100), 1 , 59 - len(self.stats.functionFailed) , 59, 'GE')
+
         #function name , sent values
         for i in self.stats.testIncorrectFailed:
             self.add_limit("%s" % i , 0 , 1 , 1, 'EQ')

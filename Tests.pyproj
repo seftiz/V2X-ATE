@@ -15,7 +15,7 @@
     <RootNamespace>ate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-v sdk-4.11.1-alpha4-sc -t sc -q</CommandLineArguments>
+    <CommandLineArguments>-v sdk-4.11.1-rc2-sc -t sc -q</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
