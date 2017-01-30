@@ -278,7 +278,7 @@ def v2x_api_test(suite, cpu_type = 'arm'):
     from tests.sdk4_x import v2x_api_test
     suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
 
-    scenario = "service_get"
+    scenario = "service_get and service_delete"
     test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
     from tests.sdk4_x import v2x_api_test
     suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
@@ -323,9 +323,9 @@ if __name__ == "__main__":
         #eth_fnc_tests( suite, 'arm' )
 
     def sc_suite( suite ):
-        #v2x_api_test(suite)
+        v2x_api_test(suite)
         #v2x_api_tests( suite, 'arm', total_frames )
-        wlanMib_api_tests( suite, 'arm')
+        #wlanMib_api_tests( suite, 'arm')
         #nav_api_tests( suite, 'arm', sampling_time_sec)
   #      can_api_tests( suite, True, 'arm' )
         #eth_fnc_tests( suite, 'arm' )
