@@ -41,7 +41,7 @@ class TC_LINK_API(common.V2X_SDKBaseTest):
 
     def __init__(self, methodName = 'runTest', param = None):
         self.stats = Statistics()
-        self._tx_src_count = 0
+        #self._tx_src_count = 0
         self.rx_list = []
         self.tx_list = []
         self.active_cli_list = []

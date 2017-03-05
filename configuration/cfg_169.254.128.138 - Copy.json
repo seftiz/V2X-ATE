@@ -82,13 +82,13 @@
                 {
                     "active"		: 1,
 					"id"            : 0,
-                    "type"          : "EVK5",
+                    "type"          : "EVK4",
 					"os"			: "threadx",
-					"version"		: "SDK5.x",
+					"version"		: "SDK4.x",
 					"cli_active"	: 0,
 					"external_host"	: "192.168.120.5",
-                    "ip"            : "",
-					"mac_addr"		: "00:02:cc:f0:00:06",
+                    "ip"            : "192.168.120.220",
+					"mac_addr"		: "02:0b:6b:ef:2f:12",
                     "pc"            : { "device": 1, "port" : 3 },
                     "terminal"      : { "device": "NONE", "id" : "10.10.1.52", "port" : 10003 },
 					"can_interfaces": [
@@ -111,13 +111,13 @@
 					],
                     "rf_interfaces" : [
 										{	"id"			: 0,
-											"mac_addr"		: "00:02:cc:f0:00:06",
+											"mac_addr"		: "02:0b:6b:ef:2f:11",
 											"freq"			: 5890,
 											"power"			: 0,
 											"link"			: "(1,0)"
 										}, 
 										{	"id"			: 1,
-											"mac_addr"		: "00:02:cc:f0:00:06",
+											"mac_addr"		: "02:0b:6b:f0:2f:11",
 											"freq"			: 5920, 
 											"power"			: 0,
 											"link"			: "(1,1)"

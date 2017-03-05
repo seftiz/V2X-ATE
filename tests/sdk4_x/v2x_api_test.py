@@ -33,7 +33,7 @@ log = logging.getLogger(__name__)
 V2X_DATA_FILE_NAME = "c:\\temp\v2x_data_file.txt"
 
 
-class V2X_API_TEST(common.V2X_SDKBaseTest):
+class TC_V2X_API_TEST(common.V2X_SDKBaseTest):
     """
     @class V2X_API_TEST
     @brief Test the V2X_API 
@@ -135,9 +135,7 @@ class V2X_API_TEST(common.V2X_SDKBaseTest):
                 print "test setup dosn't include GPS - Dot4 API will not be tested except for NO GPS correct rc test"
         
     def instruments_initilization(self):
-        # Initilize GPS                         
-        self.gps_file = os.path.join( tempfile.gettempdir(),  self._testMethodName + "_" + time.strftime("%Y%m%d-%H%M%S") + "." + 'txt')
-                 
+        pass
                                                
     def main(self):
 

@@ -68,6 +68,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="qa.py" />
+    <Compile Include="Tc_link.py" />
     <Compile Include="tests\audi\can_2_g5.py" />
     <Compile Include="tests\audi\gnss_2_g5.py" />
     <Compile Include="tests\dsrc_definitions.py" />
@@ -102,6 +103,7 @@
     </Compile>
     <Compile Include="tests\sdk4_x\v2x_api_test.py" />
     <Compile Include="tests\sdk4_x\__init__.py" />
+    <Compile Include="tests\sdk5_x\Tc_link.py" />
     <Compile Include="tests\stacks\marben\tc_preformence.py" />
     <Compile Include="tests\__init__.py" />
     <Compile Include="utilities\build_qa_cli.py">
@@ -120,6 +122,7 @@
     <Compile Include="utilities\sync_pc_clock_with_gps.py" />
     <Compile Include="uuts\common.py" />
     <Compile Include="uuts\craton\cli\cli_3.py" />
+    <Compile Include="uuts\craton\cli\cli_5.py" />
     <Compile Include="uuts\craton\cli\cli_4.py" />
     <Compile Include="uuts\craton\cli\gps.py" />
     <Compile Include="uuts\craton\cli\navigation.py" />
@@ -150,6 +153,7 @@
     <Folder Include="tests\sdk2_1" />
     <Folder Include="tests\sdk2_0" />
     <Folder Include="tests\sdk4_x\" />
+    <Folder Include="tests\sdk5_x\" />
     <Folder Include="tests\stacks\" />
     <Folder Include="tests\stacks\marben\" />
     <Folder Include="utilities\" />
@@ -159,6 +163,7 @@
     <Folder Include="uuts\craton\snmp\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="configuration\cfg_169.254.128.138 - Copy.json" />
     <Content Include="configuration\cfg_169.254.128.138.json" />
     <Content Include="configuration\cfg_10.10.1.108.json" />
     <Content Include="configuration\cfg_10.10.1.112.json" />

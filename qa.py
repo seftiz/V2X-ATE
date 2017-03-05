@@ -266,22 +266,56 @@ def v2x_api_test(suite, cpu_type = 'arm'):
     scenario = "send and receive"
     test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
     from tests.sdk4_x import v2x_api_test
-    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
+    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.TC_V2X_API_TEST, param = test_param))
 
     scenario = "dot4_channel"
     test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
     from tests.sdk4_x import v2x_api_test
-    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
+    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.TC_V2X_API_TEST, param = test_param))
 
     scenario = "socket"
     test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
     from tests.sdk4_x import v2x_api_test
-    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
+    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.TC_V2X_API_TEST, param = test_param))
 
     scenario = "service_get and service_delete"
     test_param = dict( uut_id1 = 0,uut_id2 = 1,target_cpu = cpu_type,scen = scenario)
     from tests.sdk4_x import v2x_api_test
-    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.V2X_API_TEST, param = test_param))
+    suite.addTest(common.ParametrizedTestCase.parametrize(v2x_api_test.TC_V2X_API_TEST, param = test_param))
+
+def v2x_tests ( suite, cpu_type = 'arm',total_frames = 10000):
+
+    from tests.sdk5_x import Tc_link
+   
+# api tast Tx
+    test_links = [ tParam( tx = (0,0), rx = (1,0), proto_id = 0x1234, frames = 10, frame_rate_hz = 10 ), 
+                    tParam( rx = (0,0), tx = (1,0), proto_id = 0x5678, frames = 10, frame_rate_hz = 10 ) ]
+    suite.addTest(common.ParametrizedTestCase.parametrize(Tc_link.TC_LINK, param = dict( params = test_links, target_cpu = cpu_type ) ) )
+
+# api tast Rx
+    test_links = [  tParam( tx = (0,0), rx = (1,0), frame_type= 'LPD', proto_id = 0x0052c24a43, frames = total_frames, frame_rate_hz = 10, tx_data = tx_data, dest_addr = globals.setup.units.unit(1).rf_interfaces[0].mac_addr, tx_power = tx_pow ), 
+                    tParam( tx = (1,1), rx = (0,1), frame_type= 'LPD', proto_id = 0x0052c24a43, frames = total_frames, frame_rate_hz = 10, tx_data = tx_data, dest_addr = globals.setup.units.unit(0).rf_interfaces[1].mac_addr,  tx_power = tx_pow ),  
+                    tParam( tx = (1,0), rx = (0,0), frame_type= 'LPD', proto_id = 0x13a1, frames = total_frames*5, frame_rate_hz = 20, tx_data = tx_data,  dest_addr = globals.setup.units.unit(0).rf_interfaces[0].mac_addr, tx_power = tx_pow ),
+                    tParam( tx = (1,1), rx = (0,1), frame_type= 'EPD', proto_id = 0x13d1, frames = total_frames*10, frame_rate_hz = 50, tx_data = tx_data,  dest_addr = globals.setup.units.unit(0).rf_interfaces[1].mac_addr, tx_power = tx_pow ),
+                    tParam( tx = (0,0), rx = (1,0), frame_type= 'data', proto_id = 0x13e2, frames = total_frames, frame_rate_hz = 20, tx_data = tx_data,  tx_power = tx_pow ), 
+                    tParam( tx = (1,0), rx = (0,0), frame_type= 'data', proto_id = 0x13b3, frames = total_frames*10, frame_rate_hz = 200, tx_data = tx_data,  tx_power = tx_pow ) ]
+
+    test_links = [  tParam( tx = (0,0), rx = (1,0), frame_type= 'vsa', proto_id = 0x0052c24a43, frames = total_frames, frame_rate_hz = 10, tx_data = tx_data, dest_addr = globals.setup.units.unit(1).rf_interfaces[0].mac_addr, tx_power = tx_pow ), 
+                    tParam( tx = (1,1), rx = (0,1), frame_type= 'vsa', proto_id = 0x0052c24a43, frames = total_frames, frame_rate_hz = 10, tx_data = tx_data, dest_addr = globals.setup.units.unit(0).rf_interfaces[1].mac_addr,  tx_power = tx_pow ),  
+                    tParam( tx = (1,0), rx = (0,0), frame_type= 'data', proto_id = 0x13a1, frames = total_frames*5, frame_rate_hz = 20, tx_data = tx_data,  dest_addr = globals.setup.units.unit(0).rf_interfaces[0].mac_addr, tx_power = tx_pow ),
+                    tParam( tx = (1,1), rx = (0,1), frame_type= 'data', proto_id = 0x13d1, frames = total_frames*10, frame_rate_hz = 50, tx_data = tx_data,  dest_addr = globals.setup.units.unit(0).rf_interfaces[1].mac_addr, tx_power = tx_pow ),
+                    tParam( tx = (0,0), rx = (1,0), frame_type= 'data', proto_id = 0x13e2, frames = total_frames, frame_rate_hz = 20, tx_data = tx_data,  tx_power = tx_pow ), 
+                    tParam( tx = (1,0), rx = (0,0), frame_type= 'data', proto_id = 0x13b3, frames = total_frames*10, frame_rate_hz = 200, tx_data = tx_data,  tx_power = tx_pow ) ]
+# Tx stress
+
+# Rx stress
+
+# brodcast
+
+# unicast
+
+# rate and size
+    
 
 if __name__ == "__main__":
     
@@ -323,7 +357,8 @@ if __name__ == "__main__":
         #eth_fnc_tests( suite, 'arm' )
 
     def sc_suite( suite ):
-        v2x_api_test(suite)
+        #v2x_api_test(suite)
+        v2x_tests( suite, 'arm', total_frames )
         #v2x_api_tests( suite, 'arm', total_frames )
         #wlanMib_api_tests( suite, 'arm')
         #nav_api_tests( suite, 'arm', sampling_time_sec)
@@ -331,8 +366,8 @@ if __name__ == "__main__":
         #eth_fnc_tests( suite, 'arm' )
 
     def mc_suite( suite ):
-        v2x_api_test(suite)
-        #v2x_api_tests( suite, 'arc1', total_frames )
+        #v2x_api_test(suite)
+        v2x_api_tests( suite, 'arc1', total_frames )
         #nav_api_tests( suite, 'arm', sampling_time_sec )
         #nav_api_tests( suite, 'arc1', sampling_time_sec )
         #nav_api_tests( suite, 'arc2', sampling_time_sec )
