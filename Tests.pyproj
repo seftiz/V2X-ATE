@@ -15,7 +15,7 @@
     <RootNamespace>ate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-v sdk-4.11.1-rc2-sc -t sc -q</CommandLineArguments>
+    <CommandLineArguments>-v sdk-5.2.0-rc2-alpha1 -t sc -q</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
     <Environment>
     </Environment>
@@ -44,6 +44,7 @@
     <Compile Include="lib\instruments\power_control.py" />
     <Compile Include="lib\instruments\sirit\sirit_config_tool.py" />
     <Compile Include="lib\instruments\spectracom_gsg_6.py" />
+    <Compile Include="lib\instruments\traffic_generator.py" />
     <Compile Include="lib\instruments\UsbeeRx\usbee_rx.py">
       <SubType>Code</SubType>
     </Compile>
@@ -68,7 +69,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="qa.py" />
-    <Compile Include="Tc_link.py" />
     <Compile Include="tests\audi\can_2_g5.py" />
     <Compile Include="tests\audi\gnss_2_g5.py" />
     <Compile Include="tests\dsrc_definitions.py" />
@@ -104,6 +104,7 @@
     <Compile Include="tests\sdk4_x\v2x_api_test.py" />
     <Compile Include="tests\sdk4_x\__init__.py" />
     <Compile Include="tests\sdk5_x\Tc_link.py" />
+    <Compile Include="tests\sdk5_x\__init__.py" />
     <Compile Include="tests\stacks\marben\tc_preformence.py" />
     <Compile Include="tests\__init__.py" />
     <Compile Include="utilities\build_qa_cli.py">
@@ -120,6 +121,7 @@
     </Compile>
     <Compile Include="utilities\plug-reboot.py" />
     <Compile Include="utilities\sync_pc_clock_with_gps.py" />
+    <Compile Include="utilities\__init__.py" />
     <Compile Include="uuts\common.py" />
     <Compile Include="uuts\craton\cli\cli_3.py" />
     <Compile Include="uuts\craton\cli\cli_5.py" />
@@ -163,7 +165,7 @@
     <Folder Include="uuts\craton\snmp\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="configuration\cfg_169.254.128.138 - Copy.json" />
+    <Content Include="configuration\cfg_169.254.128.138_o.json" />
     <Content Include="configuration\cfg_169.254.128.138.json" />
     <Content Include="configuration\cfg_10.10.1.108.json" />
     <Content Include="configuration\cfg_10.10.1.112.json" />

@@ -1,6 +1,6 @@
 """
-@file cli_4.py
-@brief V2X CLI API for SDK 4
+@file cli_5.py
+@brief V2X CLI API for SDK 5
 @author    	Shai Shochat
 @version	1.0
 @date		13/05/2014
@@ -64,27 +64,34 @@ class qaCliManagment(object):
             return len(self.__qa_cli)
         except Exception:
             return 0
-class Register() :
 
-    def device_register(self, type = "hw", embedded_ip = None ,device_type = 0, interface = None):
+class Register(object) :
+
+    def __init__(self, interface):
+        self._if = interface
+        self._name = "register"
+
+    def device_register(self, type = "hw", embedded_ip = None ,device_type = 0, i_f = None):
         
-        cmd = "register device" 
+        cmd = "%s device" % self._name
         cmd += (" -hw_addr %s"  % embedded_ip)
         cmd += (" -device_type %d"  % device_type) 
-        cmd += (" -if %s"  % interface)
+        cmd += (" -if %s"  % i_f)
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
-        if 'ERROR' in data:
-            raise Exception( data )
+        return data;
+        #if 'ERROR' in data:
+        #    raise Exception( data )
         
     def service_register(self,service_name,service_type):
-        cmd = "register service"
+        cmd = "%s service" % self._name
         cmd += (" -service_name %s"  % service_name)
         cmd += (" -service_type %d"  % service_type) 
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
-        if 'ERROR' in data:
-            raise Exception( data )
+        return data;
+        #if 'ERROR' in data:
+        #    raise Exception( data )
 
 
 class linkApi(object):
@@ -151,8 +158,9 @@ class linkApi(object):
         cmd += (" -op_class %s"  % op_class) if not op_class is None else ""
         self._if.send_command(cmd, False)
         data = self._if.read_until_prompt( timeout  = 1)
-        if 'ERROR' in data:
-            raise Exception( data )
+        return cmd + data;
+        #if 'ERROR' in data:
+         #   raise Exception( data )
 
         # No response till end of transmission 
 
@@ -164,9 +172,9 @@ class linkApi(object):
         data = self._if.read_until_prompt( timeout  = 5000) 
         if out_queue is not None : 
             out_queue.put(data)  
-        return data
+        return cmd + data
         #if 'ERROR' in data:
-        #    raise Exception( data )
+        #    raise Ebxception( data )
 
 
     def reset_counters(self):
@@ -218,6 +226,15 @@ class linkApi(object):
         """ Set already active session to a new connection """
         cmd = "{} socket set -addr {}".format( self._name, address )
         self._if.send_command(cmd)
+
+    def netif_profile_set(self,  netif_index, profile ):
+        cmd = "%s netif_profile set " % self._name        
+        cmd += (" -datarate %s"  % profile[3]) #datarate
+        cmd += (" -power_dbm8 %s"  % profile[4]) #power_dbm8
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        if 'ERROR' in data:
+            raise Exception( data )
 
 
     # chani added : 
@@ -278,18 +295,18 @@ class linkApi(object):
         data = self._if.read_until_prompt( timeout  = 1)
         return data       
 
-    def netif_profile_set(self,  netif_index, profile ):
-        cmd = "%s api_test netif_profile set " % self._name        
-        cmd += (" -netif_index %s"  % netif_index)
-        cmd += (" -if_index %s"  % profile[0]) #if_index
-        cmd += (" -op_class %s"  % profile[1]) #op_class
-        cmd += (" -channel_num %s"  % profile[2]) #channel_num
-        cmd += (" -datarate %s"  % profile[3]) #datarate
-        cmd += (" -power_dbm8 %s"  % profile[4]) #power_dbm8
-        self._if.send_command(cmd)
-        data = self._if.read_until_prompt( timeout  = 1)
-        if 'ERROR' in data:
-            raise Exception( data )
+ #   def netif_profile_set(self,  netif_index, profile ):
+ #       cmd = "%s api_test netif_profile set " % self._name        
+ #       cmd += (" -netif_index %s"  % netif_index)
+ #       cmd += (" -if_index %s"  % profile[0]) #if_index
+ #       cmd += (" -op_class %s"  % profile[1]) #op_class
+ #       cmd += (" -channel_num %s"  % profile[2]) #channel_num
+ #       cmd += (" -datarate %s"  % profile[3]) #datarate
+ #       cmd += (" -power_dbm8 %s"  % profile[4]) #power_dbm8
+ #       self._if.send_command(cmd)
+  #      data = self._if.read_until_prompt( timeout  = 1)
+ #       if 'ERROR' in data:
+ #           raise Exception( data )
 
     def send(self ,params = None ,wait = None ):
         cmd = "%s api_test send" % self._name        
@@ -340,7 +357,7 @@ class linkApi(object):
         data = self._if.read_until_prompt( timeout  = 1)
         return data
         
-"""cheni added - end """
+"""chani added - end """
 
 class canApi(linkApi):
 
@@ -762,6 +779,7 @@ class qaCliApi(object):
         self.nav = navApi( self._if )
         self.ecc = eccApi( self._if )
         self.wlanMib = wlanMibApi( self._if)
+        self.register = Register(self._if)
         
     def __del__(self):
         self.link = None

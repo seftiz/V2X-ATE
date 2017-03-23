@@ -20,7 +20,7 @@
 
 		"PcapConvertServer" : {
 					"active"	: 0,
- 					"ip"		: "10.10.1.119",
+ 					"ip"		: "169.254.128.138",
 					"port"		: 8000
 		},
 
@@ -88,7 +88,7 @@
 					"cli_active"	: 0,
 					"external_host"	: "192.168.120.5",
                     "ip"            : "",
-					"mac_addr"		: "00:02:cc:f0:00:06",
+					"mac_addr"		: "00:02:cc:f0:00:07",
                     "pc"            : { "device": 1, "port" : 3 },
                     "terminal"      : { "device": "NONE", "id" : "10.10.1.52", "port" : 10003 },
 					"can_interfaces": [
@@ -111,13 +111,13 @@
 					],
                     "rf_interfaces" : [
 										{	"id"			: 0,
-											"mac_addr"		: "00:02:cc:f0:00:06",
+											"mac_addr"		: "00:02:cc:f0:00:07",
 											"freq"			: 5890,
 											"power"			: 0,
 											"link"			: "(1,0)"
 										}, 
 										{	"id"			: 1,
-											"mac_addr"		: "00:02:cc:f0:00:06",
+											"mac_addr"		: "00:02:cc:f0:00:07",
 											"freq"			: 5920, 
 											"power"			: 0,
 											"link"			: "(1,1)"
