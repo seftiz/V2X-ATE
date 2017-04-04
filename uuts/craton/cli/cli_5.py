@@ -1,6 +1,6 @@
 """
-@file cli_4.py
-@brief V2X CLI API for SDK 4
+@file cli_5.py
+@brief V2X CLI API for SDK 5
 @author    	Shai Shochat
 @version	1.0
 @date		13/05/2014
@@ -65,6 +65,34 @@ class qaCliManagment(object):
         except Exception:
             return 0
 
+class Register(object) :
+
+    def __init__(self, interface):
+        self._if = interface
+        self._name = "register"
+
+    def device_register(self, type = "hw", embedded_ip = None ,device_type = 0, i_f = None):
+        
+        cmd = "%s device" % self._name
+        cmd += (" -hw_addr %s"  % embedded_ip)
+        cmd += (" -device_type %d"  % device_type) 
+        cmd += (" -if %s"  % i_f)
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data;
+        #if 'ERROR' in data:
+        #    raise Exception( data )
+        
+    def service_register(self,service_name,service_type):
+        cmd = "%s service" % self._name
+        cmd += (" -service_name %s"  % service_name)
+        cmd += (" -service_type %d"  % service_type) 
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data;
+        #if 'ERROR' in data:
+        #    raise Exception( data )
+
 
 class linkApi(object):
 
@@ -72,14 +100,31 @@ class linkApi(object):
         self._if = interface
         self._name = "link"
 
+    def service_create(self, type = "hw", server_ip = None ):
+        
+        cmd = "%s service create" % self._name
+        cmd += (" -type %s"  % type)
+        cmd += (" -server_addr %s"  % server_ip) if not server_ip is None else ""
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        if 'ERROR' in data:
+            raise Exception( data )
 
+                 
+
+    def service_delete(self):
+        cmd = "%s service delete" % self._name
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        if 'ERROR' in data:
+            raise Exception( data )
 
 
 
 
     def socket_create(self, if_idx, frame_type, proto_id):
         cmd = "%s socket create " % self._name
-        cmd += "-if_idx %d -frame_type %s" % (if_idx, frame_type)
+        cmd += "-if_idx %d -frame_type %s -protocol_id 0x%x" % ( (if_idx+1), frame_type, proto_id)
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
         return data
@@ -95,42 +140,41 @@ class linkApi(object):
         #if 'ERROR' in data:
          #   raise Exception( data )
 
-    def transmit(self, frames = None, rate_hz = None, payloud_len = None, user_priority = 1, data_rate = 1, power_dbm8 = 0, dest_addr = None, op_class = None,ch_idx = 0, tx_data = None):
+
+    def transmit(self, payload_len = None, tx_data = None, dest_addr = None, frames = 1, rate_hz = 1, user_priority = None, data_rate = None, power_dbm8 = None,op_class = None):
         
         cmd = "%s socket tx" % self._name
-        cmd += (" -frames %d"  % frames) if not frames is None else ""
-        cmd += (" -rate_hz %d"  % rate_hz) if not rate_hz is None else ""
+        cmd += (" -frames %d"  % frames)
+        cmd += (" -rate_hz %d"  % rate_hz)
         if tx_data == None and payload_len == None:
             payload_len = 50
-        cmd += (" -payload_len %d"  % payloud_len) if not payloud_len is None else ""
-        cmd += (" -user_priority %d"  % user_priority) if not user_priority is None else ""  
-        cmd += (" -data_rate %d"  % data_rate) if not data_rate is None else ""        
-        cmd += (" -power_dbm8 %d"  % power_dbm8) if not power_dbm8 is None else ""              
-        cmd += (" -dest_addr %s"  % dest_addr) if not dest_addr is None else ""
-        cmd += (" -op_class %d"  % op_class) if not op_class is None else ""
-        cmd += (" -ch_idx %d"  % ch_idx) if not ch_idx is None else ""
-
+        cmd += (" -payload_len %s"  % payload_len) if not payload_len is None else ""
         cmd += (" -tx_data %s"  % tx_data) if not tx_data is None else ""
+ 
+        cmd += (" -dest_addr %s"  % dest_addr) if not dest_addr is None else ""
+        cmd += (" -user_priority %d"  % user_priority) if not user_priority is None else ""
+        cmd += (" -data_rate %d"  % data_rate) if not data_rate is None else ""
+        cmd += (" -power_dbm8 %d"  % power_dbm8) if not power_dbm8 is None else ""
+        cmd += (" -op_class %s"  % op_class) if not op_class is None else ""
         self._if.send_command(cmd, False)
         data = self._if.read_until_prompt( timeout  = 1)
-        if 'ERROR' in data:
-            raise Exception( data )
+        return cmd + data;
+        #if 'ERROR' in data:
+         #   raise Exception( data )
 
-    def transmit_empty(self):
-        cmd = "%s socket tx" % self._name
-        self._if.send_command(cmd)
-        data = self._if.read_until_prompt( timeout  = 1)       
-        return data
+        # No response till end of transmission 
 
-    def receive(self, frames, timeout = None, print_frame = None):
+    def receive(self, frames, timeout = None, print_frame = None,out_queue = None):
         cmd = "link socket rx -frames %s" % frames
         cmd += (" -print %s"  % print_frame) if not print_frame is None else ""
         cmd += (" -timeout_ms %s"  % timeout) if not timeout is None else ""
         self._if.send_command(cmd)
-        data = self._if.read_until_prompt( timeout  = 1)       
-        return data
+        data = self._if.read_until_prompt( timeout  = 5000) 
+        if out_queue is not None : 
+            out_queue.put(data)  
+        return cmd + data
         #if 'ERROR' in data:
-        #    raise Exception( data )
+        #    raise Ebxception( data )
 
 
     def reset_counters(self):
@@ -182,6 +226,15 @@ class linkApi(object):
         """ Set already active session to a new connection """
         cmd = "{} socket set -addr {}".format( self._name, address )
         self._if.send_command(cmd)
+
+    def netif_profile_set(self,  netif_index, profile ):
+        cmd = "%s netif_profile set " % self._name        
+        cmd += (" -datarate %s"  % profile[3]) #datarate
+        cmd += (" -power_dbm8 %s"  % profile[4]) #power_dbm8
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        if 'ERROR' in data:
+            raise Exception( data )
 
 
     # chani added : 
@@ -242,18 +295,18 @@ class linkApi(object):
         data = self._if.read_until_prompt( timeout  = 1)
         return data       
 
-    def netif_profile_set(self,  netif_index, profile ):
-        cmd = "%s api_test netif_profile set " % self._name        
-        cmd += (" -netif_index %s"  % netif_index)
-        cmd += (" -if_index %s"  % profile[0]) #if_index
-        cmd += (" -op_class %s"  % profile[1]) #op_class
-        cmd += (" -channel_num %s"  % profile[2]) #channel_num
-        cmd += (" -datarate %s"  % profile[3]) #datarate
-        cmd += (" -power_dbm8 %s"  % profile[4]) #power_dbm8
-        self._if.send_command(cmd)
-        data = self._if.read_until_prompt( timeout  = 1)
-        if 'ERROR' in data:
-            raise Exception( data )
+ #   def netif_profile_set(self,  netif_index, profile ):
+ #       cmd = "%s api_test netif_profile set " % self._name        
+ #       cmd += (" -netif_index %s"  % netif_index)
+ #       cmd += (" -if_index %s"  % profile[0]) #if_index
+ #       cmd += (" -op_class %s"  % profile[1]) #op_class
+ #       cmd += (" -channel_num %s"  % profile[2]) #channel_num
+ #       cmd += (" -datarate %s"  % profile[3]) #datarate
+ #       cmd += (" -power_dbm8 %s"  % profile[4]) #power_dbm8
+ #       self._if.send_command(cmd)
+  #      data = self._if.read_until_prompt( timeout  = 1)
+ #       if 'ERROR' in data:
+ #           raise Exception( data )
 
     def send(self ,params = None ,wait = None ):
         cmd = "%s api_test send" % self._name        
@@ -304,7 +357,25 @@ class linkApi(object):
         data = self._if.read_until_prompt( timeout  = 1)
         return data
         
-"""cheni added - end """
+    """chani added - end """
+
+    def device_register(self, embedded_ip = None ,device_type = 0, interface = None):
+        cmd = "register device" 
+        cmd += (" -hw_addr %s"  % embedded_ip) if not embedded_ip is None else ""
+        cmd += (" -device_type %d"  % device_type) if not device_type is None else 0
+        cmd += (" -if %s"  % interface) if not interface is None else "eth1"
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data
+            
+    def service_register(self,service_name,service_type):
+        cmd = "register service"
+        cmd += (" -service_name %s"  % service_name) if not service_name is None else "V2X"
+        cmd += (" -service_type %d"  % service_type) if not service_type is None else 0
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        if 'ERROR' in data:
+            raise Exception( data )
 
 class canApi(linkApi):
 
@@ -679,61 +750,15 @@ class wlanMibApi(linkApi):
                 cnts['rx'].append( int(line.split(',')[1].split('=')[1].strip()))
 
         return cnts
-   
-class dot4(linkApi):
+ 
+class dot4(object):
 
     def __init__(self, interface):
-        super(wlanMibApi, self).__init__(interface)
+        super(dot4, self).__init__()
+        self._if = interface
         self._name = "dot4"
     
-    def transport_create(self, type = "remote", server_ip = None):
-        cmd = "remote transport create"
-        cmd += (" -ip_addr 192.168.120.220")
-        self._if.send_command(cmd)
-        data = self._if.read_until_prompt( timeout  = 1)
-        if 'ERROR' in data:
-            raise Exception( data )
-
-    def service_create(self, type = "remote", server_ip = None ):     
-        cmd = "mng create"
-        cmd += (" -type %s"  % type)
-        self._if.send_command(cmd)
-        data = self._if.read_until_prompt( timeout  = 1)
-        if 'ERROR' in data:
-            raise Exception( data )
-
-    def transmit(self,property,valAndType,sleepFlag):
-        #mib service-(common to all)
-        cmd = 'mng mibApi test'
-        #get or set
-        cmd += ("%s" % property)
-        #the specific variables
-        size = len(valAndType)
-                
-        if valAndType[0]=="regular" and size==2:
-            cmd += (" -type%d " % i ) 
-            cmd += ("%s " % valAndType[i] )
-            cmd += ("%s" % valAndType[i+1] )
-            cmd += ("%s" % valAndType[i+2] )
-            cmd += (" -value%d " %i) 
-            data = self._if.send_command(cmd)
-            data = self._if.read_until_prompt()
-            return data
-        index = 0 
-        for i in range(0,size,2):
-            index += 1
-            cmd += (" -type%d " % index) 
-            cmd += ("%s " % valAndType[i])
-            cmd += (" -value%d " % index) 
-            cmd += ("%s" % valAndType[i+1])
-        data = self._if.send_command(cmd)
-        if sleepFlag and property == "Get":
-            time.sleep(60)
-        data = self._if.read_until_prompt()
-        
-        return data
-
-    def dot4_channel_start(self, request, wait ):
+    def dot4_channel_start(self, request):
         cmd = "dot4 start_ch" 
         cmd += (" -if_index %s" % request[0]) 
         cmd += (" -channel_num %s" % request[1])
@@ -750,6 +775,35 @@ class dot4(linkApi):
         cmd += (" -channel_num %s" % ch_num)
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
+        return data
+
+    def transmit(self, frames = 1, rate_hz = 1,payload_len = None, tx_data = None, 
+                 dest_addr = None,  user_priority = None, data_rate = None, power_dbm8 = None, op_class = None, channel_num = None, time_slot = None):
+        
+        cmd = "%s socket tx" % self._name
+        cmd += (" -frames %d"  % frames)
+        cmd += (" -rate_hz %d"  % rate_hz)
+        if tx_data == None and payload_len == None:
+            payload_len = 50
+        cmd += (" -payload_len %s"  % payload_len) if not payload_len is None else ""
+        cmd += (" -tx_data %s"  % tx_data) if not tx_data is None else ""
+ 
+        cmd += (" -dest_addr %s"  % dest_addr) if not dest_addr is None else ""
+        cmd += (" -user_priority %d"  % user_priority) if not user_priority is None else ""
+        cmd += (" -data_rate %d"  % data_rate) if not data_rate is None else ""
+        cmd += (" -power_dbm8 %d"  % power_dbm8) if not power_dbm8 is None else ""
+        cmd += (" -op_class %s"  % op_class) if not op_class is None else ""
+        cmd += (" -channel_num %d"  % channel_num) if not channel_num is None else ""
+        cmd += (" -time_slot %s"  % time_slot) if not time_slot is None else ""
+        self._if.send_command(cmd, False)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return cmd + data;
+
+
+    def transmit_empty(self):
+        cmd = "link socket tx"
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)       
         return data
 
     def read_counters(self):
@@ -779,7 +833,8 @@ class dot4(linkApi):
                 cnts['rx'].append( int(line.split(',')[0].split('=')[1].strip()))
                 cnts['rx'].append( int(line.split(',')[1].split('=')[1].strip()))
 
-        return cnts
+        return cnts 
+
 
 
 
@@ -825,6 +880,8 @@ class qaCliApi(object):
         self.nav = navApi( self._if )
         self.ecc = eccApi( self._if )
         self.wlanMib = wlanMibApi( self._if)
+        self.dot4 = dot4(self._if)
+        self.register = Register(self._if)
         
     def __del__(self):
         self.link = None
@@ -946,19 +1003,26 @@ class qaCliApi(object):
         uboot_ver = ''
         gnss_ver = ''
 
-        self._if.send_command('show version sdk')
-        versions = {}
-        rc = self._if.read_until_prompt()
-        if len(rc): 
+        if self.uut.external_host is u'':
+            self._if.send_command('show version sdk')
+            versions = {}
+            rc = self._if.read_until_prompt()
+            if len(rc): 
+                rc = rc.replace('\r\n' ,'').split(',')
+                # SDK: sdk-4.3.0-beta7-mc, U-BOOT: U-Boot 2012.04.01-atk-1.1.3-00526-g19cc217 (Nov 13 2014 - 10:13:42)
+                try:
+                    sdk_ver = rc[0].split(':')[1].strip()
+                    uboot_ver = rc[1].split(':')[1].strip()
+                    gnss_ver = rc[2].split(':')[1].strip().split(' ')[0]
+                except Exception as e:
+                    pass
+        else:
+            cmd = "link get_info about_sdk"
+            self._if.send_command(cmd)
+            rc = self._if.read_until_prompt()
             rc = rc.replace('\r\n' ,'').split(',')
-            # SDK: sdk-4.3.0-beta7-mc, U-BOOT: U-Boot 2012.04.01-atk-1.1.3-00526-g19cc217 (Nov 13 2014 - 10:13:42)
-            try:
-                sdk_ver = rc[0].split(':')[1].strip()
-                uboot_ver = rc[1].split(':')[1].strip()
-                gnss_ver = rc[2].split(':')[1].strip().split(' ')[0]
-            except Exception as e:
-                pass
-
+            sdk_ver = rc[0].split("Software version:")[1].split('Device')[0]
+            
         versions = {'sdk_ver': sdk_ver, 'uboot_ver' : uboot_ver, 'gnss_ver' : gnss_ver }
 
         return versions

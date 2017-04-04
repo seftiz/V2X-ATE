@@ -1,6 +1,6 @@
 
 import os, logging
-from uuts.craton.cli import cli_4 as v2x_cli
+from uuts.craton.cli import cli_5 as v2x_cli
 from uuts import common
 from uuts.craton.cli import gps
 from lib import utilities, globals, interfaces
@@ -21,7 +21,10 @@ class Units(object):
         self.units = None
 
     def append( self, uut ):
-        print "Storing uut %d with ip %s" % ( uut.idx , uut.ip)
+        if uut.ip == u'':
+            print "Storing uut %d" % ( uut.idx)
+        else:
+            print "Storing uut %d with ip %s" % ( uut.idx , uut.ip)
         self.units[str(uut.idx)] =  uut
 
     def __iter__(self):
@@ -53,7 +56,11 @@ class Units(object):
 
     def init(self):
         for id, uut in sorted( self.units.iteritems() ):
-            uut.init()
+            if uut.ip is u'':   # craton2 device
+                craton2_flag = 1;
+                uut.init(craton2_flag)
+            else : 
+                uut.init()
 
 
     def load_uuts_from_cfg_file (self, cfg_data ):
@@ -248,7 +255,8 @@ class UnitUnderTest(object):
                 if 'terminal' in port:
                     self.__fw_cli[port] = self.__create_terminal_connection()
                     continue
-
+                
+                
                 # handle ports 23 1123
                 cnn_info = { 'host':self.ip , 'port': int(port), 'timeout_sec': 10 }
                 fw_telnet = interfaces.INTERFACES['TELNET'](cnn_info)
@@ -401,17 +409,20 @@ class UnitUnderTest(object):
         self.close_fw_cli()
         self.managment = None
 
-    def init(self):
+    def init(self,device_type = 0):
 
-        self.init_managmnet()        
+        if not device_type :
+            self.init_managmnet()        
 
         # Create fw cli connection
-        self.create_fw_cli()
+        if not device_type :
+            self.create_fw_cli()
 
-        for rf_id in self.rf_interfaces:
-            rf_if = self.rf_interfaces[rf_id]
-            self.managment.set_rf_frequency(  rf_if.frequency , rf_if.id )
-            self.managment.set_tx_power( rf_if.tx_power , rf_if.id )
+        if not device_type :
+            for rf_id in self.rf_interfaces:
+                rf_if = self.rf_interfaces[rf_id]
+                self.managment.set_rf_frequency(  rf_if.frequency , rf_if.id )
+                self.managment.set_tx_power( rf_if.tx_power , rf_if.id )
 
 
 

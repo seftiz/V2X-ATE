@@ -11,12 +11,12 @@ controler
 
 if __name__ == "__main__":
     import sys
-    sys.path.append('C:\\ATLK - Zohar\\work\\qa')
+    sys.path.append('C:\\nomi\\V2X-ATE')
 
 
 from ctypes import *
 from datetime import datetime
-from uuts import common
+from uuts import common                       
 import os, sys, subprocess, time, logging, socket
 from lib import globals, interfaces
 import threading
@@ -29,14 +29,22 @@ log = logging.getLogger(__name__)
 TG_CLI_PROMPT = 'ate>'
 IF_IDX_RANGE = [1,2,3]
 BASE_HOST_PORT = 8030
+DUT1_RX_HOST_PORT = 8031
+DUT1_TX_HOST_PORT = 8041
+DUT2_RX_HOST_PORT = 8051
+DUT2_TX_HOST_PORT = 8061
 
+TX_SNIFFER = 0
+RX_SNIFFER = 1
 
 # packet_sniffer.SnifferTypes['panagea4'] = TrafficGeneratorPanagea4
 
 # def sniffer_types():
 #    return packet_sniffer.SnifferTypes
-
-
+# Define tree for 3 layer array
+from collections import defaultdict
+def tree(): return defaultdict(tree)
+sniffers = tree()
 
 class pcap_hdr_t(Structure):
     _pack_ = 1
@@ -94,7 +102,7 @@ class TGEmbeddedSniffer(object):
             raise Exception("Error setting sniffer settings")
 
 
-    def start(self, if_idx, server_ip = None, server_port = None):
+    def start(self, if_idx, server_ip = None, server_port = None, sniffer_type = "RX"):
         """
         usage : sniffer start -if_idx 1|2|3 (3 - both 1 and 2 simultanously) -server_ip 10.10.1.131 [-server_port 8030] (in any case all rf_idx frames will be redirect to the first configured port...)
         """
@@ -105,6 +113,7 @@ class TGEmbeddedSniffer(object):
         cmd = "%s start -if_idx %d" % (self._module_name, if_idx)
         cmd += " -server_ip %s"  % (server_ip if not server_ip is None else socket.gethostbyname(socket.gethostname()) )
         cmd += (" -server_port %s"  % server_port) if not server_port is None else ""
+        cmd += (" -sniffer_type %s" % sniffer_type)
         res = self._if.write( cmd.encode('ascii') + "\r\n" )
         
                 
@@ -161,7 +170,7 @@ class TGEmbeddedSniffer(object):
         return { 'RX' : counter, 'TX' : None }
 
 
-
+ 
     def reset_counters(self, if_idx):
         """
         usage : sniffer reset -if_idx 1|2
@@ -181,6 +190,18 @@ class Panagea4SnifferAppEmbedded( TGEmbeddedSniffer ):
         self._if = interface
         self._interfaces_active = {1 : False, 2 : False, 3 : False }
         data = self._if.write('\n')
+
+
+class Panagea4SnifferLinkEmbedded( TGEmbeddedSniffer ):
+
+    def __init__(self, interface):
+        self._module_name = 'link sniffer'
+        self._if = interface
+        self._interfaces_active = {1 : False, 2 : False, 3 : False }
+        data = self._if.write('\n')
+
+
+
 
 class TGHostSniffer(object):
 
@@ -229,41 +250,44 @@ class TGHostSniffer(object):
         self.threads_loop_flag = {}
         self.id = index
         self.sock_timeout = 1
-        self.sock_retries = 100
-
+        self.sock_retries = 120
+        self.thread_loop_flag = True
     def start_capture_thread(self, port, capture_file):
 
         sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         listen_addr = ('', port )
         sock.bind(listen_addr)
-
         pcap = self.PcapFile( capture_file.decode(u'utf-8'))
+        sniffers[port]['sock'] = sock
+        sniffers[port]['pcap'] = pcap
+
 
         self.threads_loop_flag[port] = True
             
         sock.settimeout(self.sock_timeout)
         counter = 0
         retries = 0
-        while ( self.threads_loop_flag[port] == True ):
+        while ( self.thread_loop_flag == True ):
                     
             try:
                 data,addr = sock.recvfrom(1518)
                 pcap.write_packet( data )
                     
             except Exception as e:
+                if (retries%60 == 0): print "{} port {}, to_retry# {}\n ".format(e, port, retries+1)
+                if (retries > self.sock_retries ):
+                    self.threads_loop_flag[port] = False
 
+                
                 if ( type(e) == socket.timeout ):
                     retries += 1
                     continue
 
-                if (retries > self.sock_retries ):
-                    self.threads_loop_flag[port] = False
-
-                print "ERROR : {} , {}, {} ".format( type(e), inst.args, e )
+                
             counter+=1
         
-        print counter
+        print "port {}, {}\n".format(port, counter)
 
         pcap.close()
         sock.close()
@@ -271,12 +295,13 @@ class TGHostSniffer(object):
     def start(self, if_idx, port, capture_file):
 
         # check if this if_idx was initialized...
-        t = threading.Thread( target = self.start_capture_thread, args= [port,capture_file] )
+        sniffers[port]['thread'] = t = threading.Thread( target = self.start_capture_thread, args= [port,capture_file] )
         t.start()
 
     def stop(self, port):
         self.threads_loop_flag[port] = False
-
+        self.thread_loop_flag = False
+        print "stopping port {} ...\n".format(port)
 
 class TrafficGeneratorPanagea4(object):
     """
@@ -418,13 +443,18 @@ if __name__ == "__main__":
     #tg = TrafficGeneratorPanagea4( 1, 'TELNET', cnn_info )
     #cnn_info_2 = { 'host':'10.10.0.237', 'port': 23, 'timeout_sec': 10 }
     tg2 = TGHostSniffer( 2 )
+    tg4 = TGHostSniffer( 4 )
     tg3 = TGHostSniffer( 3 )
+    tg5 = TGHostSniffer( 5 )
     try:
         
         #tg.sniffer.start( rf_if = 3, capture_file = "c:/temp/test_file.pcap" )
-        tg2.start(if_idx = 1, port = 8051, capture_file = "c:/temp/rx_test_file.pcap" )
-        tg3.start(if_idx = 1, port = 8061, capture_file = "c:/temp/tx_test_file.pcap" )
-        time.sleep( 120 )
+        tg3.start(if_idx = 2, port = 8061, capture_file = "c:/temp/dut2_tx_test_file.pcap" )
+        tg5.start(if_idx = 2, port = 8041, capture_file = "c:/temp/dut1_tx_test_file.pcap" )
+        tg2.start(if_idx = 2, port = 8031, capture_file = "c:/temp/dut1_rx_test_file.pcap" )
+        tg4.start(if_idx = 2, port = 8051, capture_file = "c:/temp/dut2_rx_test_file.pcap" )
+        
+        time.sleep( 240 )
         #tg.link.start( 1, 1, 0x1234, frames = 1000, rate_hz = 50, payload_length = 100 )
         #time.sleep(1)
         #tg.link.start( 1, 2, 0x5678, frames = 1000, rate_hz = 50, payload_length = 100 )
@@ -435,13 +465,20 @@ if __name__ == "__main__":
         #tg.sniffer.reset_counters( rf_if = 3)
 
     except  Exception as e:
+        time.sleep( 300 )
         pass
     finally:
         #tg.link.stop ( 1 )
         #tg.link.stop ( 2 )
         #tg.sniffer.stop( 3 )
         tg3.stop( 8061 )
+        time.sleep(2)
         tg2.stop( 8051 )
+        time.sleep(2)
+        tg4.stop( 8041 )
+        time.sleep(2)
+        tg5.stop( 8031 )
+
 
 
 

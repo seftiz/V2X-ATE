@@ -15,8 +15,10 @@
     <RootNamespace>ate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-v sdk-4.11.1-rc2-sc -t sc -q</CommandLineArguments>
+    <CommandLineArguments>-v dbg-secton-sdk-5.2.0-beta3 -t sc -q</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <Environment>
+    </Environment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,6 +44,7 @@
     <Compile Include="lib\instruments\power_control.py" />
     <Compile Include="lib\instruments\sirit\sirit_config_tool.py" />
     <Compile Include="lib\instruments\spectracom_gsg_6.py" />
+    <Compile Include="lib\instruments\traffic_generator.py" />
     <Compile Include="lib\instruments\UsbeeRx\usbee_rx.py">
       <SubType>Code</SubType>
     </Compile>
@@ -100,6 +103,9 @@
     </Compile>
     <Compile Include="tests\sdk4_x\v2x_api_test.py" />
     <Compile Include="tests\sdk4_x\__init__.py" />
+    <Compile Include="tests\sdk5_x\tc_dot4.py" />
+    <Compile Include="tests\sdk5_x\Tc_link.py" />
+    <Compile Include="tests\sdk5_x\__init__.py" />
     <Compile Include="tests\stacks\marben\tc_preformence.py" />
     <Compile Include="tests\__init__.py" />
     <Compile Include="utilities\build_qa_cli.py">
@@ -116,9 +122,11 @@
     </Compile>
     <Compile Include="utilities\plug-reboot.py" />
     <Compile Include="utilities\sync_pc_clock_with_gps.py" />
+    <Compile Include="utilities\__init__.py" />
     <Compile Include="uuts\common.py" />
+    <Compile Include="uuts\craton\cli\cli.4.py" />
     <Compile Include="uuts\craton\cli\cli_3.py" />
-    <Compile Include="uuts\craton\cli\cli_4.py" />
+    <Compile Include="uuts\craton\cli\cli_5.py" />
     <Compile Include="uuts\craton\cli\gps.py" />
     <Compile Include="uuts\craton\cli\navigation.py" />
     <Compile Include="uuts\craton\fw_debug.py" />
@@ -148,6 +156,7 @@
     <Folder Include="tests\sdk2_1" />
     <Folder Include="tests\sdk2_0" />
     <Folder Include="tests\sdk4_x\" />
+    <Folder Include="tests\sdk5_x\" />
     <Folder Include="tests\stacks\" />
     <Folder Include="tests\stacks\marben\" />
     <Folder Include="utilities\" />

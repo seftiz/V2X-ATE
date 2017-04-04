@@ -22,6 +22,10 @@ UDP_SERVER_PORT = 5454
 class Error(StandardError):
 	pass
 
+#For CHS TC added:
+CHS_RX_SNIF = 0
+CHS_TX_SNIF = 1
+
 # CAN Definitions
 CAN_ID_RTR_BIT          = 30
 CAN_ID_IDE_BIT          = 31
