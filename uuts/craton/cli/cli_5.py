@@ -83,10 +83,11 @@ class Register(object) :
         #if 'ERROR' in data:
         #    raise Exception( data )
         
-    def service_register(self,service_name,service_type):
+    def service_register(self,service_name,service_type,device_name):
         cmd = "%s service" % self._name
         cmd += (" -service_name %s"  % service_name)
         cmd += (" -service_type %d"  % service_type) 
+        cmd += (" -device_name %s"  % device_name)
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
         return data;
@@ -358,24 +359,6 @@ class linkApi(object):
         return data
         
     """chani added - end """
-
-    def device_register(self, embedded_ip = None ,device_type = 0, interface = None):
-        cmd = "register device" 
-        cmd += (" -hw_addr %s"  % embedded_ip) if not embedded_ip is None else ""
-        cmd += (" -device_type %d"  % device_type) if not device_type is None else 0
-        cmd += (" -if %s"  % interface) if not interface is None else "eth1"
-        self._if.send_command(cmd)
-        data = self._if.read_until_prompt( timeout  = 1)
-        return data
-            
-    def service_register(self,service_name,service_type):
-        cmd = "register service"
-        cmd += (" -service_name %s"  % service_name) if not service_name is None else "V2X"
-        cmd += (" -service_type %d"  % service_type) if not service_type is None else 0
-        self._if.send_command(cmd)
-        data = self._if.read_until_prompt( timeout  = 1)
-        if 'ERROR' in data:
-            raise Exception( data )
 
 class canApi(linkApi):
 
@@ -759,20 +742,21 @@ class dot4(object):
         self._name = "dot4"
     
     def dot4_channel_start(self, request):
-        cmd = "dot4 start_ch" 
+        cmd = "link dot4 start_ch" 
         cmd += (" -if_index %s" % request[0]) 
-        cmd += (" -channel_num %s" % request[1])
-        cmd += (" -time_slot %s" % request[2]) 
+        cmd += (" -ch_id %s" % request[1])
+        cmd += (" -slot_id %s" % request[2]) 
         cmd += (" -op_class %s" % request[3]) 
-        cmd += (" -immediate_access %s" % request[4]) 
+        cmd += (" -imm_acc %s" % request[4]) 
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
         return data
 
     def dot4_channel_end(self,if_index, ch_num):
-        cmd = "dot4 end_ch" 
-        cmd += (" -if_index %s" % if_index) 
-        cmd += (" -channel_num %s" % ch_num)
+        #link dot4 end_ch -if_index 1 -ch_id 172
+        cmd = "link dot4 end_ch"
+        cmd += (" -ch_id %s" % ch_num)
+        cmd += (" -if_index %s" % if_index)
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
         return data
@@ -780,31 +764,44 @@ class dot4(object):
     def transmit(self, frames = 1, rate_hz = 1,payload_len = None, tx_data = None, 
                  dest_addr = None,  user_priority = None, data_rate = None, power_dbm8 = None, op_class = None, channel_num = None, time_slot = None):
         
-        cmd = "%s socket tx" % self._name
+        cmd = "link socket tx"
         cmd += (" -frames %d"  % frames)
-        cmd += (" -rate_hz %d"  % rate_hz)
+        cmd += (" -rate_hz %d"  % rate_hz) if not rate_hz is None else ""
         if tx_data == None and payload_len == None:
             payload_len = 50
         cmd += (" -payload_len %s"  % payload_len) if not payload_len is None else ""
         cmd += (" -tx_data %s"  % tx_data) if not tx_data is None else ""
  
-        cmd += (" -dest_addr %s"  % dest_addr) if not dest_addr is None else ""
         cmd += (" -user_priority %d"  % user_priority) if not user_priority is None else ""
         cmd += (" -data_rate %d"  % data_rate) if not data_rate is None else ""
         cmd += (" -power_dbm8 %d"  % power_dbm8) if not power_dbm8 is None else ""
         cmd += (" -op_class %s"  % op_class) if not op_class is None else ""
-        cmd += (" -channel_num %d"  % channel_num) if not channel_num is None else ""
-        cmd += (" -time_slot %s"  % time_slot) if not time_slot is None else ""
+        cmd += (" -ch_idx %d"  % channel_num) if not channel_num is None else ""
+        
+        cmd += (" -time_slot %s"  % time_slot) if not time_slot == -1 else ""
         self._if.send_command(cmd, False)
         data = self._if.read_until_prompt( timeout  = 1)
-        return cmd + data;
+        return cmd + data
 
-
-    def transmit_empty(self):
+    def transmit_empty(self,channel_num,frames):
         cmd = "link socket tx"
+        cmd += (" -frames %d" % frames)
+        cmd += (" -ch_idx %d"  % channel_num) if not channel_num is None else ""
+        cmd += (" -rate_hz 10")
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)       
         return data
+
+    def receive(self, frames, timeout = None, print_frame = None,out_queue = None, ch_id= None):
+        cmd = "link socket rx -frames %s" % frames
+        cmd += (" -print %s"  % print_frame) if not print_frame is None else ""
+        cmd += (" -ch_idx %d"  % ch_id) if not ch_id is None else 0
+        cmd += (" -timeout_ms %s"  % timeout) if not timeout is None else ""
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 5000) 
+        if out_queue is not None : 
+            out_queue.put(data)  
+        return cmd + data
 
     def read_counters(self):
 

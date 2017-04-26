@@ -252,11 +252,16 @@ def dot4_tests(suite, cpu_type = 'arm'):
                      dict( channel_num = -1, time_slot = 0, op_class = 1),
                      dict( channel_num = -1, time_slot = 1, op_class = -1),
                      dict( channel_num = -1, time_slot = 3, op_class = -1) ]
-    test_links = [ tParam( tx = (0,0), rx = (1,0),frame_type= 'data', proto_id = 0x1234, frames = 20000, frame_rate_hz = 10, payload_len = 800, dest_addr = globals.setup.units.unit(1).rf_interfaces[0].mac_addr, tx_power = 160 ), 
-                   tParam( tx = (1,0), rx = (0,0),frame_type= 'data', proto_id = 0x5678, frames = 20000, frame_rate_hz = 10, payload_len = 800, dest_addr = globals.setup.units.unit(0).rf_interfaces[0].mac_addr, tx_power = 160 ) ]
-
-    suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( params = test_common_options, target_cpu = cpu_type, send_dict = test_options, tx_dict = test_links) ) )
+    test_links = [ tParam( tx = (0,1), rx = (1,0), frame_type= 'data', proto_id = 0x1234, frames = 4500, frame_rate_hz = 10, payload_len = 800, tx_power = 160 ), 
+                   tParam( tx = (1,0), rx = (0,1), frame_type= 'data', proto_id = 0x5678, frames = 4500, frame_rate_hz = 10, payload_len = 800, tx_power = 160 ) ]
+    suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( link_dict = test_links, target_cpu = cpu_type, ) ) )
+    
+    #suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( params = test_common_options, target_cpu = cpu_type, tx_dict = test_links) ) )
    
+    #suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( send_dict = test_options, target_cpu = cpu_type, tx_dict = test_links) ) )
+
+    #suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( tx_dict = test_links, target_cpu = cpu_type) ) )
+
 def parse_params():
 
     parser = argparse.ArgumentParser( description='Automatic QA CLI build process script' )

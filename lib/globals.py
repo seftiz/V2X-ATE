@@ -26,6 +26,18 @@ class Error(StandardError):
 CHS_RX_SNIF = 0
 CHS_TX_SNIF = 1
 
+CHS_GI_MS = 3
+
+CHS_SNIF_CS_ID = 0
+CHS_SNIF_BSM_ID = 1
+
+RF_IF_1_PHYSICAL = 0
+RF_IF_2_PHYSICAL = 1
+RF_IF_2_VIRTUAL = 2
+
+CHS_DUT_ID = 0
+CHS_ACTIVE = 1
+
 # CAN Definitions
 CAN_ID_RTR_BIT          = 30
 CAN_ID_IDE_BIT          = 31

@@ -353,78 +353,77 @@ def parse_params():
 
 #initialization and open the port
 if __name__ == "__main__":
-
-  global power_switch_user_pwd
-  global power_switch_addr
-  global board_is_up_text
-  global counter
-  global target_vm_ip
-  global location_path
-  global gpio_iomux_dict
-  global gpio_dir_dict
-  global gpio_val_dict
-  global iomux_set_bit_dict
-  global dir_val_set_bit_dict_1st
-  global dir_val_set_bit_dict_2nd
-  global dir_val_set_bit_dict_3rd
-  global args
-  global t
+    global power_switch_user_pwd
+    global power_switch_addr
+    global board_is_up_text
+    global counter
+    global target_vm_ip
+    global location_path
+    global gpio_iomux_dict
+    global gpio_dir_dict
+    global gpio_val_dict
+    global iomux_set_bit_dict
+    global dir_val_set_bit_dict_1st
+    global dir_val_set_bit_dict_2nd
+    global dir_val_set_bit_dict_3rd
+    global args
+    global t
     
-  t = None  
+    t = None  
 
-  parse_params()  
+    parse_params()  
 
-  default_port           = 23
-  power_switch_connector = 2
-  data                   = ''
-  expected_test_cycles   = 0
-  power_switch_user_pwd  = "{}:{}".format( "snmp", "1234")
-  power_switch_addr      = '10.10.0.3'
-  board_is_up_text       = 'Created Socket'
-  counter                = 0
-  target_vm_ip           = args.address
-  location_path          = args.pathcmd
-  gpio_iomux_dict        = OrderedDict()
-  gpio_dir_dict          = OrderedDict()
-  gpio_val_dict          = OrderedDict()
-  iomux_set_bit_dict     = OrderedDict()
+    default_port           = 23
+    power_switch_connector = 2
+    data                   = ''
+    expected_test_cycles   = 0
+    power_switch_user_pwd  = "{}:{}".format( "snmp", "1234")
+    power_switch_addr      = '10.10.0.3'
+    board_is_up_text       = 'Created Socket'
+    counter                = 0
+    target_vm_ip           = args.address
+    location_path          = args.pathcmd
+    gpio_iomux_dict        = OrderedDict()
+    gpio_dir_dict          = OrderedDict()
+    gpio_val_dict          = OrderedDict()
+    iomux_set_bit_dict     = OrderedDict()
+      
+    dir_val_set_bit_dict_1st = OrderedDict()
+    dir_val_set_bit_dict_2nd = OrderedDict()
+    dir_val_set_bit_dict_3rd = OrderedDict()
+
+ #   t = None
+    if os.path.exists("c:\\temp\\gps_gpio_conf.log"):
+      os.remove("c:\\temp\\gps_gpio_conf.log")
+
+    logging.basicConfig(filename='c:\\temp\\gps_gpio_conf.log', level=logging.INFO)
+    logging.info('configuration started:\n')
     
-  dir_val_set_bit_dict_1st = OrderedDict()
-  dir_val_set_bit_dict_2nd = OrderedDict()
-  dir_val_set_bit_dict_3rd = OrderedDict()
+    if args.reboot:
+      ser = open_ser_conn()
 
- # t = None
-  if os.path.exists("power_cycle_load_test.log"):
-    os.remove("power_cycle_load_test.log")
+      time.sleep(2)
+      if ser == -1:
+          sys.exit(0)
 
-  logging.basicConfig(filename='gps_gpio_conf.log', level=logging.INFO)
-  logging.info('configuration started:\n')
-  
-  if args.reboot:
-    ser = open_ser_conn()
+      time.sleep(2)
 
-    time.sleep(2)
-    if ser == -1:
+      logging.info('power up wait 60sec...')
+      power_cycle(power_switch_connector)
+      time.sleep(60)
+      logging.info('################  check power cycle #################\n')
+      rc = test_board_power_cycle(ser, counter)
+      if rc == -1:
         sys.exit(0)
 
+    #init_gpio(gpio_iomux_dict, gpio_dir_dict, gpio_val_dict, iomux_set_bit_dict, dir_val_set_bit_dict_1st, dir_val_set_bit_dict_2nd, dir_val_set_bit_dict_3rd)
+    init_gpio()
+    #if set_gps_gpio(iomux_set_bit_dict, dir_val_set_bit_dict_3rd) == -1:
+    if set_gps_gpio() == -1:
+        logging.info('################  set gps gpio FAILED... #################\n')
+        sys.exit(0)
+    logging.info('################  set gps gpio PASSED... #################\n')
+
     time.sleep(2)
-
-    logging.info('power up wait 60sec...')
-    power_cycle(power_switch_connector)
-    time.sleep(60)
-    logging.info('################  check power cycle #################\n')
-    rc = test_board_power_cycle(ser, counter)
-    if rc == -1:
-      sys.exit(0)
-
-  #init_gpio(gpio_iomux_dict, gpio_dir_dict, gpio_val_dict, iomux_set_bit_dict, dir_val_set_bit_dict_1st, dir_val_set_bit_dict_2nd, dir_val_set_bit_dict_3rd)
-  init_gpio()
-  #if set_gps_gpio(iomux_set_bit_dict, dir_val_set_bit_dict_3rd) == -1:
-  if set_gps_gpio() == -1:
-      logging.info('################  set gps gpio FAILED... #################\n')
-      sys.exit(0)
-  logging.info('################  set gps gpio PASSED... #################\n')
-
-  time.sleep(2)
     
     
