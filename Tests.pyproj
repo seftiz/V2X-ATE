@@ -15,7 +15,7 @@
     <RootNamespace>ate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-v dbg-secton-sdk-5.2.0-beta3 -t sc -q</CommandLineArguments>
+    <CommandLineArguments>-v dbg-secton-sdk-5.3.0-alpha2 -t sc -q</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
     <Environment>
     </Environment>
@@ -103,7 +103,6 @@
     </Compile>
     <Compile Include="tests\sdk4_x\v2x_api_test.py" />
     <Compile Include="tests\sdk4_x\__init__.py" />
-    <Compile Include="tests\sdk5_x\tc_dot4.py" />
     <Compile Include="tests\sdk5_x\Tc_link.py" />
     <Compile Include="tests\sdk5_x\__init__.py" />
     <Compile Include="tests\stacks\marben\tc_preformence.py" />
@@ -124,9 +123,9 @@
     <Compile Include="utilities\sync_pc_clock_with_gps.py" />
     <Compile Include="utilities\__init__.py" />
     <Compile Include="uuts\common.py" />
-    <Compile Include="uuts\craton\cli\cli.4.py" />
     <Compile Include="uuts\craton\cli\cli_3.py" />
     <Compile Include="uuts\craton\cli\cli_5.py" />
+    <Compile Include="uuts\craton\cli\cli_4.py" />
     <Compile Include="uuts\craton\cli\gps.py" />
     <Compile Include="uuts\craton\cli\navigation.py" />
     <Compile Include="uuts\craton\fw_debug.py" />
@@ -166,6 +165,7 @@
     <Folder Include="uuts\craton\snmp\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="configuration\cfg_169.254.128.138_o.json" />
     <Content Include="configuration\cfg_169.254.128.138.json" />
     <Content Include="configuration\cfg_10.10.1.108.json" />
     <Content Include="configuration\cfg_10.10.1.112.json" />

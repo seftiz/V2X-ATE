@@ -18,7 +18,8 @@ GPS_LONGITUDE_UNAVAILABLE = 1800000001
 
 
 #SNIFFER_DRIVE = "\\\\ate-lab\\capture\\"
-SNIFFER_DRIVE = "Z:\pcapLogs\dot4"
+SNIFFER_DRIVE = "Z:\pcapLogs\link"
+DATA_FILES = "Z:\pcapLogs\link\\tx_data\\"
 rc = utilities.Enum(['EXIT_OK', 'EXIT_ERROR', 'EXIT_BAD_PARAMETER'])
 rs = utilities.Enum(['LOCAL', 'REMOTE'])
 actions = utilities.Enum(['START', 'STOP'])

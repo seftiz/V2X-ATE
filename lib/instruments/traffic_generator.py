@@ -11,12 +11,12 @@ controler
 
 if __name__ == "__main__":
     import sys
-    sys.path.append('C:\\nomi\\V2X-ATE')
+    sys.path.append('C:\\autotalks_enviroment\\V2X-ATE')
 
 
 from ctypes import *
 from datetime import datetime
-from uuts import common                       
+from uuts import common
 import os, sys, subprocess, time, logging, socket
 from lib import globals, interfaces
 import threading
@@ -449,12 +449,12 @@ if __name__ == "__main__":
     try:
         
         #tg.sniffer.start( rf_if = 3, capture_file = "c:/temp/test_file.pcap" )
-        tg3.start(if_idx = 2, port = 8061, capture_file = "c:/temp/dut2_tx_test_file.pcap" )
-        tg5.start(if_idx = 2, port = 8041, capture_file = "c:/temp/dut1_tx_test_file.pcap" )
-        tg2.start(if_idx = 2, port = 8031, capture_file = "c:/temp/dut1_rx_test_file.pcap" )
+        tg3.start(if_idx = 1, port = 8061, capture_file = "c:/temp/dut2_tx_test_file.pcap" )
+        tg5.start(if_idx = 1, port = 8041, capture_file = "c:/temp/dut1_tx_test_file.pcap" )
+        tg2.start(if_idx = 1, port = 8031, capture_file = "c:/temp/dut1_rx_test_file.pcap" )
         tg4.start(if_idx = 2, port = 8051, capture_file = "c:/temp/dut2_rx_test_file.pcap" )
         
-        time.sleep( 240 )
+        time.sleep( 120 )
         #tg.link.start( 1, 1, 0x1234, frames = 1000, rate_hz = 50, payload_length = 100 )
         #time.sleep(1)
         #tg.link.start( 1, 2, 0x5678, frames = 1000, rate_hz = 50, payload_length = 100 )
