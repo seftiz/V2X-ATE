@@ -133,7 +133,7 @@ class TGEmbeddedSniffer(object):
         res = self._if.write( cmd.encode('ascii') + "\r\n" )
         res = self._if.read_until('ate>');
         if ('ERROR' in res) :
-            raise Exception("Error in starting tg session")
+            raise Exception("Error in stopping tg session")
 
         self._interfaces_active[if_idx] = False
 
@@ -275,7 +275,7 @@ class TGHostSniffer(object):
                 pcap.write_packet( data )
                     
             except Exception as e:
-                if (retries%60 == 0): print "{} port {}, to_retry# {}\n ".format(e, port, retries+1)
+                if (retries%60 == 0): pass#print "{} port {}, to_retry# {}\n ".format(e, port, retries+1)
                 if (retries > self.sock_retries ):
                     self.threads_loop_flag[port] = False
 
@@ -454,7 +454,7 @@ if __name__ == "__main__":
         tg2.start(if_idx = 2, port = 8031, capture_file = "c:/temp/dut1_rx_test_file.pcap" )
         tg4.start(if_idx = 2, port = 8051, capture_file = "c:/temp/dut2_rx_test_file.pcap" )
         
-        time.sleep( 240 )
+        time.sleep( 90 )
         #tg.link.start( 1, 1, 0x1234, frames = 1000, rate_hz = 50, payload_length = 100 )
         #time.sleep(1)
         #tg.link.start( 1, 2, 0x5678, frames = 1000, rate_hz = 50, payload_length = 100 )

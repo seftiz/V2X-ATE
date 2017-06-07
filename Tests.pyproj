@@ -15,7 +15,7 @@
     <RootNamespace>ate</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>-v dbg-secton-sdk-5.2.0-beta3 -t sc -q</CommandLineArguments>
+    <CommandLineArguments>-v dbg-secton-sdk-5.3.0-alpha2 -t sc -q</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
     <Environment>
     </Environment>
@@ -114,6 +114,7 @@
     <Compile Include="utilities\can_bus_test.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="utilities\gps_gpio_set.py" />
     <Compile Include="utilities\gps_to_udp.py">
       <SubType>Code</SubType>
     </Compile>

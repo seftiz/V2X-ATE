@@ -33,6 +33,7 @@ def tn_connect(targetip = '10.10.1.122'):
     try:
       tnn = telnetlib.Telnet(targetip)
       if True:
+        time.sleep(5)
         tmp = tnn.read_until('login:',3)
         tnn.write('user\n')
         time.sleep(0.2)
