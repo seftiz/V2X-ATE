@@ -87,7 +87,7 @@ class Register(object) :
         cmd = "%s service" % self._name
         cmd += (" -service_name %s"  % service_name)
         cmd += (" -service_type %d"  % service_type) 
-        cmd += (" -device_name %s"  % device_name)
+        cmd += (" -device_name %s" % device_name )
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
         return data;
@@ -151,15 +151,22 @@ class linkApi(object):
             payload_len = 50
         cmd += (" -payload_len %s"  % payload_len) if not payload_len is None else ""
         cmd += (" -tx_data %s"  % tx_data) if not tx_data is None else ""
- 
+
+        #if not tx_data is None and not data_file is None:
+        #    try:
+        #        data_file.write(tx_data + "\n") 
+        #    except Exception as e:
+        #        return "error";
+        
         cmd += (" -dest_addr %s"  % dest_addr) if not dest_addr is None else ""
         cmd += (" -user_priority %d"  % user_priority) if not user_priority is None else ""
         cmd += (" -data_rate %d"  % data_rate) if not data_rate is None else ""
         cmd += (" -power_dbm8 %d"  % power_dbm8) if not power_dbm8 is None else ""
         cmd += (" -op_class %s"  % op_class) if not op_class is None else ""
         self._if.send_command(cmd, False)
-        data = self._if.read_until_prompt( timeout  = 1)
-        return cmd + data;
+        #time.sleep((frames / rate_hz) +10)
+        #data = self._if.read_until_prompt( timeout  = (frames / rate_hz) +10)        
+        #return data;
         #if 'ERROR' in data:
          #   raise Exception( data )
 
@@ -173,7 +180,9 @@ class linkApi(object):
         #data = self._if.read_until_prompt( timeout  = 5000) 
         #if out_queue is not None : 
         #    out_queue.put(data)  
-        #return cmd + data
+        #return data
+        #if 'ERROR' in data:
+        #    raise Ebxception( data )
 
     def reset_counters(self):
         cmd = "%s counters reset" % self._name
@@ -185,7 +194,7 @@ class linkApi(object):
         cmd = "%s counters print" % self._name
         data1 = self._if.send_command(cmd)
         
-        data = self._if.read_until_prompt()
+        data = self._if.read_until_prompt(timeout  = 3)
         if not len(data):
             return cnts
 
@@ -355,7 +364,7 @@ class linkApi(object):
         data = self._if.read_until_prompt( timeout  = 1)
         return data
         
-    """chani added - end """
+"""chani added - end """
 
 class canApi(linkApi):
 
@@ -817,7 +826,6 @@ class dot4(object):
 
 
 
-
        
 
 class qaCliApi(object):
@@ -853,7 +861,6 @@ class qaCliApi(object):
         self.nav = navApi( self._if )
         self.ecc = eccApi( self._if )
         self.wlanMib = wlanMibApi( self._if)
-        self.dot4 = dot4(self._if)
         self.register = Register(self._if)
         
     def __del__(self):
@@ -976,26 +983,19 @@ class qaCliApi(object):
         uboot_ver = ''
         gnss_ver = ''
 
-        if self.uut.external_host is u'':
-            self._if.send_command('show version sdk')
-            versions = {}
-            rc = self._if.read_until_prompt()
-            if len(rc): 
-                rc = rc.replace('\r\n' ,'').split(',')
-                # SDK: sdk-4.3.0-beta7-mc, U-BOOT: U-Boot 2012.04.01-atk-1.1.3-00526-g19cc217 (Nov 13 2014 - 10:13:42)
-                try:
-                    sdk_ver = rc[0].split(':')[1].strip()
-                    uboot_ver = rc[1].split(':')[1].strip()
-                    gnss_ver = rc[2].split(':')[1].strip().split(' ')[0]
-                except Exception as e:
-                    pass
-        else:
-            cmd = "link get_info about_sdk"
-            self._if.send_command(cmd)
-            rc = self._if.read_until_prompt()
+        self._if.send_command('show version sdk')
+        versions = {}
+        rc = self._if.read_until_prompt()
+        if len(rc): 
             rc = rc.replace('\r\n' ,'').split(',')
-            sdk_ver = rc[0].split("Software version:")[1].split('Device')[0]
-            
+            # SDK: sdk-4.3.0-beta7-mc, U-BOOT: U-Boot 2012.04.01-atk-1.1.3-00526-g19cc217 (Nov 13 2014 - 10:13:42)
+            try:
+                sdk_ver = rc[0].split(':')[1].strip()
+                uboot_ver = rc[1].split(':')[1].strip()
+                gnss_ver = rc[2].split(':')[1].strip().split(' ')[0]
+            except Exception as e:
+                pass
+
         versions = {'sdk_ver': sdk_ver, 'uboot_ver' : uboot_ver, 'gnss_ver' : gnss_ver }
 
         return versions
