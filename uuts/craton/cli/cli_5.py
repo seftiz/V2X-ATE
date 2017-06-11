@@ -142,7 +142,7 @@ class linkApi(object):
          #   raise Exception( data )
 
 
-    def transmit(self, payload_len = None, tx_data = None, dest_addr = None, frames = 1, rate_hz = 1, user_priority = None, data_rate = None, power_dbm8 = None,op_class = None):
+    def transmit(self, payload_len = None, tx_data = None, dest_addr = None, frames = 1, rate_hz = 1, user_priority = None, data_rate = None, power_dbm8 = None,op_class = None,sk = None,cli_name = None):
         
         cmd = "%s socket tx" % self._name
         cmd += (" -frames %d"  % frames)
@@ -163,6 +163,8 @@ class linkApi(object):
         cmd += (" -data_rate %d"  % data_rate) if not data_rate is None else ""
         cmd += (" -power_dbm8 %d"  % power_dbm8) if not power_dbm8 is None else ""
         cmd += (" -op_class %s"  % op_class) if not op_class is None else ""
+        cmd += (" -sk %s"  % sk) if not sk is None else ""
+        cmd += (" -cli_name %s"  % cli_name) if not cli_name is None else ""
         self._if.send_command(cmd, False)
         #time.sleep((frames / rate_hz) +10)
         #data = self._if.read_until_prompt( timeout  = (frames / rate_hz) +10)        
@@ -172,10 +174,12 @@ class linkApi(object):
 
         # No response till end of transmission 
 
-    def receive(self, frames, timeout = None, print_frame = None,out_queue = None):
+    def receive(self, frames, timeout = None, print_frame = None,out_queue = None,sk = None,cli_name = None):
         cmd = "link socket rx -frames %s" % frames
         cmd += (" -print %s"  % print_frame) if not print_frame is None else ""
         cmd += (" -timeout_ms %s"  % timeout) if not timeout is None else ""
+        cmd += (" -sk %s"  % sk) if not sk is None else ""
+        cmd += (" -cli_name %s"  % cli_name) if not cli_name is None else ""
         self._if.send_command(cmd)
         #data = self._if.read_until_prompt( timeout  = 5000) 
         #if out_queue is not None : 
@@ -184,6 +188,13 @@ class linkApi(object):
         #if 'ERROR' in data:
         #    raise Ebxception( data )
 
+    def rx_thread_stop(self):
+        cmd =  "link stop_thread rx"
+        self._if.send_command(cmd)
+
+    def tx_thread_stop(self):
+        cmd =  "link stop_thread tx"
+        self._if.send_command(cmd)
 
     def reset_counters(self):
         cmd = "%s counters reset" % self._name
@@ -909,22 +920,30 @@ class qaCliApi(object):
         uboot_ver = ''
         gnss_ver = ''
 
-        self._if.send_command('show version sdk')
-        versions = {}
-        rc = self._if.read_until_prompt()
-        if len(rc): 
+        if self.uut.external_host is u'':
+            self._if.send_command('show version sdk')
+            versions = {}
+            rc = self._if.read_until_prompt()
+            if len(rc): 
+                rc = rc.replace('\r\n' ,'').split(',')
+                # SDK: sdk-4.3.0-beta7-mc, U-BOOT: U-Boot 2012.04.01-atk-1.1.3-00526-g19cc217 (Nov 13 2014 - 10:13:42)
+                try:
+                    sdk_ver = rc[0].split(':')[1].strip()
+                    uboot_ver = rc[1].split(':')[1].strip()
+                    gnss_ver = rc[2].split(':')[1].strip().split(' ')[0]
+                except Exception as e:
+                    pass
+        else:
+            cmd = "link get_info about_sdk"
+            self._if.send_command(cmd)
+            rc = self._if.read_until_prompt()
             rc = rc.replace('\r\n' ,'').split(',')
-            # SDK: sdk-4.3.0-beta7-mc, U-BOOT: U-Boot 2012.04.01-atk-1.1.3-00526-g19cc217 (Nov 13 2014 - 10:13:42)
-            try:
-                sdk_ver = rc[0].split(':')[1].strip()
-                uboot_ver = rc[1].split(':')[1].strip()
-                gnss_ver = rc[2].split(':')[1].strip().split(' ')[0]
-            except Exception as e:
-                pass
-
+            sdk_ver = rc[0].split("Software version:")[1].split('Device')[0]
+            
         versions = {'sdk_ver': sdk_ver, 'uboot_ver' : uboot_ver, 'gnss_ver' : gnss_ver }
 
         return versions
+
 
     def create_remote_transport_layer(self):
         # timeout = 0 cancel the timeout
