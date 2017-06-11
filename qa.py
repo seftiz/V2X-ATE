@@ -376,6 +376,9 @@ def v2x_tests ( suite, cpu_type = 'arm',total_frames = 10000):
 
 # 48 hours 
 
+    test_links = [ tParam( tx = (0,1), rx = (1,1), proto_id = 0x13a1, frames = None, frame_rate_hz = 50, duration = 24 ), 
+                    tParam( rx = (0,1), tx = (1,1), proto_id = 0x13b1, frames = None, frame_rate_hz = 50, duration = 24 ) ]                  
+    suite.addTest(common.ParametrizedTestCase.parametrize(Tc_link.TC_LINK_48hours, param = dict( params = test_links, target_cpu = cpu_type ) ) )
 
 # netif configuration
         
