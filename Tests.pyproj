@@ -113,6 +113,7 @@
     <Compile Include="utilities\can_bus_test.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="utilities\gps_gpio_set.py" />
     <Compile Include="utilities\gps_to_udp.py">
       <SubType>Code</SubType>
     </Compile>

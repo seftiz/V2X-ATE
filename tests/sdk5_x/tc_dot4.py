@@ -35,9 +35,6 @@ class TC_Dot4(common.V2X_SDKBaseTest):
     
     def __init__(self, methodName = 'runTest', param = None):
         super(TC_Dot4, self).__init__(methodName, param)
-        self.send_instance = Generate_Dot4_Send()
-        self.sniffers_ports = list()
-        self.sniffer_file = list()
         self.register_flag = False
         self.rx_list = []
         self.tx_list = []
@@ -51,7 +48,8 @@ class TC_Dot4(common.V2X_SDKBaseTest):
         self.tx_instance = None
         self.rx_instance = None
         self.full_test = None
-        
+        self.expected_frames = 0
+
     def test_dot4(self):
         """Testsuite for testing channel switching
         @class TC_Dot4
@@ -68,13 +66,8 @@ class TC_Dot4(common.V2X_SDKBaseTest):
         print >> self.result._original_stdout, "Starting : {}".format( self._testMethodName )
 
         self.get_test_parameters()
-        active_sniffer = self.initilization()
-        ## Call Test scenarios blocks
-        #chs_status = self.initilization()
-        #if chs_status != globals.CHS_ACTIVE:
-        #    return
-        self.main(active_sniffer)
-        #self.analyze_results()
+        self.initilization()
+        self.main()
         self.print_results()
         
         print >> self.result._original_stdout, "test, {} completed".format( self._testMethodName )
@@ -85,30 +78,17 @@ class TC_Dot4(common.V2X_SDKBaseTest):
         self._testParams = self.param.get('tx_dict', None )
         if self._testParams is None:
             self._testParams = self.param.get('link_dict', None )
+            if self._testParams is None:
+                self._testParams = self.param.get('rx_dict', None )
+            if self._testParams is None:
+                self._testParams = self.param.get('rxtx_dict', None )
         for i, t_param in enumerate(self._testParams):
             if 'tx' in vars(t_param):
                 g.append(t_param.tx[0])
             if 'rx' in vars(t_param) and not t_param.rx is None:
                 g.append(t_param.rx[0])
         self.tx_list = set(g)
-        
-        # Set Some test defaults 
-        self._bsm_band       = self.param.get('bsm_band', 5890 )
-        self._cch_band       = self.param.get('cch_band', 5920 )
-        self._sch_band       = self.param.get('sch_band', 5900 )
-        self._sch2_band      = self.param.get('sch2_band', 5870 )
-        self._sch_proto_id   = self.param.get('sch_proto_id', 0x1234 )
-        self._cch_proto_id   = self.param.get('cch_proto_id', 0x5678 )
-        self._frame_rate_hz  = self.param.get('frame_rate_hz', 2000 )
-        self._expected_frames         = self.param.get('expected_frames', 500 )
-        self._cs_interval  = self.param.get('cs_interval', 50 )
-        self._payload_len    = self.param.get('payload_len', 330 )
-        self._chs_interval_max_expected_frames = self.param.get('chs_interval_max_expected_frames', 100 )
-        self._bsm_proto_id = self.param.get('bsm_proto_id', 0x9abc )
-        self._sync_tolerance = self.param.get('sync_tolerance', 2 )
-        self._gps_lock_timeout_sec = self.param.get('gps_to', 2 )
-        self._cs_interval = self.param.get('cs_interval', 50 )
-
+ 
     def runTest(self):
         pass
     
@@ -116,14 +96,6 @@ class TC_Dot4(common.V2X_SDKBaseTest):
         super(TC_Dot4, self).setUp()
 
     def unit_configuration(self):
-
-        gps_lock = True
-        gps_lock &= self.wait_for_gps_lock( self._uut[globals.CHS_DUT_ID + 1], self._gps_lock_timeout_sec )
-        # Add Gps lock limit     
-        self.add_limit( "GPS Locked" , int(True) , int(gps_lock), None , 'EQ')
-        if gps_lock == False:
-            log.info("GPS Lock failed")
-
         # Config rx uut
         for rx_ in self._testParams:
             rx_list = [rx_.rx] if type(rx_.rx) == tuple else rx_.rx
@@ -132,18 +104,22 @@ class TC_Dot4(common.V2X_SDKBaseTest):
                 #set cli name base on rx + proto_id + if
                 cli_name = "rx_%d_%x" % ( rf_if, rx_.proto_id )
                 self.active_cli_list.append( (uut_id, rf_if, cli_name) )
-                self.rx_list.append( (uut_id, rf_if, cli_name, rx_.frames, rx_) )
+                #ref unit:
                 if self._uut[uut_id].external_host is u'':
                     self.dot4_cli_sniffer = self._uut[uut_id].create_qa_cli(cli_name, target_cpu = self.target_cpu)
-                    # Open general session
+                    self.rx_list.append( (uut_id, rf_if, cli_name, rx_.frames, rx_.proto_id, rx_) )
+                    
                     self._uut[uut_id].qa_cli(cli_name).link.service_create( type = 'remote' if self._uut[uut_id].external_host else 'hw')
-                else: 
+                #dut:
+                else:
+                    self.rx_list.append( (uut_id, rf_if, cli_name, rx_.frames, rx_.proto_id,rx_.ch_idx,rx_.op_class,rx_.time_slot, rx_.tx_power, rx_.print_, rx_) )
                     self.dot4_cli = self._uut[uut_id].create_qa_cli(cli_name, target_cpu = self.target_cpu)
                     if self.register_flag is False:
                         self.register_flag = True
                         self._uut[uut_id].qa_cli(cli_name).register.device_register("hw",self._uut[uut_id].mac_addr,1,"eth1")
                         self._uut[uut_id].qa_cli(cli_name).register.service_register("v2x",0,"Secton")
                         self._uut[uut_id].qa_cli(cli_name).register.service_register("wdm",3,"Secton")
+                self._uut[uut_id].qa_cli(cli_name).link.socket_create(rf_if, "data", rx_.proto_id)
 
         # Config tx uut
         for tx_ in self._testParams:
@@ -161,29 +137,28 @@ class TC_Dot4(common.V2X_SDKBaseTest):
                     if ( create_new_cli == False):
                         cli_name = cli + '_' + '1'
                     self.active_cli_list.append( (uut_id, rf_if, cli_name) )
-                    self.tx_list_.append( (uut_id, rf_if, cli_name, tx_.frames, tx_.frame_rate_hz, tx_) )
+                    #ref unit:
                     if self._uut[uut_id].external_host is u'':
+                        self.tx_list_.append( (uut_id, rf_if, cli_name,tx_.frames ,tx_.proto_id,tx_.frame_rate_hz ,tx_) )
                         self.dot4_cli_sniffer1 = self._uut[uut_id].create_qa_cli(cli_name, target_cpu = self.target_cpu)
                         # Open general session
                         self._uut[uut_id].qa_cli(cli_name).link.service_create( type = 'remote' if self._uut[uut_id].external_host else 'hw')
-                        self._uut[uut_id].qa_cli(cli_name).link.receive( tx_.frames, print_frame = 0, timeout = self.get_max_waiting_time())
-                        active_sniffer = self.start_sniffer(self.dot4_cli_sniffer.interface(),1,"RX") 
-                    else: 
+                    #dut:
+                    else:
+                        self.tx_list_.append( (uut_id, rf_if, cli_name, tx_.frames , tx_.proto_id, tx_.frame_type, tx_.frame_rate_hz, tx_.ch_idx, tx_.time_slot, tx_.op_class, tx_.tx_power, tx_) )
+                        self.expected_frames += tx_.frames
                         self.dot4_cli1 = self._uut[uut_id].create_qa_cli(cli_name, target_cpu = self.target_cpu)
                         if self.register_flag is False:
                             self.register_flag = True
                             self._uut[uut_id].qa_cli(cli_name).register.device_register("hw",self._uut[uut_id].mac_addr,1,"eth1")
                             self._uut[uut_id].qa_cli(cli_name).register.service_register("v2x",0,"Secton")
                             self._uut[uut_id].qa_cli(cli_name).register.service_register("wdm",3,"Secton")
-        return active_sniffer
-             
-    def main(self,active_sniffer):
+                    self._uut[uut_id].qa_cli(cli_name).link.socket_create(rf_if, "data", tx_.proto_id)
+                     
+    def main(self):
         try:
             result = None
-            waiting_time = self.get_max_waiting_time()
-            #for rx in self.rx_list: 
-            #    uut_id, rf_if, cli_name, frames, _ = rx
-            #    self._uut[uut_id].qa_cli(cli_name).link.receive( frames, print_frame = 1, timeout = 12000 )
+            #waiting_time = self.get_max_waiting_time()
 
             test_type = self.param.get('link_dict', None )
             if test_type is None:
@@ -193,67 +168,48 @@ class TC_Dot4(common.V2X_SDKBaseTest):
                     if test_type is None:
                         test_type = self.param.get('tx_dict', None )
                         if test_type is None:
-                            raise globals.Error("input is missing or corrupted")
+                            test_type = self.param.get('rx_dict', None )
+                            if test_type is None:
+                                test_type = self.param.get('rxtx_dict',None)
+                                if test_type is None:
+                                    raise globals.Error("input is missing or corrupted")
+                                else:
+                                    #Full channel Switching Tests:
+                                    result = self.full_test.main(self)
+                                    self.stats.results_dic["full_test"].extend(result["success"])
+                                    self.stats.results_dic["full_test"].extend(result["fail"])
+                            else:
+                                #Channel Switch Rx Tests:
+                                result = self.rx_instance.main(self)
+                                self.stats.results_dic["rx_test"].extend(result["success"])
+                                self.stats.results_dic["rx_test"].extend(result["fail"])
                         else:
-                            pass
+                            #Channel Switch Tx Tests:
+                            self.stats.results_dic["tx_test"] = self.tx_instance.main(self)
                     else:
                         #Erroneuos Send Tests:
-                        result = self.err_send.main(self.dot4_cli,self.param)
+                        result = self.err_send.main(self,self.param)
                         self.stats.results_dic["erroneuous_send"].append(result["success"])
                         self.stats.results_dic["erroneuous_send"].extend(result["fail"])
                 else:
                     #Erroneuos Start Tests:
                     for i in ("alternate","immediate"):
-                        result = self.err_req.main(i, self.param,self.dot4_cli)
+                        result = self.err_req.main(i, self.param,self.dot4_cli1)
                         self.stats.results_dic["erroneuous_request_%s" % i].append(result["success"])
                         self.stats.results_dic["erroneuous_request_%s" % i].extend(result["fail"])
-                    result = self.err_req.main("continuous",self.param,self.dot4_cli) #continuous
+                    result = self.err_req.main("continuous",self.param,self.dot4_cli1) #continuous
                     self.stats.results_dic["erroneuous_request_continuous"].append(result["success"])
                     self.stats.results_dic["erroneuous_request_continuous"].extend(result["fail"])
             else:
                 #State Tests:
-                result = self.state_instance.main(self.dot4_cli1,self.dot4_cli_sniffer1)
+                result = self.state_instance.main(self,self.dot4_cli1,self.dot4_cli_sniffer)
                 self.stats.results_dic["state_tests"].extend(result["success"])
                 #to know from where start the indication of the failures
                 self.stats.results_dic["state_tests"].append("fail:")
                 self.stats.results_dic["state_tests"].extend(result["fail"])
 
-            ##Channel Switch Tx Tests:
-            #result = self.tx_instance.main(self.dot4_cli.uut.idx)
-            #tg_sniffer_id = 0
-            #rf_if = 1
-            #self.add_limit( "(sniffer_id#%d, rf_if#%d), protocol id check " % ( tg_sniffer_id, rf_if), 0, result[tg_sniffer_id][rf_if]['sniffer_proto_fail'], None , 'EQ') 
-            #self.add_limit( "(sniffer_id#%d, rf_if#%d), data compare check " % ( tg_sniffer_id, rf_if), 0, result[tg_sniffer_id][rf_if]['sniffer_data_cmp_fail'], None , 'EQ')
-            #self.add_limit( "(sniffer_id#%d, rf_if#%d), Total Frames Prccessed on Sniffer " % ( tg_sniffer_id, rf_if), self._expected_frames, result[tg_sniffer_id][rf_if]['total_frames'], None , 'EQ') 
-
-            #if tg_sniffer_id == globals.CHS_SNIF_CS_ID:
-            #    self.add_limit( "(sniffer_id#%d, rf_if#%d), Tx after sync tolerance " % ( tg_sniffer_id, rf_if), 0, result[tg_sniffer_id][rf_if]['chs_setup_failure'], None , 'EQ')
-            #    self.add_limit( "(sniffer_id#%d, rf_if#%d), Tx interval expected frames " % ( tg_sniffer_id, rf_if), 0, result[tg_sniffer_id][rf_if]['chs_interval_expected_frames_fail_count'] , None , 'EQ') 
-            #    self.add_limit( "(sniffer_id#%d, rf_if#%d), Tx interval equals to 46-50 ms " % ( tg_sniffer_id, rf_if), 0, result[tg_sniffer_id][rf_if]['chs_interval_expected_to_fail_count'] , None , 'EQ') 
-            #    self.add_limit( "(sniffer_id#%d, rf_if#%d), Tx during GI " % ( tg_sniffer_id, rf_if), 0, result[tg_sniffer_id][rf_if]['chs_tx_during_gi_fail_count'] , None , 'EQ')
-            #    self.add_limit( "(sniffer_id#%d, rf_if#%d), Tx data read fail " % ( tg_sniffer_id, rf_if), 0, result[tg_sniffer_id][rf_if]['sniffer_data_read_fail'], None , 'EQ') 
-            ##for a,b in result.iteritems():
-            #    for c,d in b.iteritems():
-            #        self.add_limit("Dot4 tx %s" % c , 1 , 1 , 1 , 'EQ')
-            #        for e,f in d.iteritems():
-            #            self.add_limit("Dot4 tx %s" % e , 1 , 1 , 1 , 'EQ')
-            #            self.add_limit("Dot4 tx %d" % f , 1 , 1 , 1 , 'EQ')
-            ##Channel Switch Rx Tests:
-            #self.stats.results_dic["rx_test"] = self.rx_instance.main()
-            ##Channel Switch Full Test:
-            #self.stats.results_dic["full_test"] = self.full_test.main()
-            
-            self.stop_sniffer(active_sniffer[0],active_sniffer[1])
-                
         except Exception as e:
             raise e
-                   
-    def analyze_results(self):
-        self._test_frm_data = self.get_test_frm_data()
-        for sniffer_file in self.sniffer_file:
-            cap = pyshark.FileCapture(sniffer_file)
-            for frame_idx,frame in  enumerate(cap):
-                self.packet_handler(frame)
 
     def print_results(self):
         #function name , sent values
@@ -279,9 +235,16 @@ class TC_Dot4(common.V2X_SDKBaseTest):
             elif "state_tests" in i:
                 flag = False
                 for j in item:
-                    if "fail" in j:
+                    if "fail" in j and flag == False:
                         flag = True
                         continue
+                    elif flag == False:
+                        if 'fail' not in j:
+                            string = j
+                            values = [int(s) for s in string.split() if s.isdigit()]
+                            self.add_limit("%s %d %s %d" % (string[0] ,values[0] ,string[1] ,values[1]) ,values[0] ,values[1] ,None ,'EQ')
+                        else:
+                            self.add_limit("%s %d" % (string[0] ,int(string[1])) ,0 ,string[1] ,None ,'EQ')
                     if not flag:
                         self.add_limit("Dot4 State (%s) success" % j , 1 , 1 , 1 , 'EQ')
                         self.add_limit("Data proto_id 0x%x" % self.stats.proto , 1 , 1, None , 'EQ')
@@ -289,38 +252,29 @@ class TC_Dot4(common.V2X_SDKBaseTest):
                     else:
                         self.add_limit("Dot4 State (%s) fail" % j , 0 , 1 , 1 , 'EQ' )
             elif "tx_test" in i:
-                continue
-        #self.print_ref_results()
-
-    def start_sniffer(self, cli_interface, idx, type):
-        self.dut_host_sniffer = traffic_generator.TGHostSniffer(idx)
-        self.dut_embd_sniffer = traffic_generator.Panagea4SnifferAppEmbedded(cli_interface)
-        sniffer_port = traffic_generator.BASE_HOST_PORT + ( idx * 17 ) #+ (1 if type is globals.CHS_TX_SNIF else 0)
-        #save for sniffer close...
-        self.sniffers_ports.append(sniffer_port)
-        self.sniffer_file.append(os.path.join( common.SNIFFER_DRIVE ,  self._testMethodName + "_" + "dut" + str(idx) + "_" + str(type) + "_" + time.strftime("%Y%m%d-%H%M%S") + "." + 'pcap'))  
-        try:
-            time.sleep(2)
-            #use the last appended sniffer  file...
-            self.dut_host_sniffer.start( if_idx = idx , port = sniffer_port, capture_file = self.sniffer_file[len(self.sniffer_file) - 1] )
-            time.sleep(1)
-            self.dut_embd_sniffer.start( if_idx = idx , server_ip = "192.168.120.1" , server_port = sniffer_port, sniffer_type = type)
-            #time.sleep( 120 )
-        except Exception as e:
-            time.sleep( 300 )
-            pass
-        return (idx,sniffer_port)
-
-    def stop_sniffer(self,idx,sniffer_port):
-        self.dut_host_sniffer.stop(sniffer_port)
-        time.sleep(2)
-        self.dut_embd_sniffer.stop(idx)
-
+                for j in item:
+                    string = j
+                    if 'fail' not in j:
+                        values = [int(s) for s in string.split() if s.isdigit()]
+                        self.add_limit("%s %s %s on rf%d" %(string.split()[0] ,string.split()[1] ,string.split()[2] ,values[0]) ,values[1] ,values[2] ,None ,'EQ')
+                    elif 'Total frames' in j:
+                        self.add_limit("%s" % string.split(",fail")[0], self.expected_frames, int(string.split(",fail")[1]),None ,'EQ')
+                    else:
+                        self.add_limit("%s" % string.split(",fail")[0], 0, int(string.split(",fail")[1]),None ,'EQ')
+            elif "rx_test" in i:
+                for j in item:
+                    string = j.split(":")
+                    if 'fail' not in j:
+                        values = [int(s) for s in string.split() if s.isdigit()]
+                        self.add_limit("%s %d %s %d" % (string[0] ,values[0] ,string[1] ,values[1]) ,values[0] ,values[1] ,None ,'EQ')
+                    else:
+                        self.add_limit("%s %d" % (string.split(',fail')[0] ,int(string[1])) ,0 ,string[1] ,None ,'EQ')
+       
     def get_max_waiting_time(self):
         # get the max waiting time
         transmit_time = 0
         for tx in self.tx_list_:
-            uut_id, rf_if, cli_name, frames, frame_rate_hz, _ = tx
+            uut_id, rf_if, cli_name, proto_id, frames,  frame_rate_hz, ch_idx,_ = tx
             expected_transmit_time = int(float( 1.0 / frame_rate_hz) *  frames) + 5
             transmit_time  = transmit_time if transmit_time > expected_transmit_time else expected_transmit_time
 
@@ -328,31 +282,13 @@ class TC_Dot4(common.V2X_SDKBaseTest):
         
         return rx_timeout
 
-    def packet_handler(self, packet):
-        data = packet.data.data[4:len(ExpData)-1]
-        ind = packet.data.data[0:4]
-        if data != ExpData[4:len(ExpData)-1] :
-            self.stats.data_mismatch +=1 
-        if int(xp_idx) != int("0x"+ind,0) :
-            self.stats.ref_rx_count_error +=1
-            return int("0x" + data[:4],0) +1
-        else :
-            return 0
-   
     def initilization(self):
         rc = 0
         # initilize uut
         self._uut[0] = globals.setup.units.unit(globals.CHS_DUT_ID)
         self._uut[1] = globals.setup.units.unit(globals.CHS_DUT_ID + 1)
-        active_sniffer = self.unit_configuration()
-        return active_sniffer
-
-    def get_test_frm_data(self):
-        frm_tx_data = ""
-        for chr in range(self._payload_len):
-            frm_tx_data += "".join('{:02x}'.format((chr % 0xFF) + 1))
-        return frm_tx_data   
-
+        self.unit_configuration()
+       
     def tearDown(self):
         super(TC_Dot4, self).tearDown()
         """for cli in self.active_cli_list:
@@ -373,7 +309,7 @@ class TC_Dot4(common.V2X_SDKBaseTest):
 class TC_Dot4_ERRONEOUS_Request():
     """
     @class TC_Dot4_ERRONEOUS
-    @brief Test 
+    @brief Test - TC_CHS_09, TC_CHS_10 ,TC_CHS_12 ,TC_CHS_14 ,TC_CHS_15
     @author Nomi Rozenkruntz
     @version 0.1
     @date   3/6/2017
@@ -390,12 +326,15 @@ class TC_Dot4_ERRONEOUS_Request():
         self.immediate_access = 0
     
     def main(self,state,param,cli):
-        self.res_dic["success"] = 0
-        self.res_dic["fail"] = []
-        self.dot4_cli = cli
-        self.get_test_parameters(param)
-        self.erroneous_request(state)
-        return self.res_dic
+        try:
+            self.res_dic["success"] = 0
+            self.res_dic["fail"] = []
+            self.dot4_cli = cli
+            self.get_test_parameters(param)
+            self.erroneous_request(state)
+            return self.res_dic
+        except Exception as e:
+            raise globals.Error(e.message)
         
     def get_test_parameters( self, param ):
         self.param = param
@@ -408,23 +347,23 @@ class TC_Dot4_ERRONEOUS_Request():
                                req.get("time_slot"),
                                req.get("op_class"),
                                req.get("immediate_access"))
-            if "error" or "Invalid" not in rc :
+            if "ERROR" and "Invalid" not in rc :
                 self.res_dic["fail"].append(state.upper() + " state: channel: %d time slot: %d operation class: %d immediate access: %d" %(req.get("channel_num"),req.get("time_slot"),req.get("op_class"),req.get("immediate_access")))
-                self.end_channel("channel_num")
+                self.end_channel(req.get("channel_num"))
             else:
                 self.res_dic["success"] += 1
 
         if state is not "continuous":
             rc = self.start_request(180,1,1,None)
-            if "error" or "Invalid " not in rc :
+            if "ERROR" or "Invalid " not in rc :
                 self.res_dic["fail"].append(state.upper() + " state: channel: %d time slot: %d operation class: %d immediate access: %d" %(req.get("channel_num"),req.get("time_slot"),req.get("op_class"),req.get("immediate_access")))
-                self.end_channel("channel_num")
+                self.end_channel(180)
             else:
                 self.res_dic["success"] += 1
 
     def start_request(self,ch_num,t_slot,op_class,imm_access):
         request = 0,ch_num,t_slot,op_class,imm_access
-        self.dot4_cli.dot4.dot4_channel_start(request)
+        return self.dot4_cli.dot4.dot4_channel_start(request)
 
     def end_channel(self,ch_num): 
         rc = self.dot4_cli.dot4.dot4_channel_end(self.if_index, ch_num)
@@ -436,13 +375,12 @@ class TC_Dot4_ERRONEOUS_Request():
 class TC_Dot4_ERRONEOUS_Send():
     """
     @class TC_Dot4_ERRONEOUS_Send
-    @brief Test 
+    @brief Test TC_CHS_11, TC_CHS_13 ,TC_CHS_16
     @author Nomi Rozenkruntz
     @version 0.1
     @date   3/6/2017
     """
     def __init__(self, methodName = 'runTest', param = None):
-        self.send_instance = Generate_Dot4_Send()
         self.state_instance = TC_Dot4_State()
         self.res_dic = dict(success = int(), fail = list())
         self.state = None
@@ -452,56 +390,60 @@ class TC_Dot4_ERRONEOUS_Send():
         self.channel_id = dict(channel_num = 0, op_class = 0)
         self.immediate_access = 0
     
-    def main(self,dot4_cli,param):
-        self.dot4_cli = dot4_cli
-        self.get_test_parameters(param)
-        self.erroneous_send()
-        return self.res_dic
-        
+    def main(self,tc_dot4,param):
+        try:
+            self.tc_dot4 = tc_dot4
+            self.get_test_parameters(param)
+            self.erroneous_send()
+            return self.res_dic
+        except Exception as e:
+            raise globals.Error(e.message)        
+
     def get_test_parameters( self,param ):
         self.state = param.get('state',None)
         self.test_param = param.get('send_dict',None)
 
     def erroneous_send(self):
-        self.state_instance.start_continuous(172,self.dot4_cli)
+        uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = self.tc_dot4.tx_list_[0]
+        self.state_instance.start_alternate(182,self.tc_dot4._uut[uut_id].qa_cli(cli_name))
         for send_p in self.test_param:
-            rc = self.send_instance.send(self.dot4_cli,"40848",send_p.get("channel_num"),
-                                    False,
-                                    send_p.get("time_slot"),
-                                    send_p.get("op_class"))
-            if "error" or "Invalid" not in rc :
-                self.res_dic["success"] += 1
+            rc = self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.erroneous_transmit(tx_data = "4560" ,frames = frames, 
+                                                             rate_hz = frame_rate_hz ,channel_num = send_p.get("channel_num"),
+                                                             time_slot = send_p.get("time_slot"), 
+                                                             op_class = send_p.get("op_class"), 
+                                                             power_dbm8 = tx_power)
+            if "ERROR" and "Invalid" not in rc :
+                self.res_dic["fail"].append("Alternate state: channel %d time slot %d operation class %d" %(send_p.get("channel_num"),send_p.get("time_slot"),send_p.get("op_class")))
+                self.end_channels()
             else:
-                self.res_dic["fail"].append(state.upper() + " state state: channel %d time slot %d operation class %d" %(req.get("channel_num"),req.get("time_slot"),req.get("op_class")))
-                self.end_channel("channel_num")
-        self.end_channel(172)
+                self.res_dic["success"] += 1
     
-    def end_channel(self,ch_num):
-        rc = self.dot4_cli.dot4.dot4_channel_end(self.if_index, ch_num)
-        return rc 
+    def end_channels(self):
+        rc = ''
+        for tx in self.tc_dot4.tx_list_:
+            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            rc += self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_end(rf_if+1,ch_idx) 
+        return rc
 
 ############ END Class TC_Dot4_ERRONEOUS_Send ############
 
 class TC_Dot4_Tx(TC_Dot4):
-    """
+    """Transmission test
     @class TC_Dot4_Tx
-    @brief Test transmision while channel switching 
+    @brief Test transmision while channel switching- TC_CHS_17, TC_CHS_18
     @author Nomi Rozenkruntz
     @version 0.1
     @date	3/7/2017
     """
     #A reminder - todo the high rate test! 
     def __init__(self, methodName = 'runTest', param = None):
-        self.request = TC_Dot4_State()
         self.stats = Statistics()
-        self.uut_id = None
-        self.thread_list = []
-        self.if_index = 1
+        self.res_list = list()
+        self.chs_flag = False
+        self.first_proto = None
+        self.sniffer_file = list()
         self.active_cli_list = []
-        self._if_ch = {}
         self.interface = None
-        self._sch_proto_id = hex(1234)
-        self._cch_proto_id = hex(5678)
         self._expected_frames = 200
         self._frame_rate = 0
         self._payload_len = 330
@@ -509,44 +451,84 @@ class TC_Dot4_Tx(TC_Dot4):
         self._protocol_id_last_seesion_last_frame = tree()
         self._last_frame_info = {'last_rfif' : 0, 'last_rfif_first_frame_ts' : 0, 'last_rfif_frame_id' : 0, 'last_rfif_last_frame_ts' : 0, 'last_rfif_sa' : 0, 'last_rfif_first_frame_id' : 0}
                     
-    def main(self,uut_id):
-        self.uut_id = uut_id
-        #config tx and rx parameters
-        #self.unit_configuration()
-        #self.request.start_continuous(172)
-        #self.send_instance.send(self.dot4_cli ,"Dot4 Tx",172)
-        #self.request.start_continuous(176)
-        #self.send_instance.send(self.dot4_cli ,"Dot4 Tx",172)
-        self._init_sniffers_counters(1,1)
-        self._init_sniffers_counters(0,2)
-        return self.analyze_results()
+    def main(self,tc_dot4):
+        try:
+            self.tc_dot4 = tc_dot4
+            self._init_sniffers_counters()
+            #test start:
+            self.session_start()
+            self.end_channels()
+            self.analyze_results()
+            return self.print_results()
 
-    def guard_transmit(self):
-        """
-        change the frames num
-        """
+        except Exception as e:
+            raise globals.Error(e.message)
 
-    def guard_receive(self):
-        """
-        change the frames num
-        """
+    def link_tx(self,rx_timeout):
+        #recieve:
+        for rx in self.tc_dot4.rx_list:
+            uut_id, rf_if, cli_name, frames, proto_id,  _ = rx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).link.receive( frames, print_frame = 0, timeout = rx_timeout )
 
-    def _init_sniffers_counters(self, sniffer_id, rf_if):
-        self.stats.counters['chs_interval_expected_frames_fail_count'] = 0
+        ind = 0
+        #transmit:
+        for tx in self.tc_dot4.tx_list_:
+            ind += 1
+            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.transmit(tx_data = "4752" ,frames = frames, rate_hz = frame_rate_hz ,channel_num = ch_idx,time_slot = time_slot, op_class = op_class, power_dbm8 = tx_power)             
+            self.stats.total_frames_expected[ind % 2 + 1] += frames 
+            self.stats.total_data_expected[ind % 2 + 1] += 6 * frames
+
+    def session_start(self):
+        
+        transmit_time = 0
+        # get the max waiting time, 
+        for tx in self.tc_dot4.tx_list_:
+            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            self._frame_rate = frame_rate_hz
+            expected_transmit_time = int(float( 1.0 / frame_rate_hz) *  frames) + 5
+            transmit_time  = transmit_time if transmit_time > expected_transmit_time else expected_transmit_time
+
+        rx_timeout = ( transmit_time + int(transmit_time * 0.25) ) * 1000
+        for rx in self.tc_dot4.rx_list: 
+            uut_id, rf_if, cli_name, frames, proto_id,  _ = rx 
+            #self.tc_dot4._uut[uut_id].qa_cli(cli_name).link.socket_create(rf_if, "data", proto_id)  
+        
+        #open sniffer for the two interfaces in craton1
+        port = self.start_sniffer(self.tc_dot4._uut[uut_id].qa_cli(cli_name).interface(),rf_if ,"RX")
+
+        request = [1,182,1,1,0]  
+        for tx in self.tc_dot4.tx_list_:
+            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_start(request) 
+            request = [1,184,2,1,0]
+            #self.tc_dot4._uut[uut_id].qa_cli(cli_name).link.socket_create(rf_if, "data", proto_id)
+
+        self.link_tx(rx_timeout)
+
+        time.sleep(int(float(rx_timeout / 1000))+100)
+
+        self.stop_sniffer(port)
+     
+    def _init_sniffers_counters(self):
+        for i in (1,2):
+            self.stats.total_frames_expected[i] = 0
+            self.stats.total_data_expected[i] = 0
+
         self.stats.counters['chs_interval_expected_to_fail_count'] = 0
-        self.stats.counters['chs_tx_during_gi_fail_count'] = 0
-        self.stats.counters['chs_setup_failure'] = 0
+        
         self.stats.counters['sniffer_data_read_fail'] = 0
         self.stats.counters['sniffer_data_cmp_fail'] = 0
-        self.stats.counters['total_frames'] = 0
-        self.stats.counters['total_data'] = 0
-        self.stats.counters['sniffer_proto_fail'] = 0
-        self.stats.counters['sniffer_data_payload_len_fail'] = 0
-        self._protocol_id_last_seesion_last_frame[sniffer_id][self._sch_proto_id]['last_frame_num'] = 0
-        self._protocol_id_last_seesion_last_frame[sniffer_id][self._cch_proto_id]['last_frame_num'] = 0
-        self._protocol_id_last_seesion_last_frame[sniffer_id][self._sch_proto_id]['pending_chs_interval_expected_to_fail_count'] = 0
-        self._protocol_id_last_seesion_last_frame[sniffer_id][self._cch_proto_id]['pending_chs_interval_expected_to_fail_count'] = 0
-     
+
+        self.stats.counters['total_frames_rf1'] = 0
+        self.stats.counters['total_frames_rf2'] = 0
+        self.stats.counters['total_data_rf1'] = 0
+        self.stats.counters['total_data_rf2'] = 0
+        self.stats.counters['chs_setup_failure'] = 0
+        self.stats.counters['continues_frames_numbers'] = 0
+        self.stats.counters['chs_tx_during_gi_fail_count'] = 0
+        self.stats.counters['chs_interval_expected_frames_fail_count'] = 0
+        
     def get_test_frm_data(self):
         frm_tx_data = ""
         for chr in range(self._payload_len):
@@ -554,234 +536,550 @@ class TC_Dot4_Tx(TC_Dot4):
         return frm_tx_data
 
     def dut_tx_packet_handler(self, packet):
-        self.stats.total_sniffer_frames_processed += 1
-        current_active_ch_proto_id = int(packet.llc.type, 16)
-        #handle first frame in the test
+        #a)	Frames are associated with the right channel. 
+        #b)	All frames have been transmitted (continues frames numbers). 
+        #c)	Frames data was not corrupted.
+        #d)	The number of frames sent equals the number of frames arrived.
+               
+        current_active_ch_proto = int(packet.llc.type, 16)
+        num = int(packet.radiotap.mactime) / 1000
+        #powerDbm8 (transmit power):
+        if packet.radiotap.txpower != 160:
+            pass
+        #save first frame protocol
         if int(packet.frame_info.number) == 1:
-            self._first_proto_id = current_active_ch_proto_id
-            self._last_frame_info['last_rfif_proto_id'] = current_active_ch_proto_id
-            self._last_frame_info['last_rfif_first_frame_id'] = int(packet.data.data[0:4],16)
-            num = int(packet.radiotap.mactime) / 1000
-            num = num % 100
-            self._last_frame_info['last_rfif_first_frame_ts']  = (num)
-            #all frames comes on the same physical rf interface - '2' need to destinguish between them...
-            self._if_ch[self._first_proto_id] = 1
-        #we do not know where in the time sequence of the Tx CS interval the transmission started so we skip first protocol id testing and starting from the second
-        if current_active_ch_proto_id == self._first_proto_id:
-            self.stats.counters['total_frames'] += 1
-            self.stats.counters['total_data'] += int(packet.data.len)
+            self.top = current_active_ch_proto
+            self.first_proto = current_active_ch_proto
+            self.last_proto = self.top
+            
+        #channel switch occurred
+        if self.last_proto != current_active_ch_proto: 
+            #first channel switch
+            if self.chs_flag == False:
+                self.chs_flag = True
+                if self.top == current_active_ch_proto:
+                    self.stats.counters['total_frames_rf1'] += 1
+                    self.stats.counters['total_data_rf1'] += int(packet.data.len)
+                else:
+                    self.stats.counters['total_frames_rf2'] += 1
+                    self.stats.counters['total_data_rf2'] += int(packet.data.len)
+                #to know if there was already a channel switch
+                self.first_proto = None
+                self.last_timestamp = num
+                self.last_proto = current_active_ch_proto
+                return
+
+        #not yet CHS:
+        if not self.chs_flag:
+            self.first_timestamp = num
+            self.last_proto = current_active_ch_proto
+            if self.top == current_active_ch_proto:
+                self.stats.counters['total_frames_rf1'] += 1
+                self.stats.counters['total_data_rf1'] += int(packet.data.len)
+            else:
+                self.stats.counters['total_frames_rf2'] += 1
+                self.stats.counters['total_data_rf2'] += int(packet.data.len)
             return
-        #check if this is the first if channel, change and set the second channel for test
-        if self._first_proto_id  != None:
-            self._if_ch[current_active_ch_proto_id] = 2
-        # Test packet data
-        try:
-            packet_data = ''.join(packet.data.data.split(':')).encode('ascii','ignore').upper()
-        except Exception as e:
-            self.stats.counters['sniffer_data_read_fail'] +=1
-            #count total frames and data (amount in bytes)
-            self.stats.counters['total_frames'] += 1
-            self.stats.counters['total_data'] += int(packet.data.len)
+
+        #there was already a channel switch
+        if self.first_proto == None:
+            #continues to arrive in the same channel, check if time slot is match
+            if self.last_proto == current_active_ch_proto:
+                #the previous frames was on slot_0
+                if self.last_timestamp % 100 < 54 and self.last_timestamp % 100 > 4:
+                    if num % 100 <= 54:
+                        self.stats.counters['chs_setup_failure'] += 1
+                        
+                #the previous frames was on slot_1
+                else:
+                    if num - self.last_timestamp > 54:
+                        self.stats.counters['chs_setup_failure'] += 1
+                        
+                self.last_timestamp = num
+            #again there is CHS, TEST!
+            else:
+                self.first_proto = current_active_ch_proto
+                #timestamp test:
+                if self.last_timestamp - self.first_timestamp > 50:
+                    self.stats.counters['chs_tx_during_gi_fail_count'] += 1 
+                    
+                #the previous frames was on slot_0
+                if self.last_timestamp % 100 < 54 and self.last_timestamp % 100 > 4:
+                    if num % 100 <= 54:
+                        self.stats.counters['chs_setup_failure'] += 1
+                        
+                #the previous frames was on slot_1
+                else:
+                    if num - self.last_timestamp > 54:
+                        self.stats.counters['chs_setup_failure'] += 1
+                        #print "frame {}, time mismatch\n ".format(packet.frame_info.number)
+                        
+                #when high transmit power - more than one frame per 50 ms:
+                '''Now - 10 frames in time slot, or 40 - 2 frames in timeslot?'''
+                if self._frame_rate >= 40:     
+                    #check time sync and last frame in interval boumdries (2ms in GI are RX OK!)
+                    if num % 100 > 4 and num % 100 < 54:
+                        if self.last_timestamp < 37:
+                            self.stats.counters['chs_interval_expected_to_fail_count'] += 1
+
+        #There was not yet CHS
         else:
-            if current_active_ch_proto_id !=  self._last_frame_info['last_rfif_proto_id']:
-                # handle first CS - this is the testing starting point...
-                if self._first_proto_id  != None:
-                    self._first_proto_id  = None
-                    #arrival time of last frame
-                    num = int(packet.radiotap.mactime) / 1000
-                    num = num % 100
-                    self._last_frame_info['last_rfif_last_frame_ts'] = (num)
-                    #frame id of last frame
-                    self._last_frame_info['last_rfif_frame_id'] = int(packet.data.data[0:4],16)
-                    self.stats.counters['total_frames'] += 1
-                    self._last_frame_info['last_rfif_proto_id'] = int(packet.llc.type, 16)
-                    return
-                if type == globals.CHS_RX_SNIF:
-                  if self._protocol_id_last_seesion_last_frame[sniffer_id][int(packet.llc.type, 16)]['pending_chs_interval_expected_to_fail_count'] == 1:
-                      if ((int(packet.data.data[0:4],16) - 1) == self._protocol_id_last_seesion_last_frame[sniffer_id][self._last_frame_info['last_rfif_proto_id']]['last_frame_num']):
-                          self.stats.counters['chs_interval_expected_to_fail_count'] -=1
-
-                self._protocol_id_last_seesion_last_frame[sniffer_id][self._last_frame_info['last_rfif_proto_id']]['last_frame_num'] = self._last_frame_info['last_rfif_frame_id']
-
-                self.handle_chs_event(sniffer_id, type, self._last_frame_info['last_rfif_proto_id'])
-
-                #arrival time of first frame of the interval
-                self._last_frame_info['last_rfif_first_frame_ts'] = (int(packet.radiotap.mactime) / 1000)
-                self._last_frame_info['last_rfif_first_frame_id'] = int(packet.frame_info.number)
-            #arrival time of last frame
-            self._last_frame_info['last_rfif_last_frame_ts'] = (int(packet.radiotap.mactime) / 1000)
-            #frame id of last frame
-            self._last_frame_info['last_rfif_frame_id'] = int(packet.data.data[0:4],16)
-            self._last_frame_info['last_rfif_proto_id'] = int(packet.llc.type, 16)
-            self.stats.counters['total_frames'] += 1
-            self.stats.counters['total_data'] += int(packet.data.len)
-
-    def get_test_frm_data(self):
-        frm_tx_data = ""
-        for chr in range(self._payload_len):
-            frm_tx_data += "".join('{:02x}'.format((chr % 0xFF) + 1))
-        return frm_tx_data
+            self.first_proto = None
+            self.last_proto = current_active_ch_proto
+            self.last_timestamp = num
+        #for testing all frames arrived and data was not corrupted
+        if self.top == current_active_ch_proto:
+            self.stats.counters['total_frames_rf1'] += 1
+            self.stats.counters['total_data_rf1'] += int(packet.data.len)
+        else:
+            self.stats.counters['total_frames_rf2'] += 1
+            self.stats.counters['total_data_rf2'] += int(packet.data.len)
 
     def analyze_results(self):
         self._test_frm_data = self.get_test_frm_data()
-        # analyze last file only - DUT rf_if 2 (CS)
-        cap = pyshark.FileCapture("Z:\\pcapLogs\\dot4\\dut1_tx_test_file.pcap")
-        for frame_idx,frame in enumerate(cap):
-            self.dut_tx_packet_handler(frame)  
-        res = self.stats.counters 
-        return res     
+        for sniffer_file in self.sniffer_file:
+            try:
+                cap = pyshark.FileCapture(sniffer_file)
+            except Exception as e:
+                raise globals.Error("pcap file not exist")
+            
+            for frame_idx,frame in enumerate(cap):
+                self.dut_tx_packet_handler(frame)
+                #if int(frame.frame_info.number) - 1 != frame_idx:
+                self.stats.counters['continues_frames_numbers'] += 1
+                
+    def end_channels(self):
+        rc = ''
+        for tx in self.tc_dot4.tx_list_:
+            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            rc += self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_end(rf_if+1,ch_idx) 
+        return rc
 
-    def handle_chs_event(self, sniffer_id, type, proto_id):
-        if type == globals.CHS_RX_SNIF:
-            ''' check channel duration not more then defined by MIB '''
-            if (((self._last_frame_info['last_rfif_last_frame_ts'] - self._last_frame_info['last_rfif_first_frame_ts']) < self._cs_interval - globals.CHS_GI_MS - self._frame_rate) or ((self._last_frame_info['last_rfif_last_frame_ts'] - self._last_frame_info['last_rfif_first_frame_ts']) > self._cs_interval) or 
-                 ''' check time sync and last frame in interval boumdries (2ms in GI are RX OK!)...'''                      ''' check time sync and first frame in interval boundries...'''
-                 ((self._last_frame_info['last_rfif_last_frame_ts'] + self._frame_rate) % 10 > self._sync_tolerance / 2) or ((self._last_frame_info['last_rfif_first_frame_ts'] % 10 < globals.CHS_GI_MS - (self._sync_tolerance / 2)) or (self._last_frame_info['last_rfif_first_frame_ts'] % 10 > globals.CHS_GI_MS + 1))):
-                     self.stats.counters['chs_interval_expected_to_fail_count'] +=1
-                     self._protocol_id_last_seesion_last_frame[sniffer_id][proto_id]['pending_chs_interval_expected_to_fail_count'] = 1
-        if type == globals.CHS_TX_SNIF:
-            ''' check channel duration are alterbate from 0-50 to 50-100 '''
-            if ((self._last_frame_info['last_rfif_first_frame_ts'] + self._frame_rate) % 10 > 0) or (self._last_frame_info['last_rfif_last_frame_ts'] % 10 > globals.CHS_GI_MS + 1):
-                self.stats.counters['chs_interval_expected_to_fail_count'] +=1
+    def start_sniffer(self, cli_interface, idx, type):
+        self.dut_host_sniffer = traffic_generator.TGHostSniffer(idx)
+        time.sleep(2)
+        self.dut_embd_sniffer = traffic_generator.Panagea4SnifferLinkEmbedded(cli_interface)
+        sniffer_port = traffic_generator.BASE_HOST_PORT + ( idx * 17 ) + 1 
+        #save for sniffer close...
+        self.sniffer_file.append ( os.path.join( common.SNIFFER_DRIVE , "test_mode_dut" + str(idx) + "_" + str(type) + "_" + time.strftime("%Y%m%d-%H%M%S") + "." + 'pcap'))
+        try:
+            time.sleep(2)
+            #use the last appended sniffer  file...
+            self.dut_host_sniffer.start( if_idx = idx , port = sniffer_port, capture_file = self.sniffer_file[len(self.sniffer_file) - 1] )
+            time.sleep(1)
+            self.dut_embd_sniffer.start( if_idx = idx , server_ip = "192.168.120.1" , server_port = sniffer_port, sniffer_type = type)
+            time.sleep(1)
+            self.dut_embd_sniffer.start( if_idx = idx + 1 , server_ip = "192.168.120.1" , server_port = sniffer_port, sniffer_type = type)
+            time.sleep( 30 )
+        except Exception as e:
+            time.sleep( 300 )
+            pass
+        return sniffer_port
+
+    def stop_sniffer(self,sniffer_port):
+        self.dut_host_sniffer.stop(sniffer_port)
+        time.sleep(2)
+        #self.dut_embd_sniffer.stop(1)
+        #time.sleep(2)
+        #self.dut_embd_sniffer.stop(2)
+
+    def print_results(self):
+        self.res_list.append("Total Frames Prccessed %d %d %d" %(1,self.stats.total_frames_expected[1],self.stats.counters['total_frames_rf1']))
+        self.res_list.append("Total Frames Prccessed %d %d %d" %(2,self.stats.total_frames_expected[2],self.stats.counters['total_frames_rf2']))
+        self.res_list.append("Data corrupted Prccessed %d %d %d" %(1,self.stats.total_data_expected[1],self.stats.counters['total_data_rf1']))
+        self.res_list.append("Data corrupted Prccessed %d %d %d" %(2,self.stats.total_data_expected[2],self.stats.counters['total_data_rf2']))
+
+        self.res_list.append("Tx Total frames ,fail %d" %self.stats.counters['continues_frames_numbers'])
+        if self._frame_rate >= 40:
+            self.res_list.append("Tx during GI ,fail %d" %self.stats.counters['chs_tx_during_gi_fail_count'])
+        self.res_list.append("Tx interval equals to 46-50 ms ,fail %d" %self.stats.counters['chs_interval_expected_to_fail_count'])
+        self.res_list.append("Tx after sync tolerance ,fail %d" %self.stats.counters['chs_setup_failure'])
+        return self.res_list
 
 ############ END Class TC_Dot4_Tx ############
 
 class TC_Dot4_Rx(TC_Dot4):
     """
     @class TC_Dot4_Rx
-    @brief Test reception while channel switching 
+    @brief Test reception while channel switching- TC_CHS_19, TC_CHS_20 
     @author Nomi Rozenkruntz
     @version 0.1
     @date	3/7/2017
     """
         
     def __init__(self, methodName = 'runTest', param = None):
-        self.request = TC_Dot4_State()
-        self.tx_instance = TC_Dot4_Tx()
+        self.stats = Statistics()
+        self.res_dic = dict(success = list(), fail = list())
         self.thread_list = []
         self.if_index = 1
+        self.active_cli_list = []
+        self.frames_headers = list()
+        self._expected_frames = 0
     
-    def main(self):
-        #create_service - uut is configure to rx
-        self.create_rx_thread(frames = 5000,timeout = 5000 ,print_frame = 1)
-        self.socket_create(1234)
-        self.create_tx_thread(frames = 5000,timeout = 5000 ,print_frame = 1)
-        for thread in self.thread_list:
-            thread.start()
-        for thread in self.thread_list:
-            thread.join() 
-        self.request.start_continuous(172)
-        self.request.start_continuous(176)
+    def _init_counters(self, rf_if):
+        self.stats.total_frames_expected[rf_if] = 0
+        self.stats.total_data_expected[rf_if] = 0
+
+        self.stats.counters['total_frames_ch#1'] = 0
+        self.stats.counters['total_frames_ch#2'] = 0
+        self.stats.counters['total_data_ch#1'] = 0
+        self.stats.counters['total_data_ch#2'] = 0
+        self.stats.counters['chs_setup_failure'] = 0
+        self.stats.counters['continues_frames_numbers'] = 0
+        self.stats.counters['chs_rx_during_gi_fail_count'] = 0
+
+    def main(self,tc_dot4):
+        try:
+            self.tc_dot4 = tc_dot4
+            self.res_dic["success"] = []
+            self.res_dic["fail"] = []            
+            #test start:
+            self._init_counters(1)
+            self._init_counters(2)
+            self.session_start()
+            self.analyze_results()
+            if self.stats.total_frames_expected[1] == self.stats.counters['total_frames_ch#1']:
+                self.res_dic["success"].append("frames sent in ch#%d: %d receive: %d" %(182,self.stats.total_frames_expected[1],self.stats.counters['total_frames_ch#1']))
+            else:
+                self.res_dic["fail"].append("frames sent in ch#%d: %d receive: %d" %(182,self.stats.total_frames_expected[1],self.stats.counters['total_frames_ch#1']))
+            if self.stats.total_frames_expected[2] == self.stats.counters['total_frames_ch#2']:
+                self.res_dic["success"].append("frames sent in ch %d: %d receive: %d" %(184,self.stats.total_frames_expected[2],self.stats.counters['total_frames_ch#2']))
+            else:
+                self.res_dic["fail"].append("frames sent in ch %d: %d receive: %d" %(184,self.stats.total_frames_expected[2],self.stats.counters['total_frames_ch#2']))
+            if self.stats.counters['continues_frames_numbers'] != 0:
+                self.res_dic["fail"].append("not all frames have been transmitted ,fail: %d" %self.stats.counters['continues_frames_numbers'])
+            if self.stats.counters['chs_tx_during_gi_fail_count'] != 0:
+                self.res_dic["fail"].append("There is transmission during guard interval ,fail: %d" %self.stats.counters['chs_tx_during_gi_fail_count'])
+            return self.res_dic
+        except Exception as e:
+            raise globals.Error(e.message)
+
+    def session_start(self):
+        thread_list = []
+        transmit_time = 0
+        # get the max waiting time
+        for tx in self.tc_dot4.tx_list_:
+            uut_id, rf_if, cli_name, frames, proto_id, frame_rate_hz,  _ = tx
+            expected_transmit_time = int(float( 1.0 / frame_rate_hz) *  frames) + 5
+            transmit_time  = transmit_time if transmit_time > expected_transmit_time else expected_transmit_time
+            self._expected_frames += frames
+        #Need for waiting time calculation
+        self.frame_rate_hz = frame_rate_hz
+
+        request = [1,182,1,1,0] 
+        rx_timeout = ( transmit_time + int(transmit_time * 0.25) ) * 1000
+        for rx in self.tc_dot4.rx_list: 
+            uut_id, rf_if, cli_name, frames, proto_id, ch_idx, op_class,time_slot, tx_power , print_ , _ = rx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_start(request) 
+            request = [1,184,2,1,0]               
         
-    def create_rx_thread(self):
-        # Config rx uut
-        for t_param in self._testParams:
-            if t_param.rx is None:
-                continue
-            rx_list = [t_param.rx] if type(t_param.rx) == tuple else t_param.rx
-            for rx in rx_list:
-                uut_id, ch_num = rx
-                #set cli name base on rx + proto_id + if
-                cli_name = "dut%d_rx_%d_%x" % ( uut_id, ch_num, t_param.proto_id )
-                # Get start counters
-                self.stats.uut_counters[uut_id][ch_num]['rx_cnt'] = self._uut[uut_id].managment.get_wlan_frame_rx_cnt( ch_num )
-                self.stats.uut_counters[uut_id][ch_num]['tx_cnt'] = self._uut[uut_id].managment.get_wlan_frame_tx_cnt( ch_num )
-                #Initialization interface to work with     
-                interface = self._uut[uut_id].create_qa_cli(cli_name, target_cpu = self.target_cpu)
-                self.active_cli_list.append( (interface, uut_id, ch_num, cli_name) )
-                self.rx_list.append( (interface, uut_id, ch_num, cli_name, t_param.frames, t_param.frame_rate_hz, t_param) )
-                t_param.rx_cli = cli_name
-                # Open general session
-                self._uut[uut_id].qa_cli(cli_name).link.service_create( type = 'remote' if self._uut[uut_id].external_host else 'hw')
-                # Open sdk Link
-                self._uut[uut_id].qa_cli(cli_name).link.socket_create(self.if_index,"data", t_param.proto_id)
-                self.request.start_continuous(t_param.ch_id)                  
+        for rx in self.tc_dot4.rx_list:
+            t = threading.Thread( target = self.get_frames_from_cli_thread, args = (rx,) )
+            thread_list.append(t)
 
-    def create_tx_thread(self):
-        for t_param in self._testParams:
-            # For Multiple RX convert to list is not list
-            tx_list = [t_param.tx] if type(t_param.tx) == tuple else t_param.tx
-            # Config tx uut
-            for tx in tx_list:
-                self.stats.tx_count += 1
-                uut_id, ch_num = tx
-                # Set start rate
-                if self.stats.tx_count == 1:
-                    self._frame_rate_hz = t_param.frame_rate_hz
-                #set cli name base on tx + proto_id + if
-                cli_name = "dut%d_tx_%d_%x" % ( uut_id, ch_num, t_param.proto_id )
-                t_param.tx_cli = cli_name
-                # Check if cli exists
-                try:
-                    current_context = self._uut[uut_id].qa_cli(cli_name).get_socket_addr()
-                    create_new_cli = False
-                except Exception as e:
-                    create_new_cli = True
-                    if ( create_new_cli == False):
-                        cli_name = cli + '_' + '1'
-                    t_param.tx_cli = cli_name
-                    # Get start counters
-                    self.stats.uut_counters[uut_id][ch_num]['rx_cnt'] = self._uut[uut_id].managment.get_wlan_frame_rx_cnt(ch_num )
-                    self.stats.uut_counters[uut_id][ch_num]['tx_cnt'] = self._uut[uut_id].managment.get_wlan_frame_tx_cnt(ch_num )
-                    interface = self._uut[uut_id].create_qa_cli(cli_name, target_cpu = self.target_cpu)
-                    if (create_new_cli == False):
-                        self._uut[uut_id].qa_cli(cli_name).set_socket_addr( current_context )
+        # Starts threads
+        for thread in thread_list:
+            thread.start()
+
+        for thread in thread_list:
+            thread.join()
+                        
+        self.link_rx(rx_timeout)
+
+        time.sleep(int(float(rx_timeout / 1000))+100)
+
+        self.end_channels()
+        
+    def link_rx(self,rx_timeout):
+        #recieve:
+        for rx in self.tc_dot4.rx_list:
+            #self.rx_list.append( (uut_id, rf_if, cli_name, rx_.frames, rx_.proto_id,rx_.ch_idx,rx_.op_class,rx_.time_slot, rx_.tx_power, rx_.print_, rx_) )
+            uut_id, rf_if, cli_name, frames, proto_id, ch_idx, op_class,time_slot, tx_power , print_ , _ = rx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.receive( frames, print_frame = print_, timeout = rx_timeout, channel_num = ch_idx ,op_class = op_class,time_slot = time_slot, power_dbm8 = tx_power)
+            
+        ind = 0
+        #transmit:
+        for tx in self.tc_dot4.tx_list_:
+            ind += 1
+            uut_id, rf_if, cli_name, frames, proto_id, frame_rate_hz,  _ = tx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).link.transmit(tx_data = "4560" ,frames = frames, rate_hz = frame_rate_hz)             
+            self.stats.total_frames_expected[ind % 2 + 1] += frames 
+            self.stats.total_data_expected[ind % 2 + 1] += len(str(proto_id)) * frames
+        
+    def get_frames_from_cli_thread(self, rx):
+        
+        log = logging.getLogger(__name__)
+        uut_id, rf_if, cli_name, frames, proto_id, ch_idx, op_class,time_slot, tx_power ,print_ ,  _ = rx
+        
+        frm_cnt = 0
+        transmit_time  = int(float( 1.0 / self.frame_rate_hz) *  self._expected_frames) + 5  
+        start_time = int(time.clock())
+  
+         # Start Reading from RX unit
+        while True:
+            try:
+                data = self._uut[uut_id].qa_cli(cli_name).interface().read_until('\r\n', timeout = 2)
+            except Exception as e:
+                break
+
+            if 'ERROR' in data:
+                log.debug( "ERROR Found in RX, {}".format( data) )
+
+            if 'Frame' in data:
+                frm_cnt += 1
+                self.stats.total_frames_processed += 1
+                self.frames_headers.append(data)
+                #frame = data.split(',')
+                #frame_id = int(frame[0].split(':')[1])
+                #if frame_id != frm_cnt:
+                #    self.stats.frame_seq_err += 1
+
+                #if self.tx_data.strip() != frame[2].strip():
+                #    self.stats.data_mismatch += 1
+
+            # Timeout
+            if ( int(time.clock()) - start_time ) > (transmit_time + int(transmit_time * 0.1)):
+                log.debug( "exit rx thread {} loop due to time out".format (rx) )
+                break
+
+            # frame count
+            if frm_cnt >= self._expected_frames:
+                log.debug( "exit rx thread {} loop due to frame count".format(rx) )
+                break
+
+    def analyze_results(self):
+        #a)	Frames are associated with the right channel. 
+        #b)	All frames have been transmitted (continues frames numbers). 
+        #c)	Frames data was not corrupted.
+        #d)	The number of frames sent equals the number of frames arrived.
+        for i in self.frames_headers:
+            pass
+        frame_list = frames_headers.split("Frame")
+        num = int(frame_list[:1]) / 1000
+        num = num % 100
+        self.first_timestamp = num
+        ind = 0
+        for packet in frame_list:
+            ind += 1
+            if packet.split("ch_num")[1] == 182:
+                if packet[0] != ind:
+                    self.stats.counters['continues_frames_numbers'] += 1
+                self.stats.counters['total_frames_ch#1'] += 1
+                #self.stats.counters['total_data_ch#1'] += int(packet.data.len)
+                if self.chs:
+                    num = int(packet.split('timestamp:')[1]) / 1000
+                    num = num % 100
+                    if self.first_timestamp > 54:
+                        if num > 100 or num < 54:
+                            self.stats.counters['chs_setup_failure'] += 1
+                            self.stats.counters['chs_rx_during_gi_fail_count'] += 1
                     else:
-                        self._uut[uut_id].qa_cli(cli_name).link.service_create( type = 'remote' if self._uut[uut_id].external_host else 'hw')
-                        self._uut[uut_id].qa_cli(cli_name).link.socket_create(self.if_index - 1, "data", protocol_id)
-                    self._uut[uut_id].qa_cli(cli_name).link.dot4_channel_start(rf_if = CHS_TEST_RF_IF, op_class = 1, ch_id = t_param.ch_id, slot_id = t_param.slot_id, im_acc = 0)
-                    self.active_cli_list.append( (interface, uut_id, ch_num, cli_name) )
-                    self.tx_list.append( (interface, uut_id, ch_num, cli_name, t_param.frames, t_param.frame_rate_hz, t_param) )
-                    self.stats.total_tx_expected += t_param.frames
-                    # Verify lowest rate
-                    if self._frame_rate_hz < t_param.frame_rate_hz: 
-                        self._frame_rate_hz = t_param.frame_rate_hz
+                        if num > 54 or num < 0:
+                            self.stats.counters['chs_setup_failure'] += 1
+                            self.stats.counters['chs_rx_during_gi_fail_count'] += 1
+            elif packet.split("ch_num")[1] == 184:
+                if self.chs is False:
+                    self.chs = True
+                num = int(packet.split('timestamp:')[1]) / 1000
+                num = num % 100
+                if self.first_timestamp > 54:
+                    if num > 54 or num < 0:
+                        self.stats.counters['chs_setup_failure'] += 1
+                        self.stats.counters['chs_rx_during_gi_fail_count'] += 1 
+                else:
+                    if num > 100 or num < 54:
+                        self.stats.counters['chs_setup_failure'] += 1
+                        self.stats.counters['chs_rx_during_gi_fail_count'] += 1
+                self.stats.counters['total_frames_ch#2'] += 1
+                #self.stats.counters['total_data_ch#2'] += int(packet.data.len)
 
-    def socket_create(self,protocol_id):
-        self._rc = self.dot4.link.socket_create( )
-      
+    def end_channels(self):
+        for rx in self.tc_dot4.rx_list: 
+            uut_id, rf_if, cli_name, frames, proto_id, ch_idx, op_class,time_slot, print_ ,tx_power ,  _ = rx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_end(rf_if + 1,ch_idx) 
+
 ############ END Class TC_Dot4_Rx ############
 
 class TC_Dot4_Full_CS():
     """
     @class TC_Dot4_Full_CS
-    @brief Test transmit and recieve while channel switching 
+    @brief Test transmit and recieve while channel switching - TC_CHS_23
     @author Nomi Rozenkruntz
     @version 0.1
     @date	2/23/2017
     """
         
     def __init__(self, methodName = 'runTest', param = None):
-        self.transmit_instance = TC_Dot4_Tx()
-        self.receive_instance = TC_Dot4_Rx()
+        self.stats = Statistics()
+        self.res_dic = dict(success = list(), fail = list())
         self.thread_list = []
         self.if_index = 1
+        self.active_cli_list = []
+        self.tx_instance = TC_Dot4_Tx()
+        self._expected_frames = 200
 
-    def main(self):
-        gps_lock = True
-        gps_lock &= self.wait_for_gps_lock( uut, self._gps_lock_timeout_sec )
-        if gps_lock == False:
-          log.info("GPS Lock failed")
-          return 
-        #create_service - 2 uuts is configure to dot4 one to rx, one to tx
-        #uut1
-        self.receive_instance.socket_create(1234)
-        self.receive_instance.create_rx_thread(5000,5000,1)
-        self.receive_instance.socket_create(1234)
-        self.receive_instance.create_tx_thread(5000,5000,1)
-        #uut2
-        for i in range(1235,1335):
-            self.transmit_instance.socket_create(i)
-            self.transmit_instance.create_rx_thread(5000,5000,1)
-            self.transmit_instance.socket_create(i)
-            self.transmit_instance.create_rx_thread(5000,5000,1)
-        for thread in self.thread_list:
-            thread.start()
-        for thread in self.thread_list:
-            thread.join() 
-        self.request.start_continuous(172)
-        self.request.start_continuous(176)
+    def _init_counters(self, rf_if):
+        self.stats.total_frames_expected[rf_if] = 0
+        self.stats.total_data_expected[rf_if] = 0
+        
+        for i in (0,1):
+            self.stats.rx_uut_count['rf%duut%d' %(rf_if,i)] = 0
+            self.stats.counters['total_frames_ch#1_uut%d' %i] = 0
+            self.stats.counters['total_frames_ch#2_uut%d' %i] = 0
+            self.stats.counters['total_data_ch#1_uut%d' %i] = 0
+            self.stats.counters['total_data_ch#2_uut%d' %i] = 0
+            
+            self.stats.counters['chs_setup_failure_uut%d' %i] = 0
+            self.stats.counters['continues_frames_numbers_uut%d' %i] = 0
+            self.stats.counters['chs_during_gi_fail_count_uut%d' %i] = 0
 
+    def main(self,tc_dot4):
+        try:
+            self.tc_dot4 = tc_dot4
+            self.res_dic["success"] = []
+            self.res_dic["fail"] = []
+            #test start:
+            self._init_counters(1)
+            self._init_counters(2)
+            results = self.session_start()#.split('Start')
+            self.analyze_results(results[1],0)
+            self.analyze_results(results[2],1)
+            for i in (0,1):
+                if self.stats.rx_uut_count['rf%duut%d' %(1,i)] == self.stats.counters['total_frames_rf1_uut%d' %i]:
+                    self.res_dic["success"].append("frames sent in ch#%d: %d receive: %d" %(182,self.stats.rx_uut_count['rf%duut%d' %(1,i)],self.stats.counters['total_frames_ch#1_uut%d' %i]))
+                else:
+                    self.res_dic["fail"].append("frames sent in ch#%d: %d receive: %d" %(182,self.stats.rx_uut_count['rf%duut%d' %(1,i)],self.stats.counters['total_frames_ch#1_uut%d' %i]))
+                if self.stats.rx_uut_count['rf%duut%d' %(2,i)] == self.stats.counters['total_frames_rf2_uut%d' %i]:
+                    self.res_dic["success"].append("frames sent in ch %d: %d receive: %d" %(184,self.stats.rx_uut_count['rf%duut%d' %(1,i)],self.stats.counters['total_frames_ch#2_uut%d' %i]))
+                else:
+                    self.res_dic["fail"].append("frames sent in ch %d: %d receive: %d" %(184,self.stats.rx_uut_count['rf%duut%d' %(1,i)],self.stats.counters['total_frames_ch#2_uut%d' %i]))
+                if self.stats.counters['continues_frames_numbers'] != 0:
+                    self.res_dic["fail"].append("not all frames have been transmitted, fail: %d" %self.stats.counters['continues_frames_numbers_uut%d' %i])
+                if self.stats.counters['chs_tx_during_gi_fail_count'] != 0:
+                    self.res_dic["fail"].append("There is transmission during guard interval, fail: %d" %self.stats.counters['chs_tx_during_gi_fail_count_uut%d' %i])
+            return self.res_dic
+            
+        except Exception as e:
+            raise globals.Error(e.message)
+
+    def link_tx_rx(self,rx_timeout):
+        #recieve, ref unit:
+        for i in range(0,len(self.tc_dot4.rx_list)/2):
+            rx = self.tc_dot4.rx_list[i]
+            uut_id, rf_if, cli_name, frames, proto_id,  _ = rx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).link.receive( frames, print_frame = 0, timeout = rx_timeout )
+        #recieve, dut:
+        for j in range(i+1,len(self.tc_dot4.rx_list)):
+            rx = self.tc_dot4.rx_list[j]
+            uut_id, rf_if, cli_name, frames, proto_id, ch_idx, op_class,time_slot, tx_power , print_ , _ = rx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.receive( frames, print_frame = print_, timeout = rx_timeout, channel_num = ch_idx ,op_class = op_class,time_slot = time_slot, power_dbm8 = tx_power)
+        ind = 0
+        #transmit, dut:
+        for i in range(0,len(self.tc_dot4.tx_list_)/2):
+            tx = self.tc_dot4.tx_list_[i]
+            ind += 1
+            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.transmit(tx_data = "4752" ,frames = frames, rate_hz = frame_rate_hz ,channel_num = ch_idx,time_slot = time_slot, op_class = op_class, power_dbm8 = tx_power)             
+            self.stats.total_frames_expected[ind % 2 + 1] += frames 
+            self.stats.total_data_expected[ind % 2 + 1] += 6 * frames
+        #transmit, ref unit:
+        for j in range(i + 1,len(self.tc_dot4.tx_list_)):
+            tx = self.tc_dot4.tx_list_[j]
+            uut_id, rf_if, cli_name, frames, proto_id, frame_rate_hz,  _ = tx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).link.transmit(tx_data = "4560" ,frames = frames, rate_hz = frame_rate_hz)             
+            self.stats.total_frames_expected[ind % 2 + 1] += frames 
+            self.stats.total_data_expected[ind % 2 + 1] += 6 * frames
+
+    def session_start(self):
+        frames_headers = ''
+        transmit_time = 0
+        # get the max waiting time, 
+        for i in range(0,len(self.tc_dot4.tx_list_)/2):
+            tx = self.tc_dot4.tx_list_[i]
+            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            self._frame_rate = frame_rate_hz
+            expected_transmit_time = int(float( 1.0 / frame_rate_hz) *  frames) + 5
+            transmit_time  = transmit_time if transmit_time > expected_transmit_time else expected_transmit_time
+
+        for j in range(i + 1,len(self.tc_dot4.tx_list_)):
+            tx = self.tc_dot4.tx_list_[j]
+            uut_id, rf_if, cli_name, frames, proto_id, frame_rate_hz,  _ = tx
+            expected_transmit_time = int(float( 1.0 / frame_rate_hz) *  frames) + 5
+            transmit_time  = transmit_time if transmit_time > expected_transmit_time else expected_transmit_time
+            self._expected_frames += frames
+
+        rx_timeout = ( transmit_time + int(transmit_time * 0.25) ) * 1000
+        rx = self.tc_dot4.rx_list[1]
+        uut_id, rf_if, cli_name, frames, proto_id,  _ = rx  
+        
+        #open sniffer for the two interfaces in craton1
+        port = self.tx_instance.start_sniffer(self.tc_dot4._uut[uut_id].qa_cli(cli_name).interface(),rf_if ,"RX")
+
+        request = [1,182,1,1,0]  
+        for i in range(0,len(self.tc_dot4.tx_list_)/2):
+            tx = self.tc_dot4.tx_list_[i]
+            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_start(request) 
+            request = [1,184,2,1,0]
+
+        self.link_tx_rx(rx_timeout)
+
+        time.sleep(int(float(rx_timeout / 1000))+100)
+
+        self.tx_instance.stop_sniffer(port) 
+
+        return frames_headers
+
+    def analyze_results(self,frames_headers,uut_id):
+        #a)	Frames are associated with the right channel. 
+        #b)	All frames have been transmitted (continues frames numbers). 
+        #c)	Frames data was not corrupted.
+        #d)	The number of frames sent equals the number of frames arrived.
+        frame_list = frames_headers.split("Frame")
+        num = int(frame_list[:1]) / 1000
+        num = num % 100
+        self.first_timestamp = num
+        ind = 0
+        for packet in frame_list:
+            ind += 1
+            if packet.split("ch_num")[1] == 182:
+                if packet[0] != ind:
+                    self.stats.counters['continues_frames_numbers_uut%d' %uut_id] += 1
+                self.stats.counters['total_frames_ch#1_uut%d' %uut_id] += 1
+                #self.stats.counters['total_data_ch#1_uut%d' %uut_id] += int(packet.data.len)
+                if self.chs:
+                    num = int(packet.split('timestamp:')[1]) / 1000
+                    num = num % 100
+                    if self.first_timestamp > 54:
+                        if num > 100 or num < 54:
+                            self.stats.counters['chs_setup_failure_uut%d' %uut_id] += 1
+                            self.stats.counters['chs_rx_during_gi_fail_count_uut%d' %uut_id] += 1
+                    else:
+                        if num > 54 or num < 0:
+                            self.stats.counters['chs_setup_failure_uut%d' %uut_id] += 1
+                            self.stats.counters['chs_rx_during_gi_fail_count_uut%d' %uut_id] += 1
+            elif packet.split("ch_num")[1] == 184:
+                if self.chs is False:
+                    self.chs = True
+                num = int(packet.split('timestamp:')[1]) / 1000
+                num = num % 100
+                if self.first_timestamp > 54:
+                    if num > 54 or num < 0:
+                        self.stats.counters['chs_setup_failure_uut%d' %uut_id] += 1
+                        self.stats.counters['chs_rx_during_gi_fail_count_uut%d' %uut_id] += 1 
+                else:
+                    if num > 100 or num < 54:
+                        self.stats.counters['chs_setup_failure_uut%d' %uut_id] += 1
+                        self.stats.counters['chs_rx_during_gi_fail_count_uut%d' %uut_id] += 1
+                self.stats.counters['total_frames_ch#2_uut%d' %uut_id] += 1
+                #self.stats.counters['total_data_ch#2_uut%d' %uut_id] += int(packet.data.len)
+
+    def end_channels(self):
+        for i in range(0,len(self.tc_dot4.tx_list_)/2):
+            tx = self.tc_dot4.tx_list_[i]
+            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_end(rf_if,ch_idx) 
+            
 ############ END Class TC_Dot4_Full_CS ############
 
 class TC_Dot4_State():
@@ -795,247 +1093,232 @@ class TC_Dot4_State():
     
     def __init__(self, methodName = 'runTest', param = None):
         self.dot4_cli = None
-        self.send_times = dict()
-        self.if_index = 1
-        self.time_slots = 0       
-        self.channel_id = dict(channel_num = 0, op_class = 0)
-        self.immediate_access = 0
+        self.stats = Statistics()
         self.sniffer_file = list()
+        self.res_dic = dict(success = list(), fail = list())
+        self.if_index = 1
+        self.time_slots = 0
+        self.channel_id = dict(channel_num = 0, op_class = 0)
+        self.cli_names = []
+        self.immediate_access = 0
         self.success_scenarios = list()
         self.fail_scenarios = list()
-        self.send_instance = Generate_Dot4_Send()
     
-    def main(self,dot4_cli,dot4_cli_sniffer):
-        self.dot4_cli = dot4_cli
-        self.frames = 100
-        #Init reference unit to wait for frames on the required channels
-        request = [1,172,1,1,0]
-        rc = dot4_cli_sniffer.dot4.dot4_channel_start(request)
-        if "error" or "Invalid" not in rc:
-            request = [2,176,2,1,0]
-            rc = dot4_cli_sniffer.dot4.dot4_channel_start(request)
-            if "error" or "Invalid" not in rc:
-                request = [1,184,3,1,0]
-                rc = dot4_cli_sniffer.dot4.dot4_channel_start(request)
-                if "error" or "Invalid" not in rc:
-                    pass
-                else:
-                    raise globals.Error("error in start channel in ref unit")
-            else:
-                raise globals.Error("error in start channel in ref unit")
-        else:
-            raise globals.Error("error in start channel in ref unit")
-        rc = dot4_cli_sniffer.link.socket_create(1, "data", 0x1234 )
-        rc += dot4_cli_sniffer.link.socket_create(2, "data", 0x5678 )
-        if "error" or "Invalid" not in rc:
-            port1 = self.start_sniffer(dot4_cli_sniffer.interface(),1,"RX")
-            dot4_cli_sniffer.link.receive(self.frames , print_frame = 1 , timeout = 12000)
-            port2 = self.start_sniffer(dot4_cli_sniffer.interface(),2,"RX")
+    def main(self,tc_dot4,dot4_cli,dot4_cli_sniffer):
+        try:
+            self.scenarios_list = ('40843','408431','4084323','408435','40841','408413')
+            self.scenarios_names= ('continuous','continuous end scenario','continuous 2 continuous scenario','immediate scenario 1','immediate scenario 2','alternate scenario 1','alternate scenario 2','alternate scenario 3')
+            self.tc_dot4 = tc_dot4
+            self._uut = self.tc_dot4._uut
+            
+            self.rx_timeout = self.get_max_waiting_time()
+
+            for rx in self.tc_dot4.rx_list:
+                uut_id, rf_if, cli_name, frames, proto_id,  _ = rx
+                self.tc_dot4._uut[uut_id].qa_cli(cli_name).link.receive( frames, print_frame = 0, timeout = self.rx_timeout * self.rx_timeout )
+
+            port = self.start_sniffer(self.tc_dot4._uut[uut_id].qa_cli(cli_name).interface(),rf_if,"RX")
+            self.frames = frames
             self.continuous_scenario()
-            self.continuous_end_scenario() 
+            self.continuous_end_scenario()
             self.continuous_2_continuous_scenario()
             self.alternate_scenario_1()
             self.alternate_scenario_2()
             self.immediate_scenario_1()
             self.immediate_scenario_2()
             self.immediate_scenario_3()
-            waiting_time = int(float( 1.0 / 10) *  self.frames) + 5
-            time.sleep(int(float(waiting_time / 1000)) +20)
-            #self.stop_sniffer(active_sniffer[0],active_sniffer[1])
-            self.stop_sniffer(port1[0],port1[1])
-            self.stop_sniffer(port2[0],port2[1])
-        return self.analyze_results()        
+            
+            time.sleep(int(float(self.rx_timeout / 1000)) +20)
 
-    def start_continuous(self,ch_num,cli = None):
-        if self.dot4_cli is None:
-            self.dot4_cli = cli
+            self.stop_sniffer(port)
+                        
+            return self.analyze_results()  
+
+        except Exception as e:
+            #self.stop_sniffer(port)
+            raise globals.Error(e.message)   
+                   
+    def get_max_waiting_time(self):
+        transmit_time = 0
+        # get the max waiting time
+        for tx in self.tc_dot4.tx_list_:
+            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            self.cli_names.append(cli_name)
+            expected_transmit_time = int(float( 1.0 / frame_rate_hz) *  frames) + 5
+            transmit_time  = transmit_time if transmit_time > expected_transmit_time else expected_transmit_time
+        rx_timeout = ( transmit_time + int(transmit_time * 0.25) ) * 1000
+        return rx_timeout
+
+    def link_tx(self,data,ch_num):
+
+        #transmit:
+        if ch_num == 184:
+            tx = self.tc_dot4.tx_list_[0]
+            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            rc = self._uut[uut_id].qa_cli(self.cli_names[1]).dot4.transmit(tx_data = data ,frames = frames, rate_hz = frame_rate_hz ,channel_num = ch_num,time_slot = time_slot, op_class = op_class, power_dbm8 = tx_power)
+        else:
+            tx = self.tc_dot4.tx_list_[1]
+            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            rc = self._uut[uut_id].qa_cli(self.cli_names[0]).dot4.transmit(tx_data = data ,frames = frames, rate_hz = frame_rate_hz ,channel_num = ch_num,time_slot = time_slot, op_class = op_class, power_dbm8 = tx_power)
+        time.sleep(20)
+
+    def start_continuous(self,ch_num):
         self.time_slots = 3
         self.channel_id["channel_num"] = ch_num
         self.channel_id["op_class"] = 1 
         self.immediate_access = 255
-        rc = self.start_request()
-        return rc
+        return self.start_request()
 
-    def start_alternate(self,ch_num):
+    def start_alternate(self,ch_num,cli = None):
+        if self.dot4_cli is None:
+            self.dot4_cli = cli
         self.time_slots = 2
         self.channel_id["channel_num"] = ch_num
         self.channel_id["op_class"] = 1 
         self.immediate_access = 0
-        rc = self.start_request()
-        return rc
+        return self.start_request()
 
     def start_immediate(self,ch_num):
         self.time_slots = 3
         self.channel_id["channel_num"] = ch_num
         self.channel_id["op_class"] = 1 
         self.immediate_access = 10
-        rc = self.start_request()
-        return rc
+        return self.start_request()
 
     def continuous_scenario(self):
-        rc = self.start_continuous(172)
-        if not "error" in rc:
-            self.dot4_cli.link.socket_create(1, "data", 0x1234 )
-            ex_rc = self.send_instance.send(self.dot4_cli ,"40843",172,True,self.frames) #expected: success
-            if not "error" in ex_rc:
-                self.success_scenarios.append("continuous data: 40843 frames_num: %d proto_id: %x" %(self.frames,0x1234))
-            else:
-                self.fail_scenarios.append("continuous, channel: 172")
-            self.end_channel(172)
+        rc = self.start_continuous(182)
+        if not "ERROR" in rc:
+            self.link_tx("40843",182) 
+            self.end_channel(182)
 
     def continuous_end_scenario(self):
-        self.start_continuous(172)
-        rc = self.end_channel(172)
-        if "error" or "Invalid" not in rc:
-            ex_rc = self.send_instance.send(self.dot4_cli ,"408431",0,True,self.frames) # expected: fail
-            if not "error" in ex_rc:
-                self.success_scenarios.append("continuous end")
+        rc = self.start_continuous(182)
+        if "ERROR" and "Invalid" not in rc:
+            rc = self.end_channel(182)
+            if "ERROR" and "Invalid" not in rc:
+                self.link_tx("408431",182)
             else:
-                self.fail_scenarios.append("continuous end, channel: 172")
+                self.fail_scenarios.append("error in end channel")
         else:
-            raise Exception("error in start channel request")
-        self.end_channel(172)
+            self.fail_scenarios.append("error in start channel request")
 
     def continuous_2_continuous_scenario(self):
-        rc = ["",""]
-        rc[0] = self.start_continuous(172)
-        rc[1] = self.start_continuous(176)
-        if ("error" or "Invalid") not in rc:
-            self.dot4_cli.link.socket_create(1, "data", 0x5678 )
-            ex_rc = self.send_instance.send(self.dot4_cli ,"4084323",172,True,self.frames) #expected: success
-            if not "error" in ex_rc:
-                self.end_channel(172)
-                ex_rc = self.send_instance.send(self.dot4_cli ,"4084323",176,True,self.frames) #expected: success
-                if not "error" in ex_rc:
-                    self.success_scenarios.append("continuous to continuous")
-                else:
-                    self.fail_scenarios.append("continuous to continuous, channel: 176")
-            else:
-                    self.fail_scenarios.append("continuous to continuous, channel: 176")
-            self.end_channel(176)
+        rc = self.start_continuous(182)
+        rc += self.start_continuous(184)
+        if "ERROR" and "Invalid" not in rc:
+            self.link_tx("4084323",182)
+            self.end_channel(182)
+            self.link_tx("4084323",182)
+            self.end_channel(184)
         else:
-            raise Exception("error in start channel request")
+            self.fail_scenarios.append("error in start channel")
 
     def immediate_scenario_1(self):
-        rc = ["",""]
-        rc[0] = self.start_continuous(172)
-        rc[1] = self.start_immediate(176)
-        if ("error" or "Invalid") not in rc:
-            ex_rc = self.send_instance.send(self.dot4_cli ,"40843",176,True,self.frames) #expected: success
-            if not "error" in ex_rc:
-                ex_rc = self.send_instance.send(self.dot4_cli ,"40843",172,True,self.frames) #expected: success
-                if not "error" in ex_rc:
-                    self.success_scenarios.append("immediate")
-                else:
-                    self.fail_scenarios.append("immediate, channel: 176")
-        self.end_channel(172)
-        self.end_channel(176)
-    
+        rc = self.start_continuous(182)
+        rc += self.start_immediate(184)
+        if "ERROR" and "Invalid" not in rc:
+            self.link_tx("1234",184)
+            self.link_tx("1234",182)
+            self.end_channel(182)
+            self.end_channel(184)
+        else:
+            self.fail_scenarios.append("error in start channel")
+            
     def immediate_scenario_2(self):
-        rc = ["","",""]
-        rc[0] = self.start_alternate(172)
-        rc[1] = self.start_alternate(176)
-        rc[2] = self.start_immediate(184)
-        if ("error" or "Invalid") not in rc:
-            ex_rc = self.send_instance.send(self.dot4_cli ,"40847",180,True,self.frames) #expected: success
-            if "error" not in ex_rc:
-                ex_rc = self.send_instance.send(self.dot4_cli ,"40847",172,True,self.frames) #expected: success
-                if "error" not in ex_rc:
-                    ex_rc = self.send_instance.send(self.dot4_cli ,"40847",176,True,self.frames) #expected: success
-                    if "error" not in ex_rc:
-                        self.success_scenarios.append("immediate")
-                    else:
-                        self.fail_scenarios.append("immediate, channel: 176")
-                else:
-                    self.fail_scenarios.append("immediate, channel: 172")
-            else:
-                self.fail_scenarios.append("immediate, channel: 180")
-        self.end_channel(172)
-        self.end_channel(176)
-        self.end_channel(184)
-
+        rc = self.start_alternate(182)
+        rc += self.start_alternate(184)
+        rc += self.start_immediate(172)
+        if "ERROR" and "Invalid" not in rc:
+            self.link_tx("408435",184)
+            self.link_tx("408435",182)
+            self.link_tx("408435",172)
+            self.end_channel(182)
+            self.end_channel(184)
+            self.end_channel(172)
+        else:
+            self.fail_scenarios.append("error in start channel")
+        
     def immediate_scenario_3(self):
-        rc = self.start_immediate(172) #expected: fail
-        if "error" in rc:
+        rc = self.start_immediate(182) 
+        if "ERROR" in rc:
             self.success_scenarios.append("immediate without previous mode")
         else:
-            self.fail_scenarios.append("immediate without previous mode, channel: 172")
+            self.fail_scenarios.append("immediate without previous mode, channel: 182")
 
     def alternate_scenario_1(self):
-        rc = ["",""]
-        rc[0] = self.start_alternate(172)
-        rc[1] = self.start_alternate(176)
-        if ("error" or "Invalid") not in rc:
-            ex_rc = self.send_instance.send(self.dot4_cli ,"40841",176,True,self.frames) #expected: success
-            if "error" not in ex_rc:
-                ex_rc = self.send_instance.send(self.dot4_cli ,"40841",172,True,self.frames) #expected: success
-                if "error" not in ex_rc:
-                    self.success_scenarios.append("alternate")
-                    self.end_channel(176)
-                    ex_rc = self.send_instance.send(self.dot4_cli ,"40841",176,True,self.frames) #expected: fail
-                    if "error" in ex_rc:
-                        self.success_scenarios.append("alternate end")
-                        ex_rc = self.send_instance.send(self.dot4_cli ,"40841",172,True,self.frames) #expected: success
-                        ex_rc += self.send_instance.send(self.dot4_cli ,"40841",0,True,self.frames) #expected: success
-                        if "error" in ex_rc:
-                            self.fail_scenarios.append("alternate, channels: 172,default")
-                    else:
-                        self.success_scenarios.append("alternate end, channel: 176")
-                else:
-                    self.fail_scenarios.append("alternate, channel: 172")
-            else:
-                self.fail_scenarios.append("alternate, channel: 176")       
-            self.end_channel(172)
+        rc = self.start_alternate(182)
+        rc += self.start_alternate(184)
+        if "ERROR" and "Invalid" not in rc:
+            self.link_tx("1234",184)
+            self.link_tx("1234",182)  
+            self.end_channel(184)
+            self.link_tx("1234",182)
+            self.link_tx("1234",0)
+            self.end_channel(182)
 
     def alternate_scenario_2(self):
-        rc = ["","",""]
-        rc[0] = self.start_continuous(172)
-        rc[1] = self.start_immediate(176)
-        rc[2] = self.start_alternate(184)
-        if ("error" or "Invalid") not in rc:
-            ex_rc = self.send_instance.send(self.dot4_cli ,"408412",176,True,self.frames) #expected: success
-            if "error" not in ex_rc:
-                ex_rc = self.send_instance.send(self.dot4_cli ,"408412",184,True,self.frames) #expected: success
-                if "error" not in ex_rc:
-                    self.success_scenarios.append("immediate to alternate, channels: 172, 184")
-        else:
-            self.fail_scenarios.append("immediate to alternate, channel: 176")
-        self.end_channel(172)
-        self.end_channel(176)
-        self.end_channel(184)
+        rc = self.start_continuous(182)
+        rc += self.start_immediate(184)
+        rc += self.start_alternate(172)
+        if "ERROR" and "Invalid" not in rc:
+            self.link_tx("40842",184)
+            self.end_channel(182)
+            self.end_channel(184)
+            self.end_channel(172)
 
     def alternate_scenario_3(self):
-        rc = ["",""]
-        rc[0] = self.start_continuous(172)
-        rc[1] = self.start_alternate(184)
-        if ("error" or "Invalid") not in rc:
-            ex_rc = self.send_instance.send(self.dot4_cli ,"408413",184,True,self.frames) #expected: success, to check: durring not define channel time - there is no transmission
-            if "error" not in ex_rc:
-                self.success_scenarios.append("continuous to alternate, channels: 172, 184")
-        self.end_channel(172)
-        self.end_channel(184)
+        rc = self.start_continuous(182)
+        rc += self.start_alternate(184)
+        if "ERROR" and "Invalid" not in rc:
+            self.link_tx("408413",184)
+            self.end_channel(182)
+            self.end_channel(184)
 
     def start_request(self):
         request = []
         request.append(self.if_index)
-        request.append(self.channel_id.get("op_class"))
         request.append(self.channel_id.get("channel_num"))
         request.append(self.time_slots)
+        request.append(self.channel_id.get("op_class"))
         request.append(self.immediate_access)
-        rc = self.dot4_cli.dot4.dot4_channel_start(request)
+        if self.dot4_cli != None:
+             return self.dot4_cli.dot4.dot4_channel_start(request)
+        if request[1] == 184:
+            rc = self._uut[0].qa_cli(self.cli_names[1]).dot4.dot4_channel_start(request)
+        else:
+            rc = self._uut[0].qa_cli(self.cli_names[0]).dot4.dot4_channel_start(request)
         return rc
 
     def end_channel(self,ch_num):
-        rc = self.dot4_cli.dot4.dot4_channel_end(self.if_index, ch_num)
+        if ch_num == 182:
+            rc = self._uut[0].qa_cli(self.cli_names[0]).dot4.dot4_channel_end(self.if_index, ch_num)
+        elif ch_num == 184:
+            rc = self._uut[0].qa_cli(self.cli_names[1]).dot4.dot4_channel_end(self.if_index, ch_num)
+        else:
+            rc = self._uut[0].qa_cli(self.cli_names[0]).dot4.dot4_channel_end(self.if_index, ch_num)
         return rc
 
     def analyze_results(self):
+        for sniffer_file in self.sniffer_file:
+            try:
+                cap = pyshark.FileCapture(sniffer_file)
+            except Exception as e:
+                raise globals.Error("pcap file not exist")
+            
+            for frame_idx,frame in enumerate(cap):
+                for i in range(0,len(self.scenarios_list)):
+                    if self.scenarios_list[i] in frame.data.data:
+                        self.success_scenarios.append("%s" %self.scenarios_names[i])
+        
+        [self.fail_scenarios.append("%s" %i) for i in self.scenarios_names if i not in self.success_scenarios]
+            
         res_dic = dict(success = self.success_scenarios, fail = self.fail_scenarios)
         return res_dic
 
     def start_sniffer(self, cli_interface, idx, type):
         self.dut_host_sniffer = traffic_generator.TGHostSniffer(idx)
-        self.dut_embd_sniffer = traffic_generator.Panagea4SnifferAppEmbedded(cli_interface)
+        time.sleep(1)
+        self.dut_embd_sniffer = traffic_generator.Panagea4SnifferLinkEmbedded(cli_interface)
         sniffer_port = traffic_generator.BASE_HOST_PORT + ( idx * 17 ) + 1 
         #save for sniffer close...
         self.sniffer_file.append(os.path.join( common.SNIFFER_DRIVE , "test_mode_dut" + str(idx) + "_" + str(type) + "_" + time.strftime("%Y%m%d-%H%M%S") + "." + 'pcap'))  
@@ -1045,86 +1328,22 @@ class TC_Dot4_State():
             self.dut_host_sniffer.start( if_idx = idx , port = sniffer_port, capture_file = self.sniffer_file[len(self.sniffer_file) - 1] )
             time.sleep(1)
             self.dut_embd_sniffer.start( if_idx = idx , server_ip = "192.168.120.1" , server_port = sniffer_port, sniffer_type = type)
-            #time.sleep( 120 )
+            time.sleep(1)
+            self.dut_embd_sniffer.start( if_idx = idx + 1 , server_ip = "192.168.120.1" , server_port = sniffer_port, sniffer_type = type)
+            time.sleep( 30 )
         except Exception as e:
             time.sleep( 300 )
             pass
-        return (idx,sniffer_port)
+        return sniffer_port
 
-    def stop_sniffer(self,idx,sniffer_port):
+    def stop_sniffer(self,sniffer_port):
         self.dut_host_sniffer.stop(sniffer_port)
         time.sleep(2)
-        self.dut_embd_sniffer.stop(idx)
+        #self.dut_embd_sniffer.stop(1)
+        #time.sleep(2)
+        #self.dut_embd_sniffer.stop(2)
 
 ############ END Class TC_Dot4_State ############
-
-class Generate_Dot4_Send():
-    """
-    @class Generate_Dot4_Send
-    @brief Generate parameters for send request
-    @author Nomi Rozenkruntz
-    @version 0.1
-    @date	2/21/2017
-    """
-    def __init__(self, methodName = 'runTest', param = None):
-        self.dot4_cli = None
-        self.sniffers_ports = list()
-        self.sniffer_file = list()
-        self.frames = 0
-        self.rate_hz = 0
-        self.payloud_len = None
-        self.user_priority = 0
-        self.data_rate = None
-        self.powerdbm8 = 160
-        self.op_class = 0
-        self.channel_num = 0
-        self.time_slot = -1
-        self.tx_data = None
-        
-    def send(self ,dot4_cli ,tx_data ,ch_num ,flag = False ,frames = 5000 ,rate_hz = 100 ,time_slot = 0):
-        self.dot4_cli = dot4_cli
-        self.channel_num = ch_num
-        self._testMethodName = "test_dot4"
-        if self.dot4_cli.uut.external_host == u'':
-            self.start_dut_sniffer(self.dot4_cli.interface(),1,globals.CHS_RX_SNIF,self._testMethodName)
-        if flag == False:
-            self.frames = frames
-            self.tx_data = tx_data
-            self.data_rate = 12
-            self.rate_hz = rate_hz
-            self.user_priority = 7
-            rc = self.dot4_cli.dot4.transmit(self.frames,
-                                        self.rate_hz,
-                                        self.payloud_len,
-                                        self.tx_data,
-                                        self.user_priority,
-                                        self.data_rate,
-                                        self.powerdbm8,
-                                        self.op_class,
-                                        self.channel_num,
-                                        self.time_slot)
-        else:
-            rc = self.dot4_cli.dot4.transmit_empty(self.channel_num,self.frames)
-        return rc    
-    
-    def start_dut_sniffer(self, cli_interface, idx, type, testMethodName):
-        
-        self.dut_host_sniffer = traffic_generator.TGHostSniffer(idx)
-        #add to sniffer list
-        self.dut_embd_sniffer = traffic_generator.Panagea4SnifferAppEmbedded(cli_interface)
-                    
-        sniffer_port = traffic_generator.BASE_HOST_PORT + ( idx * 17 ) + (1 if type is globals.CHS_TX_SNIF else 0)
-
-        #save for sniffer close...
-        self.sniffers_ports.append(sniffer_port)
-        self.sniffer_file.append(os.path.join( common.SNIFFER_DRIVE ,  self._testMethodName + "_" + "dut" + str(idx) + "_" + str(type) + "_" + time.strftime("%Y%m%d-%H%M%S") + "." + 'pcap'))  
-        time.sleep(2)
-        #use the last appended sniffer  file...
-        self.dut_host_sniffer.start( if_idx = idx, port = sniffer_port, capture_file = self.sniffer_file[len(self.sniffer_file) - 1] )
-        time.sleep(1)
-        self.dut_embd_sniffer.start( if_idx = idx, server_ip = None, server_port = sniffer_port, sniffer_type = type)
-                
-############ END Class Generate_Dot4_Send ############
 
 class Statistics(object):
     def __init__(self):
@@ -1138,23 +1357,16 @@ class Statistics(object):
         self.results_dic["tx_test"] = list()
         self.results_dic["rx_test"] = list()
         self.results_dic["full_test"] = list()
+        
+        #tx counters
+        self.total_frames_expected = dict()
+        self.total_data_expected = dict()
+
+        self.rx_uut_count = dict()
+
         self.total_frames_processed = 0
         self.frame_seq_err = 0
-        self.data_mismatch = tree()
         self.counters = dict()
-        self.bad_ch_type = tree()
-        self.total_sniffer_frames_processed = 0
-        self.total_unicast_ack_frames = 0
-        self.sniffer_data_fail = 0
-        self.wlan_da_mismatch = 0
-        self.user_prio_mismatch = 0
-        self.data_band_mismatch = tree()
         self.total_tx_expected = 3
-        self.tx_count = 0
-        self.sniffer_proto_fail = 0
-        self.total_frames_processed = tree()
-        #self.frame_fields = frameStatistics()
-        self.total_tx_time_exceed = tree()
-        self.total_frame_cnt_exceed = tree()
         self.proto = None
         self.total_tx_expected = None
