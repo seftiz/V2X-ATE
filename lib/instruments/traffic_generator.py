@@ -11,12 +11,12 @@ controler
 
 if __name__ == "__main__":
     import sys
-    sys.path.append('C:\\nomi\\V2X-ATE')
+    sys.path.append('C:\\autotalks_enviroment\\V2X-ATE')
 
 
 from ctypes import *
 from datetime import datetime
-from uuts import common                       
+from uuts import common
 import os, sys, subprocess, time, logging, socket
 from lib import globals, interfaces
 import threading
@@ -133,7 +133,7 @@ class TGEmbeddedSniffer(object):
         res = self._if.write( cmd.encode('ascii') + "\r\n" )
         res = self._if.read_until('ate>');
         if ('ERROR' in res) :
-            raise Exception("Error in stopping tg session")
+            raise Exception("Error in starting tg session")
 
         self._interfaces_active[if_idx] = False
 
@@ -271,11 +271,11 @@ class TGHostSniffer(object):
         while ( self.thread_loop_flag == True ):
                     
             try:
-                data,addr = sock.recvfrom(1518)
+                data,addr = sock.recvfrom(1518)                
                 pcap.write_packet( data )
                     
             except Exception as e:
-                if (retries%60 == 0): pass#print "{} port {}, to_retry# {}\n ".format(e, port, retries+1)
+                if (retries%60 == 0): print "{} port {}, to_retry# {}\n ".format(e, port, retries+1)
                 if (retries > self.sock_retries ):
                     self.threads_loop_flag[port] = False
 
@@ -449,12 +449,12 @@ if __name__ == "__main__":
     try:
         
         #tg.sniffer.start( rf_if = 3, capture_file = "c:/temp/test_file.pcap" )
-        tg3.start(if_idx = 2, port = 8061, capture_file = "c:/temp/dut2_tx_test_file.pcap" )
-        tg5.start(if_idx = 2, port = 8041, capture_file = "c:/temp/dut1_tx_test_file.pcap" )
-        tg2.start(if_idx = 2, port = 8031, capture_file = "c:/temp/dut1_rx_test_file.pcap" )
+        tg3.start(if_idx = 1, port = 8061, capture_file = "c:/temp/dut2_tx_test_file.pcap" )
+        tg5.start(if_idx = 1, port = 8041, capture_file = "c:/temp/dut1_tx_test_file.pcap" )
+        tg2.start(if_idx = 1, port = 8030, capture_file = "c:/temp/dut1_rx_test_file.pcap" )
         tg4.start(if_idx = 2, port = 8051, capture_file = "c:/temp/dut2_rx_test_file.pcap" )
         
-        time.sleep( 90 )
+        time.sleep( 120 )
         #tg.link.start( 1, 1, 0x1234, frames = 1000, rate_hz = 50, payload_length = 100 )
         #time.sleep(1)
         #tg.link.start( 1, 2, 0x5678, frames = 1000, rate_hz = 50, payload_length = 100 )
@@ -465,7 +465,7 @@ if __name__ == "__main__":
         #tg.sniffer.reset_counters( rf_if = 3)
 
     except  Exception as e:
-        time.sleep( 300 )
+        time.sleep( 30 )
         pass
     finally:
         #tg.link.stop ( 1 )
@@ -477,7 +477,7 @@ if __name__ == "__main__":
         time.sleep(2)
         tg4.stop( 8041 )
         time.sleep(2)
-        tg5.stop( 8031 )
+        tg5.stop( 8030 )
 
 
 
