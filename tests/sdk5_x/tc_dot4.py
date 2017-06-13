@@ -89,6 +89,7 @@ class TC_Dot4(common.V2X_SDKBaseTest):
             if 'rx' in vars(t_param) and not t_param.rx is None:
                 g.append(t_param.rx[0])
         self.tx_list = set(g)
+
  
     def runTest(self):
         pass
