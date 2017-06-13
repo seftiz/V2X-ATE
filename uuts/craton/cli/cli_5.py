@@ -861,6 +861,7 @@ class qaCliApi(object):
         self.nav = navApi( self._if )
         self.ecc = eccApi( self._if )
         self.wlanMib = wlanMibApi( self._if)
+        self.dot4 = dot4(self._if)
         self.register = Register(self._if)
         
     def __del__(self):
@@ -983,19 +984,26 @@ class qaCliApi(object):
         uboot_ver = ''
         gnss_ver = ''
 
-        self._if.send_command('show version sdk')
-        versions = {}
-        rc = self._if.read_until_prompt()
-        if len(rc): 
+        if self.uut.external_host is u'':
+            self._if.send_command('show version sdk')
+            versions = {}
+            rc = self._if.read_until_prompt()
+            if len(rc): 
+                rc = rc.replace('\r\n' ,'').split(',')
+                # SDK: sdk-4.3.0-beta7-mc, U-BOOT: U-Boot 2012.04.01-atk-1.1.3-00526-g19cc217 (Nov 13 2014 - 10:13:42)
+                try:
+                    sdk_ver = rc[0].split(':')[1].strip()
+                    uboot_ver = rc[1].split(':')[1].strip()
+                    gnss_ver = rc[2].split(':')[1].strip().split(' ')[0]
+                except Exception as e:
+                    pass
+        else:
+            cmd = "link get_info about_sdk"
+            self._if.send_command(cmd)
+            rc = self._if.read_until_prompt()
             rc = rc.replace('\r\n' ,'').split(',')
-            # SDK: sdk-4.3.0-beta7-mc, U-BOOT: U-Boot 2012.04.01-atk-1.1.3-00526-g19cc217 (Nov 13 2014 - 10:13:42)
-            try:
-                sdk_ver = rc[0].split(':')[1].strip()
-                uboot_ver = rc[1].split(':')[1].strip()
-                gnss_ver = rc[2].split(':')[1].strip().split(' ')[0]
-            except Exception as e:
-                pass
-
+            sdk_ver = rc[0].split("Software version:")[1].split('Device')[0]
+            
         versions = {'sdk_ver': sdk_ver, 'uboot_ver' : uboot_ver, 'gnss_ver' : gnss_ver }
 
         return versions
