@@ -176,22 +176,27 @@ class TC_Dot4(common.V2X_SDKBaseTest):
                                 if test_type is None:
                                     raise globals.Error("input is missing or corrupted")
                                 else:
+                                    print "Cover Dot4 TCS_23"
                                     #Full channel Switching Tests:
                                     result = self.full_test.main(self)
                                     self.stats.results_dic["full_test"].extend(result["Tx"])
                                     self.stats.results_dic["full_test"].extend(result["Rx"])
                             else:
+                                print "Cover Dot4 TCS_19,20,22"
                                 #Channel Switch Rx Tests:
                                 self.stats.results_dic["rx_test"] = self.rx_instance.main(self)
                         else:
+                            print "Cover Dot4 TCS_17,18,21"
                             #Channel Switch Tx Tests:
                             self.stats.results_dic["tx_test"] = self.tx_instance.main(self)
                     else:
+                        print "Cover Dot4 TCS_11,13,16"
                         #Erroneuos Send Tests:
                         result = self.err_send.main(self,self.param)
                         self.stats.results_dic["erroneuous_send"].append(result["success"])
                         self.stats.results_dic["erroneuous_send"].extend(result["fail"])
                 else:
+                    print "Cover Dot4 TCS_09,10,12,14,15"
                     #Erroneuos Start Tests:
                     for i in ("alternate","immediate"):
                         result = self.err_req.main(i, self.param,self.dot4_cli1)
@@ -201,6 +206,7 @@ class TC_Dot4(common.V2X_SDKBaseTest):
                     self.stats.results_dic["erroneuous_request_continuous"].append(result["success"])
                     self.stats.results_dic["erroneuous_request_continuous"].extend(result["fail"])
             else:
+                print "Cover Dot4 TCS_01-TCS_08"
                 #State Tests:
                 result = self.state_instance.main(self,self.dot4_cli1,self.dot4_cli_sniffer)
                 self.stats.results_dic["state_tests"].extend(result["success"])
@@ -221,17 +227,17 @@ class TC_Dot4(common.V2X_SDKBaseTest):
             if "erroneuous_request" in i:
                 if item[0] is not 0:
                     if not "continuous" in i:
-                        self.add_limit("Dot4 start invalid request %s" % i.split("erroneuous_request_")[1] ,1 ,int(item[0]) ,4 , 'GE')
+                        self.add_limit("Invalid %s request" % i.split("erroneuous_request_")[1] ,1 ,int(item[0]) ,4 , 'GE')
                     else:
-                        self.add_limit("Dot4 start invalid request %s" % i.split("erroneuous_request_")[1] ,1 ,int(item[0]) ,3 , 'GE')
+                        self.add_limit("Invalid %s request" % i.split("erroneuous_request_")[1] ,1 ,int(item[0]) ,3 , 'GE')
                 for j in item[1:l]:
-                    self.add_limit("Dot4 start %s invalid request" % j , 0 , 1 , 1, 'EQ')
+                    self.add_limit("%s invalid request" % j , 0 , 1 , 1, 'EQ')
             elif "erroneuous_send" in i:
                 if item[0] is not 0:
                     self.add_limit("Dot4 send- invalid values" ,0 ,int(item[0]) ,5 , 'GE')
                 if item[0] < 5:
                     for j in item[1:l]:
-                        self.add_limit("Dot4 start %s invalid request" % j , 0 , 1 , 1, 'EQ')
+                        self.add_limit("%s" % j , 0 , 1 , 1, 'EQ')
             elif "state_tests" in i:
                 flag = False
                 for j in item:
@@ -240,12 +246,12 @@ class TC_Dot4(common.V2X_SDKBaseTest):
                         continue
                     elif flag == False:
                         if 'fail' not in j:
-                            self.add_limit("Dot4 State %s" % j , 1 , 1 , 1 , 'EQ')
+                            self.add_limit("%s" % j , 1 , 1 , 1 , 'EQ')
                             continue
                         else:
                             self.add_limit("%s %d" % (string[0] ,int(string[1])) ,0 ,string[1] ,None ,'EQ')
                     else:
-                        self.add_limit("Dot4 State %s" % j , 0 , 1 , 1 , 'EQ' )
+                        self.add_limit("%s" % j , 0 , 1 , 1 , 'EQ' )
             else:
                 for j in item:
                     string = j
@@ -302,6 +308,9 @@ class TC_Dot4_ERRONEOUS_Request():
             self.res_dic["fail"] = []
             self.dot4_cli = cli
             self.get_test_parameters(param)
+            if state == "continuous":
+                for i, t_param in enumerate(self.test_param):
+                    print "Param %d : ch_idx='%d', time_slot='%d', op_class='%d', imm_access='%d'" %( i,t_param.get("channel_num"),t_param.get("time_slot"),t_param.get("op_class"),t_param.get("immediate_access"))
             self.erroneous_request(state)
             return self.res_dic
         except Exception as e:
@@ -311,7 +320,7 @@ class TC_Dot4_ERRONEOUS_Request():
         self.param = param
         self.test_param = self.param.get('params',None)
         self.state = self.param.get('state',None)
-        
+                    
     def erroneous_request(self,state):
         for req in self.test_param:
             rc = self.start_request(req.get("channel_num"),
@@ -319,7 +328,7 @@ class TC_Dot4_ERRONEOUS_Request():
                                req.get("op_class"),
                                req.get("immediate_access"))
             if "ERROR" and "Invalid" not in rc :
-                self.res_dic["fail"].append(state.upper() + " state: channel: %d time slot: %d operation class: %d immediate access: %d" %(req.get("channel_num"),req.get("time_slot"),req.get("op_class"),req.get("immediate_access")))
+                self.res_dic["fail"].append(state.upper() + " state: immediate access: %d" %req.get("immediate_access"))
                 self.end_channel(req.get("channel_num"))
             else:
                 self.res_dic["success"] += 1
@@ -327,7 +336,7 @@ class TC_Dot4_ERRONEOUS_Request():
         if state is not "continuous":
             rc = self.start_request(180,1,1,None)
             if "ERROR" or "Invalid " not in rc :
-                self.res_dic["fail"].append(state.upper() + " state: channel: %d time slot: %d operation class: %d immediate access: %d" %(req.get("channel_num"),req.get("time_slot"),req.get("op_class"),req.get("immediate_access")))
+                self.res_dic["fail"].append(state.upper() + " state: immediate access: %d" %req.get("immediate_access"))
                 self.end_channel(180)
             else:
                 self.res_dic["success"] += 1
@@ -373,6 +382,8 @@ class TC_Dot4_ERRONEOUS_Send():
     def get_test_parameters( self,param ):
         self.state = param.get('state',None)
         self.test_param = param.get('send_dict',None)
+        for i, t_param in enumerate(self.test_param):
+            print "Param %d : ch_idx='%d', time_slot='%d', op_class='%d'" %( i,t_param.get("channel_num"),t_param.get("time_slot"),t_param.get("op_class"))
 
     def erroneous_send(self):
         uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = self.tc_dot4.tx_list_[0]
@@ -384,7 +395,7 @@ class TC_Dot4_ERRONEOUS_Send():
                                                              op_class = send_p.get("op_class"), 
                                                              power_dbm8 = tx_power)
             if "ERROR" and "Invalid" not in rc :
-                self.res_dic["fail"].append("Alternate state: channel %d time slot %d operation class %d" %(send_p.get("channel_num"),send_p.get("time_slot"),send_p.get("op_class")))
+                self.res_dic["fail"].append("V2X Send invalid request: channel %d time slot %d operation class %d" %(send_p.get("channel_num"),send_p.get("time_slot"),send_p.get("op_class")))
                 self.end_channels()
             else:
                 self.res_dic["success"] += 1
@@ -757,10 +768,8 @@ class TC_Dot4_Rx(TC_Dot4):
             uut_id, rf_if, cli_name, frames, proto_id, ch_idx, op_class,time_slot, tx_power , print_ , _ = rx
             self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.receive( frames, print_frame = print_, timeout = rx_timeout, channel_num = ch_idx ,op_class = op_class,time_slot = time_slot, power_dbm8 = tx_power)
             
-        ind = 0
         #transmit:
         for tx in self.tc_dot4.tx_list_:
-            ind += 1
             uut_id, rf_if, cli_name, frames, proto_id, frame_rate_hz,  _ = tx
             self.tc_dot4._uut[uut_id].qa_cli(cli_name).link.transmit(tx_data = "4560" ,frames = frames, rate_hz = frame_rate_hz)    
         
@@ -1124,20 +1133,22 @@ class TC_Dot4_State():
         self.stats = Statistics()
         self.sniffer_file = list()
         self.res_dic = dict(success = list(), fail = list())
+        self.start_fail = list()
         self.if_index = 1
         self.time_slots = 0
         self.channel_id = dict(channel_num = 0, op_class = 0)
         self.cli_names = []
         self.immediate_access = 0
+        self.rx_flag = False
         self.success_scenarios = list()
         self.fail_scenarios = list()
     
     def main(self,tc_dot4,dot4_cli,dot4_cli_sniffer):
         try:
             self.scenarios_list = ('1111','2222','3333','4444','5555','6666','7777','8888')
-            self.scenarios_names= ('continuous','continuous end scenario','continuous 2 continuous scenario',
-                                   'immediate scenario 1','immediate scenario 2',
-                                   'alternate scenario 1','alternate scenario 2','alternate scenario 3')
+            self.scenarios_names= ('Null to Continuous','Continuous End','Continuous to Continuous',
+                                   'Continuous to Immediate','Alternate to Immediate',
+                                   'Null to Alternate','Continuous and Immediate to Alternate','Alternate with one channel')
             self.tc_dot4 = tc_dot4
             self._uut = self.tc_dot4._uut
             
@@ -1181,16 +1192,28 @@ class TC_Dot4_State():
         return rx_timeout
 
     def link_tx(self,data,ch_num):
-
         #transmit:
         if ch_num == 184:
             tx = self.tc_dot4.tx_list_[1]
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
-            rc = self._uut[uut_id].qa_cli(self.cli_names[1]).dot4.transmit(tx_data = data ,frames = frames, rate_hz = frame_rate_hz ,channel_num = ch_num,time_slot = time_slot, op_class = op_class, power_dbm8 = tx_power)
         else:
             tx = self.tc_dot4.tx_list_[0]
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
-            rc = self._uut[uut_id].qa_cli(self.cli_names[0]).dot4.transmit(tx_data = data ,frames = frames, rate_hz = frame_rate_hz ,channel_num = ch_num,time_slot = time_slot, op_class = op_class, power_dbm8 = tx_power)
+        uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+        rc = self._uut[uut_id].qa_cli(self.cli_names[0]).dot4.transmit(tx_data = data ,frames = frames, rate_hz = frame_rate_hz ,channel_num = ch_num,time_slot = time_slot, op_class = op_class, power_dbm8 = tx_power)
+        time.sleep(20)
+
+    def link_rx(self,data,ch_num):
+        if ch_num == 184:
+            rx = self.tc_dot4.rx_list_[3]
+            tx = self.tc_dot4.tx_list_[3]
+        else:
+            rx = self.tc_dot4.rx_list_[2]
+            tx = self.tc_dot4.tx_list_[2]
+        #receive:
+        uut_id, rf_if, cli_name, frames, proto_id, ch_idx, op_class,time_slot, tx_power , print_ , _ = rx
+        self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.receive( frames, print_frame = print_, timeout = rx_timeout, channel_num = ch_idx ,op_class = op_class,time_slot = time_slot, power_dbm8 = tx_power)
+        #transmit:
+        uut_id, rf_if, cli_name, frames, proto_id, frame_rate_hz,  _ = tx
+        self.tc_dot4._uut[uut_id].qa_cli(cli_name).link.transmit(tx_data = data ,frames = frames, rate_hz = frame_rate_hz)
         time.sleep(20)
 
     def start_continuous(self,ch_num):
@@ -1219,24 +1242,34 @@ class TC_Dot4_State():
         self.immediate_access = 10
         return self.start_request()
 
-    def continuous_scenario(self):
+    def continuous_scenario(self,rx_flag = None):
         rc = self.start_continuous(182)
         if not "ERROR" in rc:
-            self.link_tx("11111111",182) 
+            if rx_flag == None:
+                self.link_tx("11111111",182) 
+            else:
+                self.link_rx("11111111",182)
             self.end_channel(182)
+        else:
+            self.start_fail.append("Null to Continuous")
+            self.fail_scenarios.append("Null to Continuous Error in start request")
 
-    def continuous_end_scenario(self):
+    def continuous_end_scenario(self,rx_flag = None):
         rc = self.start_continuous(182)
         if "ERROR" and "Invalid" not in rc:
             rc = self.end_channel(182)
             if "ERROR" and "Invalid" not in rc:
-                self.link_tx("22222222",182)
+                if rx_flag == None:
+                    self.link_tx("22222222",182)
+                else:
+                    self.link_rx("22222222",182)
             else:
-                self.fail_scenarios.append("error in end channel")
+                self.fail_scenarios.append("Error in end channel")
         else:
-            self.fail_scenarios.append("error in start continuous request")
+            self.start_fail.append("Continuous End")
+            self.fail_scenarios.append("Continuous End Error in start request")
 
-    def continuous_2_continuous_scenario(self):
+    def continuous_2_continuous_scenario(self,rx_flag= None):
         rc = self.start_continuous(182)
         rc += self.start_continuous(184)
         if "ERROR" and "Invalid" not in rc:
@@ -1245,41 +1278,44 @@ class TC_Dot4_State():
             self.link_tx("33333333",182)
             self.end_channel(184)
         else:
-            self.fail_scenarios.append("error in start continuous")
+            self.start_fail.append("Continuous to Continuous")
+            self.fail_scenarios.append("Continuous to Continuous Error in start request")
 
-    def immediate_scenario_1(self):
+    def immediate_scenario_1(self,rx_flag= None):
         rc = self.start_continuous(182)
         rc += self.start_immediate(184)
         if "ERROR" and "Invalid" not in rc:
-            self.link_tx("44444444",184)
+            self.link_tx("23232323",184)
             self.link_tx("44444444",182)
             self.end_channel(182)
             self.end_channel(184)
         else:
-            self.fail_scenarios.append("error in start immediate")
-            
-    def immediate_scenario_2(self):
+            self.start_fail.append("Continuous to Immediate")
+            self.fail_scenarios.append("Continuous to Immediate Error in start request")
+
+    def immediate_scenario_2(self,rx_flag= None):
         rc = self.start_alternate(182)
         rc += self.start_alternate(184)
         rc += self.start_immediate(172)
         if "ERROR" and "Invalid" not in rc:
-            #self.link_tx("55555555",184)
-            #self.link_tx("55555555",182)
+            self.link_tx("99999999",184)
+            self.link_tx("99999999",182)
             self.link_tx("55555555",172)
             self.end_channel(182)
             self.end_channel(184)
             self.end_channel(172)
         else:
-            self.fail_scenarios.append("error in start alternate")
-        
-    def immediate_scenario_3(self):
+            self.start_fail.append("Alternate to Immediate")
+            self.fail_scenarios.append("Alternate to Immediate Error in start request")
+
+    def immediate_scenario_3(self,rx_flag= None):
         rc = self.start_immediate(182) 
         if "ERROR" in rc:
-            self.success_scenarios.append("immediate without previous mode")
+            self.success_scenarios.append("Immediate without previous mode")
         else:
-            self.fail_scenarios.append("immediate without previous mode")
+            self.fail_scenarios.append("Immediate without previous mode")
 
-    def alternate_scenario_1(self):
+    def alternate_scenario_1(self,rx_flag= None):
         rc = self.start_alternate(182)
         rc += self.start_alternate(184)
         if "ERROR" and "Invalid" not in rc:
@@ -1289,8 +1325,11 @@ class TC_Dot4_State():
             self.link_tx("55555555",182)
             self.link_tx("55555555",0)
             self.end_channel(182)
+        else:
+            self.start_fail.append("Null to Alternate")
+            self.fail_scenarios.append("Null to Alternate Error in start request")
 
-    def alternate_scenario_2(self):
+    def alternate_scenario_2(self,rx_flag= None):
         rc = self.start_continuous(182)
         rc += self.start_immediate(184)
         rc += self.start_alternate(172)
@@ -1299,14 +1338,40 @@ class TC_Dot4_State():
             self.end_channel(182)
             self.end_channel(184)
             self.end_channel(172)
+        else:
+            self.start_fail.append("Immediate to Alternate")
+            self.fail_scenarios.append("Immediate to Alternate Error in start request")
 
-    def alternate_scenario_3(self):
+    def alternate_scenario_3(self,rx_flag= None):
         rc = self.start_continuous(182)
         rc += self.start_alternate(184)
         if "ERROR" and "Invalid" not in rc:
             self.link_tx("88888888",184)
             self.end_channel(182)
             self.end_channel(184)
+        else:
+            self.start_fail.append("Continuous to Alternate")
+            self.fail_scenarios.append("Continuous to Alternate Error in start request")
+
+    def rx_scenarios(self):
+        self.rx_flag = True
+                    #('Null to Continuous','Continuous End','Continuous to Continuous',
+                    #'Continuous to Immediate','Alternate to Immediate',
+                    #'Null to Alternate','Continuous and Immediate to Alternate','Alternate with one channel')
+
+            #self.continuous_scenario()
+            #self.continuous_end_scenario()
+            #self.continuous_2_continuous_scenario()
+            #self.alternate_scenario_1()
+            #self.alternate_scenario_2()
+            #self.immediate_scenario_1()
+            #self.immediate_scenario_2()
+            #self.immediate_scenario_3()
+            
+            #time.sleep(int(float(self.rx_timeout / 1000)) +20)
+        for i in self.scenarios_names:
+            if i not in self.start_fail:
+                self.scenarios_list[i]
 
     def start_request(self):
         request = []
@@ -1317,19 +1382,33 @@ class TC_Dot4_State():
         request.append(self.immediate_access)
         if self.dot4_cli != None:
              return self.dot4_cli.dot4.dot4_channel_start(request)
-        if request[1] == 184:
-            rc = self._uut[0].qa_cli(self.cli_names[1]).dot4.dot4_channel_start(request)
+        if not self.rx_flag:
+            if request[1] == 184:
+                rc = self._uut[0].qa_cli(self.cli_names[1]).dot4.dot4_channel_start(request)
+            else:
+                rc = self._uut[0].qa_cli(self.cli_names[0]).dot4.dot4_channel_start(request)
         else:
-            rc = self._uut[0].qa_cli(self.cli_names[0]).dot4.dot4_channel_start(request)
+            if request[1] == 184:
+                rc = self._uut[0].qa_cli(self.cli_names[3]).dot4.dot4_channel_start(request)
+            else:
+                rc = self._uut[0].qa_cli(self.cli_names[2]).dot4.dot4_channel_start(request)
         return rc
 
     def end_channel(self,ch_num):
-        if ch_num == 182:
-            rc = self._uut[0].qa_cli(self.cli_names[0]).dot4.dot4_channel_end(self.if_index, ch_num)
-        elif ch_num == 184:
-            rc = self._uut[0].qa_cli(self.cli_names[1]).dot4.dot4_channel_end(self.if_index, ch_num)
+        if not self.rx_flag:
+            if ch_num == 182:
+                rc = self._uut[0].qa_cli(self.cli_names[0]).dot4.dot4_channel_end(self.if_index, ch_num)
+            elif ch_num == 184:
+                rc = self._uut[0].qa_cli(self.cli_names[1]).dot4.dot4_channel_end(self.if_index, ch_num)
+            else:
+                rc = self._uut[0].qa_cli(self.cli_names[0]).dot4.dot4_channel_end(self.if_index, ch_num)
         else:
-            rc = self._uut[0].qa_cli(self.cli_names[0]).dot4.dot4_channel_end(self.if_index, ch_num)
+            if ch_num == 182:
+                rc = self._uut[0].qa_cli(self.cli_names[2]).dot4.dot4_channel_end(self.if_index, ch_num)
+            elif ch_num == 184:
+                rc = self._uut[0].qa_cli(self.cli_names[3]).dot4.dot4_channel_end(self.if_index, ch_num)
+            else:
+                rc = self._uut[0].qa_cli(self.cli_names[2]).dot4.dot4_channel_end(self.if_index, ch_num)
         return rc
 
     def analyze_results(self):
@@ -1338,16 +1417,26 @@ class TC_Dot4_State():
                 cap = pyshark.FileCapture(sniffer_file)
             except Exception as e:
                 raise globals.Error("pcap file not exist")
-            
+            flag = False
             for frame_idx,frame in enumerate(cap):
                 for i in range(0,len(self.scenarios_list)):
-                    if self.scenarios_list[i] in frame.data.data and self.scenarios_names[i] not in self.success_scenarios:
+                    if flag:
+                        if '9999' in frame.data.data and self.scenarios_names[3] not in self.success_scenarios:
+                           self.success_scenarios.append("%s" %self.scenarios_names[3])
+                        elif '2323' in frame.data.data and self.scenarios_names[4] not in self.success_scenarios:
+                            self.success_scenarios.append("%s" %self.scenarios_names[4])
+                        break
+                    elif '4444' or '5555' in frame.data.data:
+                        flag = True
+                        break
+                    elif self.scenarios_list[i] in frame.data.data and self.scenarios_names[i] not in self.success_scenarios:
                         self.success_scenarios.append("%s" %self.scenarios_names[i])
                         break
-        
-        [self.fail_scenarios.append("%s" %i) for i in self.scenarios_names if i not in self.success_scenarios]
+
+        [self.fail_scenarios.append("%s Error in Tx" %i) for i in self.scenarios_names if i not in self.success_scenarios and i not in self.start_fail]
             
         res_dic = dict(success = self.success_scenarios, fail = self.fail_scenarios)
+        self.rx_scenarios()
         return res_dic
 
     def start_sniffer(self, cli_interface, idx, type):

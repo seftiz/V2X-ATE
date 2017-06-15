@@ -275,7 +275,7 @@ class TGHostSniffer(object):
                 pcap.write_packet( data )
                     
             except Exception as e:
-                if (retries%60 == 0): print "{} port {}, to_retry# {}\n ".format(e, port, retries+1)
+                #if (retries%60 == 0): print "{} port {}, to_retry# {}\n ".format(e, port, retries+1)
                 if (retries > self.sock_retries ):
                     self.threads_loop_flag[port] = False
 
