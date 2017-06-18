@@ -112,7 +112,7 @@
                     "rf_interfaces" : [
 										{	"id"			: 0,
 											"mac_addr"		: "00:02:cc:f0:00:07",
-											"freq"			: 5890,
+											"freq"			: 5910,
 											"power"			: 0,
 											"link"			: "(1,0)"
 										}, 
