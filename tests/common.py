@@ -216,6 +216,7 @@ class V2X_SDKBaseTest(ParametrizedTestCase):
             print "Test parameters :\n"
             for i, t_param in enumerate(self.param):
                 print "Param {} : {}".format( i, ''.join( "{} = {}".format( t_param, self.cap( str(self.param[t_param]),10) ) ) )
+            print "\n"
 
     def check_is_wlan_ack_frame( self, packet ):
         try:

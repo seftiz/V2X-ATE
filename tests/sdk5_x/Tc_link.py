@@ -48,8 +48,7 @@ class TC_LINK(common.V2X_SDKBaseTest):
         self.active_cli_list = []
         self._uut = {}
         self.sniffers_ports = []
-        self.sniffer_file = []
-        self.data_file = []                        
+        self.sniffer_file = []                                
         self.v2x_cli_sniffer_if0 = None
         self.v2x_cli_sniffer_if1 = None
         self.dut_embd_sniffer = None
@@ -57,6 +56,9 @@ class TC_LINK(common.V2X_SDKBaseTest):
         self.socket_list = [ [[],[]], [[],[]] ] # uut_id 0/1 , rf_if 0/1 , protocol_id
         self.thread_stop_tx = [[],[]]
         self.thread_stop_rx = [[],[]]
+        self.RxDUT_data = []
+        self.frames_NotForUnit_count = dict()
+        self.rx_NotForUnit_count = 0        
 
         
         return super(TC_LINK, self).__init__(methodName, param)
@@ -103,9 +105,12 @@ class TC_LINK(common.V2X_SDKBaseTest):
         self.analyze_results()
         
     def get_test_parameters( self ):
+        self.test_name = self.param.get('test_name', 0)
+        print "Test name : {} \n".format(self.test_name)
+
         super(TC_LINK, self).get_test_parameters()
 
-        self._capture_frames = self.param.get('capture_frames', 0) # Rx information print flag
+        self._capture_frames = self.param.get('capture_frames', 0) # Rx information print flag        
 
         self._testParams = self.param.get('params', None ) # get the test parameters dictionary from qa.py
         if self._testParams is None:
@@ -292,21 +297,32 @@ class TC_LINK(common.V2X_SDKBaseTest):
 
                 # Verify lowest rate
                 if self._frame_rate_hz < t_param.frame_rate_hz: 
-                    self._frame_rate_hz = t_param.frame_rate_hz 
-
-                # open file to Tx data
-                self.data_file.append(open(common.DATA_FILES + 'Exdata_'+ str(uut_id) +'.txt','w'))
-                    
+                    self._frame_rate_hz = t_param.frame_rate_hz                                    
 
     def main (self):
         
-        if bool(self.v2x_cli_sniffer_if0) :
-            self.start_dut_sniffer(self.v2x_cli_sniffer_if0.interface(), 1, "RX")
+        thread_list = []        
         if bool(self.v2x_cli_sniffer_if1) :
             self.start_dut_sniffer(self.v2x_cli_sniffer_if1.interface(), 2, "RX")
+
         self.Tx_Rx()
-        waiting_time = self.get_max_waiting_time()
-        time.sleep(int(float(waiting_time / 1000))+100)
+            
+        if ( self._capture_frames == 1):
+            
+            for rx in self.rx_list:                                
+                t = threading.Thread( target = self.get_frames_from_cli_thread, args = (rx,) )
+                thread_list.append(t)
+
+            # Starts threads
+            for thread in thread_list:
+                thread.start()
+
+            for thread in thread_list:
+                thread.join()
+        else :
+            waiting_time = self.get_max_waiting_time()       
+            time.sleep(int(float(waiting_time / 1000))+100)
+
         # stop the threads :
         for stop in self.thread_stop_tx[0] :
             self._uut[0].qa_cli(stop).link.tx_thread_stop()
@@ -321,12 +337,14 @@ class TC_LINK(common.V2X_SDKBaseTest):
             self.stop_dut_sniffer(1)
         if bool(self.v2x_cli_sniffer_if1) :
             self.stop_dut_sniffer(2)
-        
-
-        for i in self.data_file :
-            i.close()
+               
 
     def Tx_Rx(self) :
+
+        for tx in self.tx_list:
+            uut_id, rf_if, cli_name, tx_data ,frames, frame_rate_hz, t_param = tx
+            cli_n = cli_name.split("_")
+            self.frames_NotForUnit_count[cli_n[2]] = 0
 
         transmit_time = 0
         # get the max waiting time
@@ -335,7 +353,7 @@ class TC_LINK(common.V2X_SDKBaseTest):
             expected_transmit_time = int(float( 1.0 / frame_rate_hz) *  frames) + 5
             transmit_time  = transmit_time if transmit_time > expected_transmit_time else expected_transmit_time
 
-        rx_timeout = ( transmit_time + int(transmit_time * 0.25) ) * 1000
+        rx_timeout = (( transmit_time + int(transmit_time * 0.25) ) * 1000 )
        
         for rx in  self.rx_list: 
             uut_id, rf_if, cli_name, frames, _ = rx
@@ -358,12 +376,26 @@ class TC_LINK(common.V2X_SDKBaseTest):
             if Tx_thread:
                 self.thread_stop_tx[uut_id].append(cli_name)                   
   
-            self.stats.tx_uut_count[uut_id] += frames 
+            self.stats.tx_uut_count[uut_id] += frames    
+
+            cli_n = cli_name.split("_")
+            if dest_addr:
+                if (dest_addr != globals.setup.units.unit(uut_id ^ 1).rf_interfaces[1].mac_addr) :
+                    self.frames_NotForUnit_count[cli_n[2]] += frames
+                    self.rx_NotForUnit_count += frames                        
              
  
     def analyze_results(self):
 
-        d_file = open(self.data_file[0].name,'r')
+        #check the DUT Rx data :
+        if ( self._capture_frames == 1 ):
+            for rx_dut_data in self.RxDUT_data :
+                if rx_dut_data != self.tx_data[6:len(self.tx_data)].lower() :                        
+                        print "dutRx_data_mismatch %d " %self.stats.dutRx_data_mismatch                     
+                        self.stats.dutRx_data_mismatch +=1
+            
+        # Rx ref checker :
+        
         frames_recived = 0
 
         help = 0              
@@ -379,8 +411,8 @@ class TC_LINK(common.V2X_SDKBaseTest):
                          inc = self.packet_handler(frame,self.num_of_frames_per_socket.get(frames_num)[1],str(self.tx_data)) 
                          frames_recived +=1
                          self.num_of_frames_per_socket.get(frames_num)[1] = inc if inc else self.num_of_frames_per_socket.get(frames_num)[1] +1 if self.num_of_frames_per_socket.get(frames_num)[1] != 65535 else 0 # 65535 = 0xffff
-                          
-        if frames_recived < self.stats.rx_uut_count[1] - 1 :
+                         
+        if frames_recived + self.rx_NotForUnit_count < self.stats.rx_uut_count[1] - 1 :
             self.stats.ref_rx_count_error += self.stats.rx_uut_count[1] - frames_recived
 
    #Tx counters checker :
@@ -417,27 +449,31 @@ class TC_LINK(common.V2X_SDKBaseTest):
             if not uut_id :
                 self.read_cnt = self._uut[uut_id].qa_cli(cli_name).link.read_counters()  
                 time.sleep(1)  
-                read += self.read_cnt['rx'][1]           
-        if read != self.stats.rx_uut_count[0] : 
-            self.stats.dut_rx_count_error += self.stats.rx_uut_count[0] - read
+                read += self.read_cnt['rx'][1]     
+        cli_n = cli_name.split("_")      
+        if read + self.rx_NotForUnit_count != self.stats.rx_uut_count[0] : 
+        #if read != self.stats.rx_uut_count[0] :            
+            self.stats.dut_rx_count_error += self.stats.rx_uut_count[0] - read        
 
 
-        if self.stats.tx_uut_count[0] :
-            self.add_limit( "Tx counter DUT" , 0 , self.stats.dut_tx_count_error, self.stats.tx_uut_count[0] , 'EQ')
-        if self.stats.rx_uut_count[0] :
-            self.add_limit( "Rx counter DUT" , 0 , self.stats.dut_rx_count_error, self.stats.rx_uut_count[0] , 'EQ')
+        if self.stats.tx_uut_count[0] :            
+            self.add_limit( "DUT Tx failed counter" , 0 , self.stats.dut_tx_count_error, None , 'EQ')
+        if self.stats.rx_uut_count[0] :           
+            self.add_limit( "DUT Rx failed counter" , 0 , self.stats.dut_rx_count_error, None , 'EQ')
         if self.stats.tx_uut_count[1] :
-            self.add_limit( "Tx counter ref" , 0 , self.stats.ref_tx_count_error, self.stats.tx_uut_count[1] , 'EQ')
+            self.add_limit( "ref Tx failed counter" , 0 , self.stats.ref_tx_count_error, None , 'EQ')
         if self.stats.rx_uut_count[1] :
-            self.add_limit( "Rx counter ref" , 0 , self.stats.ref_rx_count_error, self.stats.rx_uut_count[1] , 'EQ')           
+            self.add_limit( "ref Rx failed counter" , 0 , self.stats.ref_rx_count_error, None , 'EQ')     
+        if ( self._capture_frames == 1 ):
+            self.add_limit( "data value mismatch - ref Tx to DUT Rx (sample)" , 0 ,self.stats.dutRx_data_mismatch , None ,'EQ')      
         if frames_recived :
-            self.add_limit( "data mismatch - Tx DUT to REF" , 0 , self.stats.data_mismatch, frames_recived , 'EQ')
+            self.add_limit( "data value mismatch - DUT Tx to REF Rx" , 0 , self.stats.data_mismatch, None ,'EQ')#frames_recived , 'EQ')
             if self.tx_power :
-                self.add_limit( "Rx ref : power mismatch" , 0 , self.stats.power_dbm_error, frames_recived , 'EQ')
+                self.add_limit( "Rx ref : power mismatch" , 0 , self.stats.power_dbm_error, None ,'EQ')# frames_recived , 'EQ')
             if self.datarate :
-                self.add_limit( "Rx ref : data rate mismatch" , 0 , self.stats.data_rate_error, frames_recived , 'EQ')
+                self.add_limit( "Rx ref : data rate mismatch" , 0 , self.stats.data_rate_error, None ,'EQ')# frames_recived , 'EQ')
             if self.payload_len:
-                self.add_limit( "Rx ref : data size mismatch" , 0 , self.stats.data_size_error, frames_recived , 'EQ')
+                self.add_limit( "Rx ref : data size mismatch" , 0 , self.stats.data_size_error, None ,'EQ')# frames_recived , 'EQ')
 
         for t_param in self._testParams:
             # For Multiple RX convert to list is not list
@@ -449,17 +485,21 @@ class TC_LINK(common.V2X_SDKBaseTest):
             uut_id, rf_if = tx_list[0]
             link_tx_counters = self._uut[uut_id].qa_cli(t_param.tx_cli).link.read_counters()
             time.sleep(1)
+            cli_n = t_param.tx_cli.split("_")
             try :
-                self.add_limit( "(%d,%d), %s 0x%x" % ( uut_id, rf_if, t_param.frame_type, t_param.proto_id), link_tx_counters['tx'][1] , link_rx_counters['rx'][1] , None , 'EQ')
+                if self.frames_NotForUnit_count.get(cli_n[2]) :
+                    self.add_limit( "(%d,%d), %s 0x%x" % ( uut_id, rf_if, t_param.frame_type, t_param.proto_id), link_tx_counters['tx'][1] , link_rx_counters['rx'][1] , None , 'LE')
+                else :
+                    self.add_limit( "(%d,%d), %s 0x%x" % ( uut_id, rf_if, t_param.frame_type, t_param.proto_id), link_tx_counters['tx'][1] , link_rx_counters['rx'][1] , None , 'EQ')
             except Exception as e:
                 pass #the limit not relevant  
 
         
 
     def packet_handler(self, packet, xp_idx, ExpData): 
-        data = packet.data.data[4:len(ExpData)-1]
-        ind = packet.data.data[0:4]
-        if data != ExpData[4:len(ExpData)-1] :
+        data = packet.data.data[6:len(ExpData)-1]
+        ind = packet.data.data[0:6]
+        if data != ExpData[6:len(ExpData)-1] :
             self.stats.data_mismatch +=1 
         if self.tx_power :
             if (int(packet.radiotap.txpower) / 8) != self.tx_power :
@@ -507,7 +547,11 @@ class TC_LINK(common.V2X_SDKBaseTest):
             #use the last appended sniffer  file...
             self.dut_host_sniffer.start( if_idx = idx , port = sniffer_port, capture_file = self.sniffer_file[len(self.sniffer_file) - 1] )
             time.sleep(1)
-            self.dut_embd_sniffer.start( if_idx = idx , server_ip = "192.168.120.2" , server_port = sniffer_port, sniffer_type = type)                   
+            if bool(self.v2x_cli_sniffer_if0):
+                self.dut_embd_sniffer.start( if_idx = idx -1 , server_ip = "192.168.120.2" , server_port = sniffer_port, sniffer_type = type)
+            time.sleep(1)
+            if bool(self.v2x_cli_sniffer_if1):
+                self.dut_embd_sniffer.start( if_idx = idx , server_ip = "192.168.120.2" , server_port = sniffer_port, sniffer_type = type)                   
         except  Exception as e:
             raise globals.Error("sniffer start error")
             pass        
@@ -517,7 +561,38 @@ class TC_LINK(common.V2X_SDKBaseTest):
         sniffer_port = BASE_HOST_PORT + ( idx * 17 )
         self.dut_host_sniffer.stop(sniffer_port)
         time.sleep(2)
-        self.dut_embd_sniffer.stop(idx)
+        #self.dut_embd_sniffer.stop(idx)
+
+    def get_frames_from_cli_thread(self, rx):
+        
+        log = logging.getLogger(__name__)
+        uut_id, rf_if, cli_name, frames, _ = rx        
+        
+        frm_cnt = 0
+        transmit_time  = int(float( 1.0 / self._frame_rate_hz) *  frames * 2) + 5  
+        start_time = int(time.clock())
+ 
+        # Start Reading from RX unit
+        while True:
+            try:
+                data = self._uut[uut_id].qa_cli(cli_name).interface().read_until('\r\n', 2)
+                if 'RxData' in data:
+                    pac1 = data.split("RxData")                    
+                    pac2 = pac1[1].split("\r\r\n")
+                    packet = pac2[0]    
+                    self.RxDUT_data.append(packet[7:len(packet)].lower());
+                    frm_cnt += 1                   
+            except Exception as e:
+                break
+                                                      
+            # Timeout
+            if ( int(time.clock()) - start_time ) > (transmit_time + int(transmit_time * 0.1)):                
+                break
+
+            # frame count
+            if frm_cnt >= frames:                
+                break
+
 
 class TC_LINK_48hours(TC_LINK):
     
@@ -553,8 +628,7 @@ class TC_LINK_48hours(TC_LINK):
         super(TC_LINK_48hours, self).unit_configuration()
 
     def main (self):
-        if bool(self.v2x_cli_sniffer_if0) :
-            self.start_dut_sniffer(self.v2x_cli_sniffer_if0.interface(), 1, "RX")
+        
         if bool(self.v2x_cli_sniffer_if1) :
             self.start_dut_sniffer(self.v2x_cli_sniffer_if1.interface(), 2, "RX")
         self.Tx_Rx()
@@ -691,6 +765,7 @@ class Statistics(object):
         self.ref_tx_count_error = 0       
         self.ref_rx_count_error = 0
         self.data_mismatch = 0
+        self.dutRx_data_mismatch = 0
         self.power_dbm_error = 0
         self.data_size_error = 0
         self.data_rate_error = 0

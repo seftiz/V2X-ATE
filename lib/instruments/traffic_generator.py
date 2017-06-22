@@ -275,7 +275,7 @@ class TGHostSniffer(object):
                 pcap.write_packet( data )
                     
             except Exception as e:
-                if (retries%60 == 0): print "{} port {}, to_retry# {}\n ".format(e, port, retries+1)
+                #if (retries%60 == 0): print "{} port {}, to_retry# {}\n ".format(e, port, retries+1)
                 if (retries > self.sock_retries ):
                     self.threads_loop_flag[port] = False
 
@@ -287,7 +287,7 @@ class TGHostSniffer(object):
                 
             counter+=1
         
-        print "port {}, {}\n".format(port, counter)
+        #print "port {}, {}\n".format(port, counter)
 
         pcap.close()
         sock.close()
@@ -301,7 +301,7 @@ class TGHostSniffer(object):
     def stop(self, port):
         self.threads_loop_flag[port] = False
         self.thread_loop_flag = False
-        print "stopping port {} ...\n".format(port)
+        #print "stopping port {} ...\n".format(port)
 
 class TrafficGeneratorPanagea4(object):
     """

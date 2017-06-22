@@ -100,24 +100,25 @@
 											"sim_port"	: 0, 
 											"device_id"	: "0"
 										},
-										{	
-											"active"	: 0,
-											"id"        : 1,
-											"simulator"	: "CanBusServer", 
-											"sim_id"	: 1, 
-											"sim_port"	: 1,
-											"device_id"	: "1"
-										}
+            {
+              "active": 0,
+              "id": 1,
+              "simulator": "CanBusServer",
+              "sim_id": 1,
+              "sim_port": 1,
+              "device_id": "1"
+            }
+
 					],
                     "rf_interfaces" : [
 										{	"id"			: 0,
-											"mac_addr"		: "00:02:cc:f0:00:07",
+											"mac_addr"		: "90:56:92:00:00:01",
 											"freq"			: 5890,
 											"power"			: 0,
 											"link"			: "(1,0)"
 										}, 
 										{	"id"			: 1,
-											"mac_addr"		: "00:02:cc:f0:00:07",
+											"mac_addr"		: "90:56:92:00:00:02",
 											"freq"			: 5920, 
 											"power"			: 0,
 											"link"			: "(1,1)"
