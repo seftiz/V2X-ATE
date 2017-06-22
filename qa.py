@@ -255,31 +255,37 @@ def dot4_tests(suite, cpu_type = 'arm'):
                      dict( channel_num = -1, time_slot = 1, op_class = -1),
                      dict( channel_num = -1, time_slot = 3, op_class = -1) ]
 
-    test_links = [ tParam( tx = (0,0), rx = (1,0), frame_type= 'data', proto_id = 0x9876, frames = 30,ch_idx = 182, frame_rate_hz = 10,  tx_power = 160 ,time_slot = 1 ,op_class = 1 ), 
-                   tParam( tx = (0,0), rx = (1,1), frame_type= 'data', proto_id = 0x5432, frames = 30,ch_idx = 184, frame_rate_hz = 10,  tx_power = 160 ,time_slot = 2 ,op_class = 1 ) ]
+    test_links = [ tParam( tx = (0,0), rx = (1,0), frame_type= 'data', proto_id = 0x9876, frames = 200,ch_idx = 182, frame_rate_hz = 100,  tx_power = 160 ,time_slot = 1 ,op_class = 1 ), 
+                   tParam( tx = (0,0), rx = (1,1), frame_type= 'data', proto_id = 0x5432, frames = 200,ch_idx = 184, frame_rate_hz = 100,  tx_power = 160 ,time_slot = 2 ,op_class = 1 ) ]
+
+    state_links = [ tParam( tx = (0,0), rx = (1,0), frame_type= 'data', proto_id = 0x5656, frames = 200,ch_idx = 182, frame_rate_hz = 100,  tx_power = 160 ,time_slot = 1 ,op_class = 1), 
+                    tParam( tx = (0,0), rx = (1,1), frame_type= 'data', proto_id = 0x7878, frames = 200,ch_idx = 184, frame_rate_hz = 100,  tx_power = 160 ,time_slot = 2 ,op_class = 1),
+                    tParam( tx = (1,0), rx = (0,0), frame_type= 'data', proto_id = 0x2121, frames = 200,ch_idx = 182, frame_rate_hz = 100, tx_power = 160 ,time_slot = 1 ,  op_class = 1 ,print_ = 1), 
+                    tParam( tx = (1,1), rx = (0,0), frame_type= 'data', proto_id = 0x4646, frames = 200,ch_idx = 184, frame_rate_hz = 100, tx_power = 160 ,time_slot = 2 ,  op_class = 1 ,print_ = 1)]
+
 
     #link socket tx -frames 150 -rate_hz 10 -time_slot 1 -ch_idx 182 -op_class 1 -power_dbm8 160
-    test_tx_links = [ tParam( tx = (0,0), rx = (1,0), frame_type= 'data', proto_id = 0x4752, frames = 500,ch_idx = 182, frame_rate_hz = 10,  tx_power = 160 ,time_slot = 1 ,op_class = 1), 
-                      tParam( tx = (0,0), rx = (1,1), frame_type= 'data', proto_id = 0x4560, frames = 500,ch_idx = 184, frame_rate_hz = 10,  tx_power = 160 ,time_slot = 2 ,op_class = 1) ]
+    test_tx_links = [ tParam( tx = (0,0), rx = (1,0), frame_type= 'data', proto_id = 0x5555, frames = 200,ch_idx = 182, frame_rate_hz = 100,  tx_power = 160 ,time_slot = 1 ,op_class = 1), 
+                      tParam( tx = (0,0), rx = (1,1), frame_type= 'data', proto_id = 0x6666, frames = 200,ch_idx = 184, frame_rate_hz = 100,  tx_power = 160 ,time_slot = 2 ,op_class = 1) ]
+                                                                                                                                        
+    test_rx_links = [ tParam( tx = (1,0), rx = (0,0), frame_type= 'data', proto_id = 0x4752, frames = 200,ch_idx = 182, frame_rate_hz = 100, tx_power = 160 ,time_slot = 1 ,  op_class = 1 ,print_ = 1), 
+                      tParam( tx = (1,1), rx = (0,0), frame_type= 'data', proto_id = 0x4560, frames = 200,ch_idx = 184, frame_rate_hz = 100, tx_power = 160 ,time_slot = 2 ,  op_class = 1 ,print_ = 1) ]
 
-    test_rx_links = [ tParam( tx = (1,0), rx = (0,0), frame_type= 'data', proto_id = 0x4752, frames = 50,ch_idx = 182, frame_rate_hz = 10, tx_power = 160 ,time_slot = 1 ,  op_class = 1 ,print_ = 1), 
-                      tParam( tx = (1,1), rx = (0,0), frame_type= 'data', proto_id = 0x4560, frames = 50,ch_idx = 184, frame_rate_hz = 10, tx_power = 160 ,time_slot = 2 ,  op_class = 1 ,print_ = 1) ]
-
-    test_rxtx_links = [ tParam( tx = (0,0), rx = (1,0), frame_type= 'data', proto_id = 0x1111, frames = 500,ch_idx = 182, frame_rate_hz = 10,  tx_power = 160 ,time_slot = 1 ,op_class = 1), 
-                        tParam( tx = (0,0), rx = (1,1), frame_type= 'data', proto_id = 0x2222, frames = 500,ch_idx = 184, frame_rate_hz = 10,  tx_power = 160 ,time_slot = 2 ,op_class = 1),
-                        tParam( tx = (1,0), rx = (0,0), frame_type= 'data', proto_id = 0x3333, frames = 50,ch_idx = 182, frame_rate_hz = 10, tx_power = 160 ,time_slot = 1 ,  op_class = 1 ,print_ = 1), 
-                        tParam( tx = (1,1), rx = (0,0), frame_type= 'data', proto_id = 0x4444, frames = 50,ch_idx = 184, frame_rate_hz = 10, tx_power = 160 ,time_slot = 2 ,  op_class = 1 ,print_ = 1)]
+    test_rxtx_links = [ tParam( tx = (0,0), rx = (1,0), frame_type= 'data', proto_id = 0x1111, frames = 200,ch_idx = 182, frame_rate_hz = 100,  tx_power = 160 ,time_slot = 1 ,op_class = 1), 
+                        tParam( tx = (0,0), rx = (1,1), frame_type= 'data', proto_id = 0x2222, frames = 200,ch_idx = 184, frame_rate_hz = 100,  tx_power = 160 ,time_slot = 2 ,op_class = 1),
+                        tParam( tx = (1,0), rx = (0,0), frame_type= 'data', proto_id = 0x3333, frames = 200,ch_idx = 182, frame_rate_hz = 100, tx_power = 160 ,time_slot = 1 ,  op_class = 1 ,print_ = 1), 
+                        tParam( tx = (1,1), rx = (0,0), frame_type= 'data', proto_id = 0x4444, frames = 200,ch_idx = 184, frame_rate_hz = 100, tx_power = 160 ,time_slot = 2 ,  op_class = 1 ,print_ = 1)]
 
     #State tests:
-    #suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( link_dict = test_links, target_cpu = cpu_type, ) ) )
+    suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( link_dict = state_links, target_cpu = cpu_type, ) ) )
     #Erroneuos Start Tests:
-    #suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( params = test_erroneous, target_cpu = cpu_type, tx_dict = test_links) ) )
+    suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( params = test_erroneous, target_cpu = cpu_type, tx_dict = test_links) ) )
     #Erroneuos Send Tests:
-    #suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( send_dict = test_erroneous_send, target_cpu = cpu_type, tx_dict = test_links) ) )
+    suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( send_dict = test_erroneous_send, target_cpu = cpu_type, tx_dict = test_links) ) )
     #Channel Switch Tx Tests:
-    #suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( tx_dict = test_tx_links, target_cpu = cpu_type) ) )
+    suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( tx_dict = test_tx_links, target_cpu = cpu_type) ) )
     #Channel Switch Rx Tests:
-    #suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( rx_dict = test_rx_links, target_cpu = cpu_type) ) )
+    suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( rx_dict = test_rx_links, target_cpu = cpu_type) ) )
     #Channel Switch Tests:
     suite.addTest(common.ParametrizedTestCase.parametrize(tc_dot4.TC_Dot4, param = dict( rxtx_dict = test_rxtx_links, target_cpu = cpu_type) ) )
 
@@ -332,7 +338,7 @@ def v2x_tests ( suite, cpu_type = 'arm',total_frames = 10000):
     test_links = [ tParam( tx = (0,1), rx = (1,1), proto_id = 0x13a1, frames = 500, frame_rate_hz = 100 ),
                     tParam( rx = (0,1), tx = (1,1), proto_id = 0x13b1, frames = 500, frame_rate_hz = 100 ) ]
     suite.addTest(common.ParametrizedTestCase.parametrize(Tc_link.TC_LINK, param = dict( params = test_links, target_cpu = cpu_type , test_name = 'basic test') ) )
-     
+    return
       
 ## Tx stress
     test_links = [  tParam( tx = (0,1), rx = (1,1), frame_type= 'data', proto_id = 0x13a1, frame_rate_hz = 100, frames = 20000),#, data_rate = 3 ), 

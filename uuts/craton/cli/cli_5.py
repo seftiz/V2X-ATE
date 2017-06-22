@@ -87,7 +87,7 @@ class Register(object) :
         cmd = "%s service" % self._name
         cmd += (" -service_name %s"  % service_name)
         cmd += (" -service_type %d"  % service_type) 
-        cmd += (" -device_name %s" % device_name )
+        cmd += (" -device_name %s"  % device_name)
         self._if.send_command(cmd)
         data = self._if.read_until_prompt( timeout  = 1)
         return data;
@@ -751,10 +751,85 @@ class wlanMibApi(linkApi):
                 cnts['rx'].append( int(line.split(',')[1].split('=')[1].strip()))
 
         return cnts
-   
+ 
+class dot4(object):
 
+    def __init__(self, interface):
+        super(dot4, self).__init__()
+        self._if = interface
+        self._name = "dot4"
+    
+    def dot4_channel_start(self, request):
+        cmd = "link dot4 start_ch" 
+        cmd += (" -if_index %s" % request[0]) 
+        cmd += (" -ch_id %s" % request[1])
+        cmd += (" -slot_id %s" % request[2]) 
+        cmd += (" -op_class %s" % request[3]) 
+        cmd += (" -imm_acc %s" % request[4]) 
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data
 
+    def dot4_channel_end(self,if_index, ch_num):
+        #link dot4 end_ch -if_index 1 -ch_id 172
+        cmd = "link dot4 end_ch"
+        cmd += (" -if_index %s" % if_index)
+        cmd += (" -ch_id %s" % ch_num)
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return data
 
+    def transmit(self, frames = 1, rate_hz = 1,payload_len = None, tx_data = None, 
+                 dest_addr = None,  user_priority = None, data_rate = None, power_dbm8 = None, op_class = None, channel_num = None, time_slot = None):
+        cmd = "link socket tx"
+        cmd += (" -frames %d"  % frames)
+        cmd += (" -rate_hz %d"  % rate_hz) if not rate_hz is None else ""
+        if tx_data == None and payload_len == None:
+            payload_len = 50
+        cmd += (" -payload_len %s"  % payload_len) if not payload_len is None else ""
+        cmd += (" -tx_data %s"  % tx_data) if not tx_data is None else ""
+ 
+        cmd += (" -user_priority %d"  % user_priority) if not user_priority is None else ""
+        cmd += (" -data_rate %d"  % data_rate) if not data_rate is None else ""
+        cmd += (" -power_dbm8 %d"  % power_dbm8) if not power_dbm8 is None else ""
+        cmd += (" -op_class %s"  % op_class) if not op_class is None else ""
+        cmd += (" -ch_idx %d"  % channel_num) if not channel_num is None else ""
+        
+        cmd += (" -time_slot %s"  % time_slot) if not time_slot is None else ""
+        self._if.send_command(cmd, False)
+        
+    def receive(self, frames, timeout = None, print_frame = None, channel_num= None,op_class = None,
+                time_slot = None,power_dbm8 = None):
+        cmd = "link socket rx -frames %s" % frames
+        cmd += (" -print %s"  % print_frame) if not print_frame is None else ""
+        cmd += (" -ch_idx %d"  % channel_num) if not channel_num is None else 0
+        cmd += (" -op_class %d"  % op_class) if not op_class is None else 0
+        cmd += (" -power_dbm8 %d"  % power_dbm8) if not power_dbm8 is None else 0
+        cmd += (" -time_slot %s"  % time_slot) if not time_slot is None else ""
+        cmd += (" -timeout_ms %s"  % timeout) if not timeout is None else ""
+        self._if.send_command(cmd)
+        return cmd
+
+    def erroneous_transmit(self, frames = 1, rate_hz = 1,payload_len = None, tx_data = None, 
+                 dest_addr = None,  user_priority = None, data_rate = None, power_dbm8 = None, op_class = None, channel_num = None, time_slot = None):
+        cmd = "link socket tx"
+        cmd += (" -frames %d"  % frames)
+        cmd += (" -rate_hz %d"  % rate_hz) if not rate_hz is None else ""
+        if tx_data == None and payload_len == None:
+            payload_len = 50
+        cmd += (" -payload_len %s"  % payload_len) if not payload_len is None else ""
+        cmd += (" -tx_data %s"  % tx_data) if not tx_data is None else ""
+ 
+        cmd += (" -user_priority %d"  % user_priority) if not user_priority is None else ""
+        cmd += (" -data_rate %d"  % data_rate) if not data_rate is None else ""
+        cmd += (" -power_dbm8 %d"  % power_dbm8) if not power_dbm8 is None else ""
+        cmd += (" -op_class %s"  % op_class) if not op_class is None else ""
+        cmd += (" -ch_idx %d"  % channel_num) if not channel_num is None else ""
+        
+        cmd += (" -time_slot %s"  % time_slot) if not time_slot is None else ""
+        self._if.send_command(cmd, False)
+        data = self._if.read_until_prompt( timeout  = 1)
+        return cmd + data
 
 
 
@@ -798,6 +873,7 @@ class qaCliApi(object):
         self.nav = navApi( self._if )
         self.ecc = eccApi( self._if )
         self.wlanMib = wlanMibApi( self._if)
+        self.dot4 = dot4(self._if)
         self.register = Register(self._if)
         
     def __del__(self):
@@ -943,7 +1019,6 @@ class qaCliApi(object):
         versions = {'sdk_ver': sdk_ver, 'uboot_ver' : uboot_ver, 'gnss_ver' : gnss_ver }
 
         return versions
-
 
     def create_remote_transport_layer(self):
         # timeout = 0 cancel the timeout
