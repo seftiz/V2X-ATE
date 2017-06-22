@@ -403,8 +403,8 @@ def v2x_tests ( suite, cpu_type = 'arm',total_frames = 10000):
     suite.addTest(common.ParametrizedTestCase.parametrize(Tc_link.TC_LINK, param = dict( params = test_links, target_cpu = cpu_type , test_name = 'rate, size and power dbm') ) )   
 
 # 48 hours 
-    test_links = [ tParam( tx = (0,1), rx = (1,1), proto_id = 0x13a1, frames = None, frame_rate_hz = 100, duration = 0.05 ), 
-                   tParam( rx = (0,1), tx = (1,1), proto_id = 0x13b1, frames = None, frame_rate_hz = 100, duration = 0.05 ) ]                  
+    test_links = [ tParam( tx = (0,1), rx = (1,1), proto_id = 0x13a1, frames = None, frame_rate_hz = 100, duration = 48 ), 
+                   tParam( rx = (0,1), tx = (1,1), proto_id = 0x13b1, frames = None, frame_rate_hz = 100, duration = 48 ) ]                  
     suite.addTest(common.ParametrizedTestCase.parametrize(Tc_link.TC_LINK_48hours, param = dict( params = test_links, target_cpu = cpu_type , test_name = '48 hours') ) )    
 
 # brodcast
