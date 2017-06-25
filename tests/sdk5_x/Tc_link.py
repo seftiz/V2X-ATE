@@ -407,7 +407,8 @@ class TC_LINK(common.V2X_SDKBaseTest):
                 raise globals.Error("pcap file not exist")               
             for frame_idx,frame in  enumerate(cap): 
                 for frames_num in self.num_of_frames_per_socket.keys() :
-                    if frames_num == int("0x"+frame.llc.type[6:10],0)  :
+                    #if frames_num == int("0x"+frame.llc.type[6:10],0)  :
+                    if frames_num == int(frame.llc.type,0)  :
                          inc = self.packet_handler(frame,self.num_of_frames_per_socket.get(frames_num)[1],str(self.tx_data)) 
                          frames_recived +=1
                          self.num_of_frames_per_socket.get(frames_num)[1] = inc if inc else self.num_of_frames_per_socket.get(frames_num)[1] +1 if self.num_of_frames_per_socket.get(frames_num)[1] != 65535 else 0 # 65535 = 0xffff
