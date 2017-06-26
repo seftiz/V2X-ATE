@@ -59,9 +59,15 @@ class TC_LINK(common.V2X_SDKBaseTest):
         self.RxDUT_data = []
         self.frames_NotForUnit_count = dict()
         self.rx_NotForUnit_count = 0        
-
+        self.sniffer_agent_ip_addr = ''
         
         return super(TC_LINK, self).__init__(methodName, param)
+
+    def set_sniffer_agent_ip(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        self.sniffer_agent_ip_addr = s.getsockname()[0]
+        s.close()
 
     def runTest(self):
         pass
@@ -549,10 +555,10 @@ class TC_LINK(common.V2X_SDKBaseTest):
             self.dut_host_sniffer.start( if_idx = idx , port = sniffer_port, capture_file = self.sniffer_file[len(self.sniffer_file) - 1] )
             time.sleep(1)
             if bool(self.v2x_cli_sniffer_if0):
-                self.dut_embd_sniffer.start( if_idx = idx -1 , server_ip = "192.168.120.2" , server_port = sniffer_port, sniffer_type = type)
+                self.dut_embd_sniffer.start( if_idx = idx -1 , server_ip = self.sniffer_agent_ip_addr , server_port = sniffer_port, sniffer_type = type)
             time.sleep(1)
             if bool(self.v2x_cli_sniffer_if1):
-                self.dut_embd_sniffer.start( if_idx = idx , server_ip = "192.168.120.2" , server_port = sniffer_port, sniffer_type = type)                   
+                self.dut_embd_sniffer.start( if_idx = idx , server_ip = self.sniffer_agent_ip_addr  , server_port = sniffer_port, sniffer_type = type)                   
         except  Exception as e:
             raise globals.Error("sniffer start error")
             pass        

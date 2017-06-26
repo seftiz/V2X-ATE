@@ -49,6 +49,14 @@ class TC_Dot4(common.V2X_SDKBaseTest):
         self.rx_instance = None
         self.full_test = None
         self.expected_frames = 0
+        self.sniffer_agent_ip_addr = ''
+
+    def set_sniffer_agent_ip(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        self.sniffer_agent_ip_addr = s.getsockname()[0]
+        s.close()
+
 
     def test_dot4(self):
         """Testsuite for testing channel switching
@@ -640,9 +648,9 @@ class TC_Dot4_Tx(TC_Dot4):
             #use the last appended sniffer  file...
             self.dut_host_sniffer.start( if_idx = idx , port = sniffer_port, capture_file = self.sniffer_file[len(self.sniffer_file) - 1] )
             time.sleep(1)
-            self.dut_embd_sniffer.start( if_idx = idx , server_ip = "192.168.120.1" , server_port = sniffer_port, sniffer_type = type)
+            self.dut_embd_sniffer.start( if_idx = idx , server_ip = self.sniffer_agent_ip_addr , server_port = sniffer_port, sniffer_type = type)
             time.sleep(1)
-            self.dut_embd_sniffer.start( if_idx = idx + 1 , server_ip = "192.168.120.1" , server_port = sniffer_port, sniffer_type = type)
+            self.dut_embd_sniffer.start( if_idx = idx + 1 , server_ip = self.sniffer_agent_ip_addr , server_port = sniffer_port, sniffer_type = type)
             time.sleep( 30 )
         except Exception as e:
             time.sleep( 300 )
@@ -1139,7 +1147,15 @@ class TC_Dot4_State():
         self.rx_flag = False
         self.success_scenarios = list()
         self.fail_scenarios = list()
-    
+        self.sniffer_agent_ip_addr = ''
+        self.set_sniffer_agent_ip()
+
+    def set_sniffer_agent_ip(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        self.sniffer_agent_ip_addr = s.getsockname()[0]
+        s.close()
+
     def main(self,tc_dot4,dot4_cli,dot4_cli_sniffer):
         try:
             self.scenarios_list = ('1111','2222','3333','4444','5555','6666','7777','8888')
@@ -1556,9 +1572,9 @@ class TC_Dot4_State():
             #use the last appended sniffer  file...
             self.dut_host_sniffer.start( if_idx = idx , port = sniffer_port, capture_file = self.sniffer_file[len(self.sniffer_file) - 1] )
             time.sleep(1)
-            self.dut_embd_sniffer.start( if_idx = idx , server_ip = "192.168.120.1" , server_port = sniffer_port, sniffer_type = type)
+            self.dut_embd_sniffer.start( if_idx = idx , server_ip = self.sniffer_agent_ip_addr , server_port = sniffer_port, sniffer_type = type)
             time.sleep(1)
-            self.dut_embd_sniffer.start( if_idx = idx + 1 , server_ip = "192.168.120.1" , server_port = sniffer_port, sniffer_type = type)
+            self.dut_embd_sniffer.start( if_idx = idx + 1 , server_ip = self.sniffer_agent_ip_addr , server_port = sniffer_port, sniffer_type = type)
             time.sleep( 30 )
         except Exception as e:
             time.sleep( 300 )
