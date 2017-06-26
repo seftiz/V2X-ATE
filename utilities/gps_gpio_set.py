@@ -39,7 +39,7 @@ def tn_connect(targetip = '10.10.1.122'):
         time.sleep(0.2)
         tmp = tnn.read_very_eager()
         tmp = tnn.read_until('assword:',2)     # let "P" be capitalized or not
-        tnn.write('123\n')
+        tnn.write(vm_pw + '\n')
         tmp = tnn.read_until(str('$'), 3)
         tmp = tnn.read_very_eager()
     except Exception as e:
@@ -63,7 +63,10 @@ def set_gps_gpio():
         time.sleep(0.5)
         tmp = t.read_very_eager()
         #Run CLI aplication
-        t.write(str('{}\n').format('\nsudo ./diagcli {} {}\n'.format(args.dev_address, args.interface)))
+        if args.dev_address != None:
+          t.write(str('{}\n').format('\nsudo ./diagcli {} {}\n'.format(args.dev_address, args.interface)))
+        else:
+          t.write(str('{}\n').format('\nsudo ./diagcli {}\n'.format(args.interface)))
         time.sleep(0.5)
         tmp = t.read_until(str('user:'), 3)
         tmp = t.read_very_eager()
@@ -72,7 +75,10 @@ def set_gps_gpio():
         tmp = t.read_until(str('atlk>'), 3)
         tmp = t.read_very_eager()
 
-        logging.info("executing: diagcli {} {}\n".format(args.dev_address, args.interface))
+        if args.dev_address != None:
+            logging.info("executing: diagcli {} {}\n".format(args.dev_address, args.interface))
+        else:
+            logging.info("executing: diagcli {} {}\n".format(args.dev_address, args.interface))
 
         gpio_iomux_set_bit_factory()
         gpio_dir_val_set_bit_factory()
@@ -347,7 +353,8 @@ def parse_params():
   parser.add_argument( '-i', '--interface', type=str, required=False, default='eth1', help='eth interface with the device')
   parser.add_argument( '-a', '--address', type=str, required=False, default='10.10.1.122', help='host VM ip address')
   parser.add_argument( '-r', '--reboot', action="store_true",help='with/without power cycly before setup')
-  parser.add_argument( '-d', '--dev_address', type=str, required=False, default='00:02:cc:f0:00:07', help='device mac address')
+  parser.add_argument( '-d', '--dev_address', type=str, required=False, default=None, help='device mac address')
+  parser.add_argument( '-v', '--vm_pw', type=str, required=False, default='123', help='device mac address')
   args = parser.parse_args()
     
 
