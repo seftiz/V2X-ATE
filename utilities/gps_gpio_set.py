@@ -39,7 +39,7 @@ def tn_connect(targetip = '10.10.1.122'):
         time.sleep(0.2)
         tmp = tnn.read_very_eager()
         tmp = tnn.read_until('assword:',2)     # let "P" be capitalized or not
-        tnn.write(vm_pw + '\n')
+        tnn.write(args.vm_pw + '\n')
         tmp = tnn.read_until(str('$'), 3)
         tmp = tnn.read_very_eager()
     except Exception as e:
@@ -70,7 +70,7 @@ def set_gps_gpio():
         time.sleep(0.5)
         tmp = t.read_until(str('user:'), 3)
         tmp = t.read_very_eager()
-        t.write(vm_pw + '\n')
+        t.write(args.vm_pw + '\n')
         time.sleep(5)
         tmp = t.read_until(str('atlk>'), 3)
         tmp = t.read_very_eager()
