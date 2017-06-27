@@ -78,7 +78,7 @@ def set_gps_gpio():
         if args.dev_address != None:
             logging.info("executing: diagcli {} {}\n".format(args.dev_address, args.interface))
         else:
-            logging.info("executing: diagcli {} {}\n".format(args.dev_address, args.interface))
+            logging.info("executing: diagcli {}\n".format(args.interface))
 
         gpio_iomux_set_bit_factory()
         gpio_dir_val_set_bit_factory()
