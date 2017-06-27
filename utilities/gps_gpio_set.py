@@ -70,7 +70,7 @@ def set_gps_gpio():
         time.sleep(0.5)
         tmp = t.read_until(str('user:'), 3)
         tmp = t.read_very_eager()
-        t.write(str('123\n'))
+        tnn.write(vm_pw + '\n')
         time.sleep(5)
         tmp = t.read_until(str('atlk>'), 3)
         tmp = t.read_very_eager()
