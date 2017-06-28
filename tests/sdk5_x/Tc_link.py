@@ -54,8 +54,8 @@ class TC_LINK(common.V2X_SDKBaseTest):
         self.dut_embd_sniffer = None
         self.num_of_frames_per_socket = dict()
         self.socket_list = [ [[],[]], [[],[]] ] # uut_id 0/1 , rf_if 0/1 , protocol_id
-        self.thread_stop_tx = [[],[]]
-        self.thread_stop_rx = [[],[]]
+        self.thread_stop_tx = [[],[]] # all the cli environments to Tx thread on unit 0, all the cli environments to Tx thread on unit 1
+        self.thread_stop_rx = [[],[]] # all the cli environments to Rx thread on unit 0, all the cli environments to Rx thread on unit 1
         self.RxDUT_data = []
         self.frames_NotForUnit_count = dict()
         self.rx_NotForUnit_count = 0        
@@ -301,8 +301,8 @@ class TC_LINK(common.V2X_SDKBaseTest):
 
                 self.socket_list[uut_id][rf_if].append(t_param.proto_id)
 
-                # Verify lowest rate
-                if self._frame_rate_hz < t_param.frame_rate_hz: 
+                # Verify lowest rate  - use in the function get_frames_from_cli_thread
+                if self._frame_rate_hz < t_param.frame_rate_hz:  
                     self._frame_rate_hz = t_param.frame_rate_hz                                    
 
     def main (self):
@@ -347,6 +347,7 @@ class TC_LINK(common.V2X_SDKBaseTest):
 
     def Tx_Rx(self) :
 
+        # this loop for unicast test
         for tx in self.tx_list:
             uut_id, rf_if, cli_name, tx_data ,frames, frame_rate_hz, t_param = tx
             cli_n = cli_name.split("_")
@@ -386,7 +387,7 @@ class TC_LINK(common.V2X_SDKBaseTest):
 
             cli_n = cli_name.split("_")
             if dest_addr:
-                if (dest_addr != globals.setup.units.unit(uut_id ^ 1).rf_interfaces[1].mac_addr) :
+                if (dest_addr != globals.setup.units.unit(uut_id ^ 1).rf_interfaces[rf_if].mac_addr) :
                     self.frames_NotForUnit_count[cli_n[2]] += frames
                     self.rx_NotForUnit_count += frames                        
              
@@ -412,12 +413,12 @@ class TC_LINK(common.V2X_SDKBaseTest):
             except Exception as e:
                 raise globals.Error("pcap file not exist")               
             for frame_idx,frame in  enumerate(cap): 
-                for frames_num in self.num_of_frames_per_socket.keys() :
+                for socket_num in self.num_of_frames_per_socket.keys() :
                     #if frames_num == int("0x"+frame.llc.type[6:10],0)  :
-                    if frames_num == int(frame.llc.type,0)  :
-                         inc = self.packet_handler(frame,self.num_of_frames_per_socket.get(frames_num)[1],str(self.tx_data)) 
+                    if socket_num == int(frame.llc.type,0)  :
+                         inc = self.packet_handler(frame,self.num_of_frames_per_socket.get(socket_num)[1],str(self.tx_data)) 
                          frames_recived +=1
-                         self.num_of_frames_per_socket.get(frames_num)[1] = inc if inc else self.num_of_frames_per_socket.get(frames_num)[1] +1 if self.num_of_frames_per_socket.get(frames_num)[1] != 65535 else 0 # 65535 = 0xffff
+                         self.num_of_frames_per_socket.get(socket_num)[1] = inc if inc else self.num_of_frames_per_socket.get(socket_num)[1] +1 if self.num_of_frames_per_socket.get(socket_num)[1] != 0xffffff else 0 # 0xffff
                          
         if frames_recived + self.rx_NotForUnit_count < self.stats.rx_uut_count[1] - 1 :
             self.stats.ref_rx_count_error += self.stats.rx_uut_count[1] - frames_recived

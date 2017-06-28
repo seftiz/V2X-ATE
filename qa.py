@@ -338,7 +338,6 @@ def v2x_tests ( suite, cpu_type = 'arm',total_frames = 10000):
     test_links = [ tParam( tx = (0,1), rx = (1,1), proto_id = 0x13a1, frames = 500, frame_rate_hz = 100 ),
                     tParam( rx = (0,1), tx = (1,1), proto_id = 0x13b1, frames = 500, frame_rate_hz = 100 ) ]
     suite.addTest(common.ParametrizedTestCase.parametrize(Tc_link.TC_LINK, param = dict( params = test_links, target_cpu = cpu_type , test_name = 'basic test') ) )
-    return
       
 ## Tx stress
     test_links = [  tParam( tx = (0,1), rx = (1,1), frame_type= 'data', proto_id = 0x13a1, frame_rate_hz = 100, frames = 20000),#, data_rate = 3 ), 
