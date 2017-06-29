@@ -174,12 +174,13 @@ class linkApi(object):
 
         # No response till end of transmission 
 
-    def receive(self, frames, timeout = None, print_frame = None,out_queue = None,sk = None,cli_name = None):
+    def receive(self, frames, timeout = None, print_frame = None,out_queue = None,sk = None,cli_name = None, print_rate = None):
         cmd = "link socket rx -frames %s" % frames
         cmd += (" -print %s"  % print_frame) if not print_frame is None else ""
         cmd += (" -timeout_ms %s"  % timeout) if not timeout is None else ""
         cmd += (" -sk %s"  % sk) if not sk is None else ""
         cmd += (" -cli_name %s"  % cli_name) if not cli_name is None else ""
+        cmd += (" -print_rate %s"  % print_rate) if not print_rate is None else ""
         self._if.send_command(cmd)
         #data = self._if.read_until_prompt( timeout  = 5000) 
         #if out_queue is not None : 
@@ -196,6 +197,15 @@ class linkApi(object):
         cmd =  "link stop_thread tx"
         self._if.send_command(cmd)
 
+    def frequency_set(self, rf_if = None, freq = None):
+        cmd = "%s freq set" % self._name
+        cmd += (" -rf_if %s"  % rf_if) if not rf_if is None else ""
+        cmd += (" -freq %s"  % freq) if not freq is None else ""
+        self._if.send_command(cmd)
+        data = self._if.read_until_prompt( timeout  = 3) 
+        if 'ERROR' in data:
+            raise globals.Error( "ERROR in frequency set" )
+        
     def reset_counters(self):
         cmd = "%s counters reset" % self._name
         return self._if.send_command(cmd)
