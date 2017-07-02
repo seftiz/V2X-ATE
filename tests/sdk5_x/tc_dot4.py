@@ -50,6 +50,10 @@ class TC_Dot4(common.V2X_SDKBaseTest):
         self.full_test = None
         self.expected_frames = 0
         self.sniffer_agent_ip_addr = ''
+        self.set_sniffer_agent_ip()
+        #self.sniffer_agent_ip_addr = "10.10.1.119"
+
+
 
     def set_sniffer_agent_ip(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -519,7 +523,7 @@ class TC_Dot4_Tx(TC_Dot4):
         self.stats.counters['chs_tx_during_gi_fail_count_ch1'] = 0
         self.stats.counters['chs_tx_during_gi_fail_count_ch2'] = 0
         self.stats.counters['chs_interval_expected_to_fail_count'] = 0
-        
+
     def dut_tx_packet_handler(self, packet):
         #a)	Frames are associated with the right channel. 
         #b)	All frames have been transmitted (continues frames numbers). 
@@ -648,9 +652,9 @@ class TC_Dot4_Tx(TC_Dot4):
             #use the last appended sniffer  file...
             self.dut_host_sniffer.start( if_idx = idx , port = sniffer_port, capture_file = self.sniffer_file[len(self.sniffer_file) - 1] )
             time.sleep(1)
-            self.dut_embd_sniffer.start( if_idx = idx , server_ip = self.sniffer_agent_ip_addr , server_port = sniffer_port, sniffer_type = type)
+            self.dut_embd_sniffer.start( if_idx = idx , server_ip = self.tc_dot4.sniffer_agent_ip_addr , server_port = sniffer_port, sniffer_type = type)
             time.sleep(1)
-            self.dut_embd_sniffer.start( if_idx = idx + 1 , server_ip = self.sniffer_agent_ip_addr , server_port = sniffer_port, sniffer_type = type)
+            self.dut_embd_sniffer.start( if_idx = idx + 1 , server_ip = self.tc_dot4.sniffer_agent_ip_addr , server_port = sniffer_port, sniffer_type = type)
             time.sleep( 30 )
         except Exception as e:
             time.sleep( 300 )
