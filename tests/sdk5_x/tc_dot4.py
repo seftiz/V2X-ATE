@@ -5,8 +5,9 @@
 @version	1.0
 @date		February 2017
 """
-import os, sys, socket
-
+import os, sys, socket, traceback
+from threading import Thread
+from threading import Lock
 import unittest, logging, socket, json, json2html
 from datetime import datetime
 import time, threading, random
@@ -52,7 +53,7 @@ class TC_Dot4(common.V2X_SDKBaseTest):
         self.sniffer_agent_ip_addr = ''
         self.set_sniffer_agent_ip()
         #self.sniffer_agent_ip_addr = "10.10.1.119"
-
+        mutex = Lock()
 
 
     def set_sniffer_agent_ip(self):
@@ -80,7 +81,8 @@ class TC_Dot4(common.V2X_SDKBaseTest):
         self.get_test_parameters()
         self.initilization()
         self.main()
-        self.print_results()
+        if self.stats.results_dic is not None:
+          self.print_results()
         
         print >> self.result._original_stdout, "test, {} completed".format( self._testMethodName )
 
@@ -238,13 +240,20 @@ class TC_Dot4(common.V2X_SDKBaseTest):
                 self.stats.results_dic["state_tests"].append("fail:")
                 self.stats.results_dic["state_tests"].extend(result["fail"])
 
+        #except Exception as e:
         except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
             raise e
 
     def print_results(self):
+      try:
         #function name , sent values
         for i in self.stats.results_dic:
             item = self.stats.results_dic.get(i)
+            if item is None:
+                continue
             l = len(item)
             if l == 0:
                 continue
@@ -284,6 +293,10 @@ class TC_Dot4(common.V2X_SDKBaseTest):
                         self.add_limit("%s %s %s on chan%d" %(string.split()[0] ,string.split()[1] ,string.split()[2] ,values[0]) ,values[1] ,values[2] ,None ,'EQ')
                     else:
                         self.add_limit("%s" % string.split(",fail")[0], 0, int(string.split(",fail")[1]),None ,'EQ')
+      except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
                                     
     def initilization(self):
         rc = 0
@@ -337,7 +350,12 @@ class TC_Dot4_ERRONEOUS_Request():
                     print "Param %d : ch_idx='%d', time_slot='%d', op_class='%d', imm_access='%d'" %( i,t_param.get("channel_num"),t_param.get("time_slot"),t_param.get("op_class"),t_param.get("immediate_access"))
             self.erroneous_request(state)
             return self.res_dic
+        #except Exception as e:
         except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+
             raise globals.Error(e.message)
         
     def get_test_parameters( self, param ):
@@ -427,7 +445,7 @@ class TC_Dot4_ERRONEOUS_Send():
     def end_channels(self):
         rc = ''
         for tx in self.tc_dot4.tx_list_:
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            uut_id, rf_if, cli_name, frames, proto_id, frame_type, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
             rc += self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_end(rf_if+1,ch_idx) 
         return rc
 
@@ -451,8 +469,9 @@ class TC_Dot4_Tx(TC_Dot4):
         self.interface = None
         self._expected_frames = 0
         self._frame_rate = 0
-                    
-    def main(self,tc_dot4):
+          
+
+    def main(self, tc_dot4):
         try:
             self.tc_dot4 = tc_dot4
             self._init_sniffers_counters()
@@ -462,8 +481,16 @@ class TC_Dot4_Tx(TC_Dot4):
             self.analyze_results()
             return self.print_results()
 
+        #except Exception as e:
         except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+
             raise globals.Error(e.message)
+
+    def set_tc_dot4_instance(self, tc_dot4):
+        self.tc_dot4 = tc_dot4
 
     def link_tx(self,rx_timeout):
         #recieve:
@@ -475,7 +502,7 @@ class TC_Dot4_Tx(TC_Dot4):
         #transmit:
         for tx in self.tc_dot4.tx_list_:
             ind += 1
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            uut_id, rf_if, cli_name, frames,  proto_id, frame_type, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
             self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.transmit(tx_data = "4752" ,frames = frames, rate_hz = frame_rate_hz ,channel_num = ch_idx,time_slot = time_slot, op_class = op_class, power_dbm8 = tx_power)             
             self.stats.total_frames_expected[ind % 2 + 1] += frames 
             self.stats.total_data_expected[ind % 2 + 1] += frames
@@ -485,7 +512,7 @@ class TC_Dot4_Tx(TC_Dot4):
         transmit_time = 0
         # get the max waiting time, 
         for tx in self.tc_dot4.tx_list_:
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            uut_id, rf_if, cli_name, frames,  proto_id, frame_type,frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
             self._frame_rate = frame_rate_hz
             expected_transmit_time = int(float( 1.0 / frame_rate_hz) *  frames) + 5
             transmit_time  = transmit_time if transmit_time > expected_transmit_time else expected_transmit_time
@@ -499,7 +526,7 @@ class TC_Dot4_Tx(TC_Dot4):
 
         request = [1,182,1,1,0]  
         for tx in self.tc_dot4.tx_list_:
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            uut_id, rf_if, cli_name, frames, proto_id, frame_type, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
             self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_start(request) 
             request = [1,184,2,1,0]
 
@@ -533,7 +560,7 @@ class TC_Dot4_Tx(TC_Dot4):
         current_active_ch_proto = int(packet.llc.type, 16)
         num = int(packet.radiotap.mactime) / 1000
         #powerDbm8 (transmit power):
-        if packet.radiotap.txpower != 160:
+        if int(packet.radiotap.txpower) != 160:
             pass
         #save first frame protocol
         if int(packet.frame_info.number) == 1:
@@ -548,10 +575,10 @@ class TC_Dot4_Tx(TC_Dot4):
                 self.chs_flag = True
                 if self.top == current_active_ch_proto:
                     self.stats.counters['total_frames_rf1'] += 1
-                    self.stats.counters['total_data_rf1'] += 1
+                    self.stats.counters['total_data_rf1'] += int(packet.data.len)
                 else:
                     self.stats.counters['total_frames_rf2'] += 1
-                    self.stats.counters['total_data_rf2'] += 1
+                    self.stats.counters['total_data_rf2'] += int(packet.data.len)
                 #to know if there was already a channel switch
                 self.first_proto = None
                 self.last_timestamp = num
@@ -564,10 +591,10 @@ class TC_Dot4_Tx(TC_Dot4):
             self.last_proto = current_active_ch_proto
             if self.top == current_active_ch_proto:
                 self.stats.counters['total_frames_rf1'] += 1
-                self.stats.counters['total_data_rf1'] += 1
+                self.stats.counters['total_data_rf1'] += int(packet.data.len)
             else:
                 self.stats.counters['total_frames_rf2'] += 1
-                self.stats.counters['total_data_rf2'] += 1
+                self.stats.counters['total_data_rf2'] += int(packet.data.len)
             return
 
         #there was already a channel switch
@@ -584,7 +611,7 @@ class TC_Dot4_Tx(TC_Dot4):
                         
                 #the previous frames was on slot_1
                 else:
-                    if num <= 54:
+                    if num % 100 <= 54:
                         if self.top == current_active_ch_proto:
                             self.stats.counters['chs_setup_failure_ch1'] += 1
                         else:
@@ -594,6 +621,7 @@ class TC_Dot4_Tx(TC_Dot4):
             #again there is CHS, TEST!
             else:
                 self.first_proto = current_active_ch_proto
+                '''
                 #timestamp test:
                 if self.last_timestamp - self.first_timestamp > 50:
                     if self.top == current_active_ch_proto:
@@ -601,14 +629,14 @@ class TC_Dot4_Tx(TC_Dot4):
                     else:
                         self.stats.counters['chs_tx_during_gi_fail_count_ch2'] += 1
                                             
-                #when high transmit power - more than one frame per 50 ms:
-                '''Now - 10 frames in time slot, or 40 - 2 frames in timeslot?'''
+                #when high transmit rate - more than one frame per 50 ms:
+                #Now - 10 frames in time slot, or 40 - 2 frames in timeslot?
                 if self._frame_rate >= 40:     
                     #check time sync and last frame in interval boumdries (2ms in GI are RX OK!)
                     if num % 100 > 4 and num % 100 < 54:
                         if self.last_timestamp < 37:
                             self.stats.counters['chs_interval_expected_to_fail_count'] += 1
-
+                '''
         #There was not yet CHS
         else:
             self.first_proto = None
@@ -617,13 +645,13 @@ class TC_Dot4_Tx(TC_Dot4):
         #for testing all frames arrived and data was not corrupted
         if self.top == current_active_ch_proto:
             self.stats.counters['total_frames_rf1'] += 1
-            self.stats.counters['total_data_rf1'] += 1
+            self.stats.counters['total_data_rf1'] += int(packet.data.len)
         else:
             self.stats.counters['total_frames_rf2'] += 1
-            self.stats.counters['total_data_rf2'] += 1
+            self.stats.counters['total_data_rf2'] += int(packet.data.len)
 
     def analyze_results(self):
-        
+      try:  
         for sniffer_file in self.sniffer_file:
             try:
                 cap = pyshark.FileCapture(sniffer_file)
@@ -632,11 +660,16 @@ class TC_Dot4_Tx(TC_Dot4):
             
             for frame_idx,frame in enumerate(cap):
                 self.dut_tx_packet_handler(frame)
-                
+      except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+
+            raise globals.Error(e.message)
     def end_channels(self):
         rc = ''
         for tx in self.tc_dot4.tx_list_:
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            uut_id, rf_if, cli_name, frames,  proto_id, frame_type, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
             rc += self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_end(rf_if+1,ch_idx) 
         return rc
 
@@ -669,6 +702,7 @@ class TC_Dot4_Tx(TC_Dot4):
         #self.dut_embd_sniffer.stop(2)
 
     def print_results(self):
+        '''
         self.res_list.append("Total Tx Frames %d %d %d" %(1,self.stats.total_frames_expected[1],self.stats.counters['total_frames_rf1']))
         self.res_list.append("Total Tx Frames %d %d %d" %(2,self.stats.total_frames_expected[2],self.stats.counters['total_frames_rf2']))
         self.res_list.append("Dropped Tx frames %d %d %d" %(1,self.stats.total_data_expected[1],self.stats.counters['total_data_rf1']))
@@ -679,6 +713,21 @@ class TC_Dot4_Tx(TC_Dot4):
         self.res_list.append("Tx during GI on time_slot1 ,fail %d" %self.stats.counters['chs_tx_during_gi_fail_count_ch2'])        
         self.res_list.append("Tx chan1 During chan2 ,fail %d" %self.stats.counters['chs_setup_failure_ch1'])
         self.res_list.append("Tx chan2 During chan1 ,fail %d" %self.stats.counters['chs_setup_failure_ch2'])
+        return self.res_list
+        '''
+        self.res_list.append("Total Tx Frames {0} {1} {2}".format(1,self.stats.total_frames_expected[1],self.stats.counters['total_frames_rf1']))
+        self.res_list.append("Total Tx Frames {0} {1} {2}".format(2,self.stats.total_frames_expected[2],self.stats.counters['total_frames_rf2']))
+        '''
+        self.res_list.append("Dropped Tx frames {0} {1} {2}".format(1,self.stats.total_data_expected[1],self.stats.counters['total_data_rf1']))
+        self.res_list.append("Dropped Tx frames {0} {1} {2}".format(2,self.stats.total_data_expected[2],self.stats.counters['total_data_rf2']))
+        '''
+        if self._frame_rate >= 40:
+            self.res_list.append("Tx interval equals to 46-50 ms ,fail {0}".format(self.stats.counters['chs_interval_expected_to_fail_count']))
+        #self.res_list.append("Tx during GI on time_slot0 ,fail {0}".format(self.stats.counters['chs_tx_during_gi_fail_count_ch1']))
+        #self.res_list.append("Tx during GI on time_slot1 ,fail {0}".format(self.stats.counters['chs_tx_during_gi_fail_count_ch2']))
+        self.res_list.append("Tx chan1 During chan2 ,fail {0}".format(self.stats.counters['chs_setup_failure_ch1']))
+        self.res_list.append("Tx chan2 During chan1 ,fail {0}".format(self.stats.counters['chs_setup_failure_ch2']))
+
         return self.res_list
 
 ############ END Class TC_Dot4_Tx ############
@@ -713,17 +762,22 @@ class TC_Dot4_Rx(TC_Dot4):
         self.stats.counters['chs_rx_during_gi_fail_count_ch1'] = 0
         self.stats.counters['chs_rx_during_gi_fail_count_ch2'] = 0
         self.stats.counters['chs_interval_expected_to_fail_count'] = 0
-
+        self.stats.counters['chs_setup_ch_num_failure'] = 0
     def main(self,tc_dot4):
         try:
             self.tc_dot4 = tc_dot4
             #test start:
             self._init_counters()
             self.session_start()
-            self.analyze_results(self.frames_headers)
+            self.analyze_results(self.frames_headers, self.tc_dot4.rx_list)
             return self.print_results()
             
+        #except Exception as e:
         except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+
             raise globals.Error(e.message)
 
     def session_start(self):
@@ -798,7 +852,14 @@ class TC_Dot4_Rx(TC_Dot4):
                     frm_cnt += 1
                     self.stats.total_frames_processed += 1
                     self.frames_headers.append(data)
+                    rx_data = self.tc_dot4._uut[uut_id].qa_cli(cli_name).interface().read_until('OK', 2)
+                    #mutex.acquire(1)
+                    self.frames_headers[self.frames_headers.index(data)] = data + " " + rx_data
+                    #mutex.release()
+                    self.tc_dot4._uut[uut_id].qa_cli(cli_name).interface().read_until('\r\n', 2)
+                    
             except Exception as e:
+                log.debug( "exception - {}, in RX, {}".format( e, data) )
                 break
             
             if 'ERROR' in data:
@@ -813,128 +874,182 @@ class TC_Dot4_Rx(TC_Dot4):
             if frm_cnt >= self._expected_frames:
                 log.debug( "exit rx thread {} loop due to frame count".format(rx) )
                 break
-
-    def analyze_results(self,frames_headers):
-        #a)	Frames are associated with the right channel. 
-        #b)	All frames have been transmitted (continues frames numbers). 
-        #c)	Frames data was not corrupted.
-        #d)	The number of frames sent equals the number of frames arrived.
-        if frames_headers == []:
+    
+    def analyze_results(self,frames_headers, rx_list = []):
+      try:
+        if frames_headers == [] or rx_list == []:
             return
-        ind = 0
-        values = [int(s) for s in frames_headers[0].split() if s.isdigit()]
-        current_active_ch = int(frames_headers[0].split("ch_num:")[1].split(',')[0])
-        self.last_timestamp = values[1]
-        self.top = current_active_ch
-        self.first_chan = current_active_ch
-        self.last_chan = self.top
-        frames_headers.pop(0)
+        time_slot_ch_id_dict = {}
+        '''extract ch_id<->slot correlation'''
+        for rx in rx_list:
+            uut_id, rf_if, cli_name, frames, proto_id, ch_idx, op_class,time_slot, tx_power , print_ , _ = rx
+            time_slot_ch_id_dict[time_slot] = ch_idx
+
         for packet in frames_headers:
-            ind += 1
-            values = [int(s) for s in packet.split() if s.isdigit()]
-            self.last_timestamp = values[1]
-            
-            current_active_ch = int(packet.split("ch_num:")[1].split(',')[0])
-            num = values[1]
-            #powerDbm8 (transmit power):
-            if int(packet.split("power_dbm8")[1].split(',')[0]) != 160:
-                pass
-            #save first frame channel num
-            if int(packet.split('Frame:')[1].split(',')[0]) == 1:
-                self.top = current_active_ch
-                self.first_chan = current_active_ch
-                self.last_chan = self.top
+            values = re.findall(r'\b\d+\b', packet)
+            #timestemp in mili
+            self.last_timestamp = int(values[1]) / 1000
                 
-            #channel switch occurred
-            if self.last_chan != current_active_ch: 
-                #first channel switch
-                if self.chs_flag == False:
-                    self.chs_flag = True
-                    if self.top == current_active_ch:
-                        self.stats.counters['total_frames_chan1'] += 1
-                    else:
-                        self.stats.counters['total_frames_chan2'] += 1
-                    #to know if there was already a channel switch
-                    self.first_chan = None
-                    self.last_timestamp = num
-                    self.last_chan = current_active_ch
-                    continue
-
-            #not yet CHS:
-            if not self.chs_flag:
-                self.first_timestamp = num
-                self.last_chan = current_active_ch
-                if self.top == current_active_ch:
-                    self.stats.counters['total_frames_chan1'] += 1
-                else:
-                    self.stats.counters['total_frames_chan2'] += 1
-                continue
-
-            #there was already a channel switch
-            if self.first_chan == None:
-                #continues to arrive in the same channel, check if time slot is match
-                if self.last_chan == current_active_ch:
-                    #the previous frames was on slot_0
-                    if self.last_timestamp % 100 < 54 and self.last_timestamp % 100 > 4:
-                        if num % 100 <= 54:
-                            if self.top == current_active_ch:
-                                self.stats.counters['chs_setup_failure_ch1'] += 1
-                            else:
-                                self.stats.counters['chs_setup_failure_ch2'] += 1
-                            
-                    #the previous frames was on slot_1
-                    else:
-                        if num - self.last_timestamp > 54:
-                            if self.top == current_active_ch:
-                                self.stats.counters['chs_setup_failure_ch1'] += 1
-                            else:
-                                self.stats.counters['chs_setup_failure_ch2'] += 1
-                            
-                    self.last_timestamp = num
-                #again there is CHS, TEST!
-                else:
-                    self.first_chan = current_active_ch
-                    #timestamp test:
-                    if self.last_timestamp - self.first_timestamp > 50:
-                        if self.top == current_active_ch:
-                            self.stats.counters['chs_rx_during_gi_fail_count_ch1'] += 1
-                        else:
-                            self.stats.counters['chs_rx_during_gi_fail_count_ch2'] += 1
-                        
-                    #the previous frames was on slot_0
-                    if self.last_timestamp % 100 < 54 and self.last_timestamp % 100 > 4:
-                        if num % 100 <= 54:
-                            if self.top == current_active_ch:
-                                self.stats.counters['chs_setup_failure_ch1'] += 1
-                            else:
-                                self.stats.counters['chs_setup_failure_ch2'] += 1
-                            
-                    #the previous frames was on slot_1
-                    else:
-                        if num - self.last_timestamp > 54:
-                            if self.top == current_active_ch:
-                                self.stats.counters['chs_setup_failure_ch1'] += 1
-                            else:
-                                self.stats.counters['chs_setup_failure_ch2'] += 1
-                            
-                    #when high transmit power - more than one frame per 50 ms:
-                    '''Now - 10 frames in time slot, or 40 - 2 frames in timeslot?'''
-                    if self._frame_rate >= 40:     
-                        #check time sync and last frame in interval boumdries (2ms in GI are RX OK!)
-                        if num % 100 > 4 and num % 100 < 54:
-                            if self.last_timestamp < 37:
-                                self.stats.counters['chs_interval_expected_to_fail_count'] += 1
-
-            #There was not yet CHS
-            else:
-                self.first_chan = None
-                self.last_chan = current_active_ch
-                self.last_timestamp = num
-            #for testing all frames arrived and data was not corrupted
-            if self.top == current_active_ch:
+            #current_active_ch = int(packet.split("ch_num:")[1].split(',')[0])
+            current_active_ch = int(values[2])
+            if current_active_ch == time_slot_ch_id_dict[1]:
+                #count chan1 frames...
                 self.stats.counters['total_frames_chan1'] += 1
-            else:
+                #check for valid time_slot 1 time stamp
+                if self.last_timestamp % 100 <= 54 and self.last_timestamp % 100 >= 4:
+                    continue
+                else:
+                    self.stats.counters['chs_setup_failure_ch1'] += 1
+            elif current_active_ch == time_slot_ch_id_dict[2]:
                 self.stats.counters['total_frames_chan2'] += 1
+                #check for valid time_slot 1 time stamp
+                if self.last_timestamp % 100 > 54 or self.last_timestamp % 100 < 4:
+                    continue
+                else:
+                    self.stats.counters['chs_setup_failure_ch2'] += 1
+            else:
+               self.stats.counters['chs_setup_ch_num_failure'] += 1
+      except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+
+    
+    #def analyze_results(self,frames_headers):
+    # try:
+
+
+    #    #a)	Frames are associated with the right channel. 
+    #    #b)	All frames have been transmitted (continues frames numbers). 
+    #    #c)	Frames data was not corrupted.
+    #    #d)	The number of frames sent equals the number of frames arrived.
+    #    if frames_headers == []:
+    #        return
+    #    ind = 0
+    #    first_frame1_flag = False
+    #    #values = [int(s) for s in frames_headers[0].split() if s.isdigit()]
+    #    values = re.findall(r'\b\d+\b', frames_headers[0])
+    #    #current_active_ch = int(frames_headers[0].split("ch_num:")[1].split(',')[0])
+    #    current_active_ch = int(values[2])
+    #    self.last_timestamp = int(values[1])
+    #    self.top = current_active_ch
+    #    self.first_chan = current_active_ch
+    #    self.last_chan = self.top
+    #    #frames_headers.pop(0)
+    #    for packet in frames_headers:
+    #        #ind += 1
+    #        #values = [int(s) for s in packet.split() if s.isdigit()]
+    #        values = re.findall(r'\b\d+\b', packet)
+    #        self.last_timestamp = int(values[1])
+            
+    #        #current_active_ch = int(packet.split("ch_num:")[1].split(',')[0])
+    #        current_active_ch = int(values[2])
+    #        num = values[1]
+    #        #powerDbm8 (transmit power):
+    #        #if int(packet.split("power_dbm8:")[1].split(',')[0]) != 160:
+    #        if int(values[3]) != 160:
+    #            pass
+    #        #save first frame channel num
+    #        #if int(packet.split('Frame:')[1].split(',')[0]) == 1:
+    #        if int(values[0]) == 1 and first_frame1_flag == False:
+    #            self.top = current_active_ch
+    #            self.first_chan = current_active_ch
+    #            self.last_chan = self.top
+    #            first_frame1_flag = True
+    #        #channel switch occurred
+    #        if self.last_chan != current_active_ch: 
+    #            #first channel switch
+    #            if self.chs_flag == False:
+    #                self.chs_flag = True
+    #                if self.top == current_active_ch:
+    #                    self.stats.counters['total_frames_chan1'] += 1
+    #                else:
+    #                    self.stats.counters['total_frames_chan2'] += 1
+    #                #to know if there was already a channel switch
+    #                self.first_chan = None
+    #                self.last_timestamp = num
+    #                self.last_chan = current_active_ch
+    #                continue
+
+    #        #not yet CHS:
+    #        if not self.chs_flag:
+    #            self.first_timestamp = num
+    #            self.last_chan = current_active_ch
+    #            if self.top == current_active_ch:
+    #                self.stats.counters['total_frames_chan1'] += 1
+    #            else:
+    #                self.stats.counters['total_frames_chan2'] += 1
+    #            continue
+
+    #        #there was already a channel switch
+    #        if self.first_chan == None:
+    #            #continues to arrive in the same channel, check if time slot is match
+    #            if self.last_chan == current_active_ch:
+    #                #the previous frames was on slot_0
+    #                if self.last_timestamp % 100 < 54 and self.last_timestamp % 100 > 4:
+    #                    if num % 100 <= 54:
+    #                        if self.top == current_active_ch:
+    #                            self.stats.counters['chs_setup_failure_ch1'] += 1
+    #                        else:
+    #                            self.stats.counters['chs_setup_failure_ch2'] += 1
+                            
+    #                #the previous frames was on slot_1
+    #                else:
+    #                    if num - self.last_timestamp > 54:
+    #                        if self.top == current_active_ch:
+    #                            self.stats.counters['chs_setup_failure_ch1'] += 1
+    #                        else:
+    #                            self.stats.counters['chs_setup_failure_ch2'] += 1
+                            
+    #                self.last_timestamp = num
+    #            #again there is CHS, TEST!
+    #            else:
+    #                self.first_chan = current_active_ch
+    #                #timestamp test:
+    #                if self.last_timestamp - self.first_timestamp > 50:
+    #                    if self.top == current_active_ch:
+    #                        self.stats.counters['chs_rx_during_gi_fail_count_ch1'] += 1
+    #                    else:
+    #                        self.stats.counters['chs_rx_during_gi_fail_count_ch2'] += 1
+                        
+    #                #the previous frames was on slot_0
+    #                if self.last_timestamp % 100 < 54 and self.last_timestamp % 100 > 4:
+    #                    if num % 100 <= 54:
+    #                        if self.top == current_active_ch:
+    #                            self.stats.counters['chs_setup_failure_ch1'] += 1
+    #                        else:
+    #                            self.stats.counters['chs_setup_failure_ch2'] += 1
+                            
+    #                #the previous frames was on slot_1
+    #                else:
+    #                    if num - self.last_timestamp > 54:
+    #                        if self.top == current_active_ch:
+    #                            self.stats.counters['chs_setup_failure_ch1'] += 1
+    #                        else:
+    #                            self.stats.counters['chs_setup_failure_ch2'] += 1
+                            
+    #                #when high transmit power - more than one frame per 50 ms:
+    #                '''Now - 10 frames in time slot, or 40 - 2 frames in timeslot?'''
+    #                if self._frame_rate >= 40:     
+    #                    #check time sync and last frame in interval boumdries (2ms in GI are RX OK!)
+    #                    if num % 100 > 4 and num % 100 < 54:
+    #                        if self.last_timestamp < 37:
+    #                            self.stats.counters['chs_interval_expected_to_fail_count'] += 1
+
+    #        #There was not yet CHS
+    #        else:
+    #            self.first_chan = None
+    #            self.last_chan = current_active_ch
+    #            self.last_timestamp = num
+    #        #for testing all frames arrived and data was not corrupted
+    #        if self.top == current_active_ch:
+    #            self.stats.counters['total_frames_chan1'] += 1
+    #        else:
+    #            self.stats.counters['total_frames_chan2'] += 1
+    # except Exception as e:
+    #        exc_type, exc_obj, exc_tb = sys.exc_info()
+    #        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+    #        print(exc_type, fname, exc_tb.tb_lineno)
                         
     def end_channels(self):
         for rx in self.tc_dot4.rx_list: 
@@ -942,6 +1057,7 @@ class TC_Dot4_Rx(TC_Dot4):
             self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_end(rf_if + 1,ch_idx) 
 
     def print_results(self):
+        '''
         self.res_list.append("Total Rx Frames %d %d %d" %(1,self.stats.total_frames_expected[1],self.stats.counters['total_frames_chan1']))
         self.res_list.append("Total Rx Frames %d %d %d" %(2,self.stats.total_frames_expected[2],self.stats.counters['total_frames_chan2']))
         if self._frame_rate >= 40:
@@ -951,6 +1067,22 @@ class TC_Dot4_Rx(TC_Dot4):
         self.res_list.append("Rx chan1 During chan2 ,fail %d" %self.stats.counters['chs_setup_failure_ch1'])
         self.res_list.append("Rx chan2 During chan1 ,fail %d" %self.stats.counters['chs_setup_failure_ch2'])
         return self.res_list
+        '''
+        self.res_list.append("Total Rx Frames {0} {1} {2}".format(1,self.stats.total_frames_expected[1],self.stats.counters['total_frames_chan1']))
+        self.res_list.append("Total Rx Frames {0} {1} {2}".format(2,self.stats.total_frames_expected[2],self.stats.counters['total_frames_chan2']))
+        
+        '''
+        if self._frame_rate >= 40:
+            self.res_list.append("Rx interval equals to 46-50 ms ,fail {0}".format(self.stats.counters['chs_interval_expected_to_fail_count']))
+        self.res_list.append("Rx during GI on time_slot0 ,fail {0}".format(self.stats.counters['chs_rx_during_gi_fail_count_ch1'])) 
+        self.res_list.append("Rx during GI on time_slot1 ,fail {0}".format(self.stats.counters['chs_rx_during_gi_fail_count_ch2']))
+        '''
+        self.res_list.append("Rx bad channel number ,fail {0}".format(self.stats.counters['chs_setup_ch_num_failure']))
+        self.res_list.append("Rx chan1 wrong time slot ,fail {0}".format(self.stats.counters['chs_setup_failure_ch1']))
+        self.res_list.append("Rx chan2 wrong time slot ,fail {0}".format(self.stats.counters['chs_setup_failure_ch2']))
+        
+        return self.res_list
+
 
 ############ END Class TC_Dot4_Rx ############
 
@@ -964,16 +1096,19 @@ class TC_Dot4_Full_CS():
     """
         
     def __init__(self, methodName = 'runTest', param = None):
+        
         self.stats = Statistics()
         self.frames_headers = list()
         self.results_dic = dict(Tx = list(), Rx = list())
         self.tx_instance = TC_Dot4_Tx()
         self.rx_instance = TC_Dot4_Rx()
         self._expected_frames = 0
-
+        
+        self.rx_dut_list_for_results_analyzing = list()
     def main(self,tc_dot4):
         try:
             self.tc_dot4 = tc_dot4
+            self.tx_instance.set_tc_dot4_instance(tc_dot4)
             self._init_counters()
             #test start:
             results = self.session_start()
@@ -981,7 +1116,12 @@ class TC_Dot4_Full_CS():
             self.analyze_results()
             return self.results_dic
             
+        #except Exception as e:
         except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
+
             raise globals.Error(e.message)
 
     def _init_counters(self):
@@ -989,7 +1129,7 @@ class TC_Dot4_Full_CS():
         self.rx_instance._init_counters()
 
     def link_tx_rx(self,rx_timeout):
-
+      try:
         #recieve, ref unit:
         for i in range(0,len(self.tc_dot4.rx_list)/2):
             rx = self.tc_dot4.rx_list[i]
@@ -998,6 +1138,7 @@ class TC_Dot4_Full_CS():
         #recieve, dut:
         for j in range(i+1,len(self.tc_dot4.rx_list)):
             rx = self.tc_dot4.rx_list[j]
+            self.rx_dut_list_for_results_analyzing.append(rx)
             uut_id, rf_if, cli_name, frames, proto_id, ch_idx, op_class,time_slot, tx_power , print_ , _ = rx
             self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.receive( frames, print_frame = print_, timeout = rx_timeout, channel_num = ch_idx ,op_class = op_class,time_slot = time_slot, power_dbm8 = tx_power)
         ind = 0
@@ -1005,7 +1146,7 @@ class TC_Dot4_Full_CS():
         for i in range(0,len(self.tc_dot4.tx_list_)/2):
             tx = self.tc_dot4.tx_list_[i]
             ind += 1
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            uut_id, rf_if, cli_name, frames,  proto_id, frame_type, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
             self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.transmit(tx_data = "4752" ,frames = frames, rate_hz = frame_rate_hz ,channel_num = ch_idx,time_slot = time_slot, op_class = op_class, power_dbm8 = tx_power)             
             self.tx_instance.stats.total_frames_expected[ind % 2 + 1] += frames 
             self.tx_instance.stats.total_data_expected[ind % 2 + 1] += frames
@@ -1018,14 +1159,19 @@ class TC_Dot4_Full_CS():
             self.tc_dot4._uut[uut_id].qa_cli(cli_name).link.transmit(tx_data = "4560" ,frames = frames, rate_hz = frame_rate_hz)             
              
             self.rx_instance.stats.total_data_expected[ind % 2 + 1] += frames
+      except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
 
     def session_start(self):
+      try:
         thread_list = []
         transmit_time = 0
         # get the max waiting time, 
         for i in range(0,len(self.tc_dot4.tx_list_)/2):
             tx = self.tc_dot4.tx_list_[i]
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            uut_id, rf_if, cli_name, frames, proto_id, frame_type, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
             self._frame_rate = frame_rate_hz
             expected_transmit_time = int(float( 1.0 / frame_rate_hz) *  frames) + 5
             transmit_time  = transmit_time if transmit_time > expected_transmit_time else expected_transmit_time
@@ -1047,7 +1193,7 @@ class TC_Dot4_Full_CS():
         request = [1,182,1,1,0]  
         for i in range(0,len(self.tc_dot4.tx_list_)/2):
             tx = self.tc_dot4.tx_list_[i]
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            uut_id, rf_if, cli_name, frames,  proto_id, frame_type, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
             self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_start(request) 
             request = [1,184,2,1,0]
 
@@ -1077,9 +1223,13 @@ class TC_Dot4_Full_CS():
                 self.rx_instance.stats.total_frames_expected[rf_if + 1] += self.read_cnt['tx'][1]
 
         self.tx_instance.stop_sniffer(port) 
+      except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
 
     def get_frames_from_cli_thread(self, rx):
-        
+      try:  
         log = logging.getLogger(__name__)
         uut_id, rf_if, cli_name, frames, proto_id, ch_idx, op_class,time_slot, tx_power ,print_ ,  _ = rx
         
@@ -1095,7 +1245,14 @@ class TC_Dot4_Full_CS():
                     frm_cnt += 1
                     self.stats.total_frames_processed += 1
                     self.frames_headers.append(data)
+                    rx_data = self.tc_dot4._uut[uut_id].qa_cli(cli_name).interface().read_until('OK', 2)
+                    #mutex.acquire(1)
+                    self.frames_headers[self.frames_headers.index(data)] = data + " " + rx_data
+                    #mutex.release()
+                    self.tc_dot4._uut[uut_id].qa_cli(cli_name).interface().read_until('\r\n', 2)
+
             except Exception as e:
+                log.debug( "exception - {}, in RX, {}".format( e, data) )
                 break
             
             if 'ERROR' in data:
@@ -1110,20 +1267,30 @@ class TC_Dot4_Full_CS():
             if frm_cnt >= self._expected_frames:
                 log.debug( "exit rx thread {} loop due to frame count".format(rx) )
                 break        
+      except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
 
     def analyze_results(self):
+
+     try:
         #Tx analyze:
         self.tx_instance.analyze_results()
         self.results_dic["Tx"] = self.tx_instance.print_results()
         #Rx analyze:
-        self.rx_instance.analyze_results(self.frames_headers)
+        self.rx_instance.analyze_results(self.frames_headers, self.rx_dut_list_for_results_analyzing)
         self.results_dic["Rx"] = self.rx_instance.print_results()
+     except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type, fname, exc_tb.tb_lineno)
 
     def end_channels(self):
         for i in range(0,len(self.tc_dot4.tx_list_)/2):
             tx = self.tc_dot4.tx_list_[i]
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
-            self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_end(rf_if,ch_idx) 
+            uut_id, rf_if, cli_name, frames, proto_id, frame_type, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            self.tc_dot4._uut[uut_id].qa_cli(cli_name).dot4.dot4_channel_end(rf_if + 1,ch_idx) 
             
 ############ END Class TC_Dot4_Full_CS ############
 
@@ -1204,13 +1371,13 @@ class TC_Dot4_State():
         # get the max waiting time
         for i in range(0,len(self.tc_dot4.tx_list_)/2):
             tx = self.tc_dot4.tx_list_[i]
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            uut_id, rf_if, cli_name, frames,  proto_id, frame_type, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
             self.cli_names.append(cli_name)
             expected_transmit_time = int(float( 1.0 / frame_rate_hz) *  frames) + 5
             transmit_time  = transmit_time if transmit_time > expected_transmit_time else expected_transmit_time
         rx_timeout = ( transmit_time + int(transmit_time * 0.25) ) * 1000
         for j in range(i + 1,len(self.tc_dot4.tx_list_)):
-            uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+            uut_id, rf_if, cli_name, frames,  proto_id, frame_type, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
             self.cli_names.append(cli_name)
         return rx_timeout
 
@@ -1220,7 +1387,7 @@ class TC_Dot4_State():
             tx = self.tc_dot4.tx_list_[1]
         else:
             tx = self.tc_dot4.tx_list_[0]
-        uut_id, rf_if, cli_name, frames, frame_type, proto_id, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
+        uut_id, rf_if, cli_name, frames,  proto_id, frame_type, frame_rate_hz, ch_idx , time_slot, op_class, tx_power,  _ = tx
         rc = self._uut[uut_id].qa_cli(self.cli_names[0]).dot4.transmit(tx_data = data ,frames = frames, rate_hz = frame_rate_hz ,channel_num = ch_num,time_slot = time_slot, op_class = op_class, power_dbm8 = tx_power)
         time.sleep(20)
 
@@ -1501,8 +1668,15 @@ class TC_Dot4_State():
                 data = self.tc_dot4._uut[uut_id].qa_cli(cli_name).interface().read_until('\r\n', 2)
                 if 'Frame' in data:
                     frm_cnt += 1
+                    self.stats.total_frames_processed += 1
                     self.frames_headers.append(data)
+                    rx_data = self.tc_dot4._uut[uut_id].qa_cli(cli_name).interface().read_until('OK', 2)
+                    #mutex.acquire(1)
+                    self.frames_headers[self.frames_headers.index(data)] = data + " " + rx_data
+                    #mutex.release()
+                    self.tc_dot4._uut[uut_id].qa_cli(cli_name).interface().read_until('\r\n', 2)
             except Exception as e:
+                log.debug( "exception - {}, in RX, {}".format( e, data) )
                 break
             
             if 'ERROR' in data:

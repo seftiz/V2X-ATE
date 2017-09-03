@@ -64,9 +64,9 @@ def set_gps_gpio():
         tmp = t.read_very_eager()
         #Run CLI aplication
         if args.dev_address != None:
-          t.write(str('{}\n').format('\nsudo ./diagcli {} {}\n'.format(args.dev_address, args.interface)))
+          t.write(str('{}\n').format('\nsudo ./diag-cli {} {}\n'.format(args.dev_address, args.interface)))
         else:
-          t.write(str('{}\n').format('\nsudo ./diagcli {}\n'.format(args.interface)))
+          t.write(str('{}\n').format('\nsudo ./diag-cli {}\n'.format(args.interface)))
         time.sleep(0.5)
         tmp = t.read_until(str('user:'), 3)
         tmp = t.read_very_eager()
@@ -351,7 +351,7 @@ def parse_params():
   parser.add_argument( '-c', '--com', type=str, required=False, default='COM20', help='comm port for serial connection')
   parser.add_argument( '-p', '--pathcmd', type=str, required=False, default='cd /tftpboot/apps', help='change path commad to diagcli directory')
   parser.add_argument( '-i', '--interface', type=str, required=False, default='eth1', help='eth interface with the device')
-  parser.add_argument( '-a', '--address', type=str, required=False, default='10.10.1.122', help='host VM ip address')
+  parser.add_argument( '-a', '--address', type=str, required=False, default='10.10.1.113', help='host VM ip address')
   parser.add_argument( '-r', '--reboot', action="store_true",help='with/without power cycly before setup')
   parser.add_argument( '-d', '--dev_address', type=str, required=False, default=None, help='device mac address')
   parser.add_argument( '-v', '--vm_pw', type=str, required=False, default='123', help='device mac address')
