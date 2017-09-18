@@ -420,9 +420,12 @@ class TC_LINK(common.V2X_SDKBaseTest):
 
             cli_n = cli_name.split("_")
             if dest_addr:
-                if (dest_addr != globals.setup.units.unit(uut_id ^ 1).rf_interfaces[rf_if].mac_addr) :
-                    self.frames_Not_For_Unit_count[cli_n[2]] += frames
-                    self.rx_Not_For_Unit_count += frames                        
+                #if (dest_addr != globals.setup.units.unit(uut_id ^ 1).rf_interfaces[rf_if].mac_addr) :
+                for jj in uut_tx_list:
+                    if (dest_addr != globals.setup.units.unit(jj).rf_interfaces[rf_if].mac_addr) :
+                        self.frames_Not_For_Unit_count[cli_n[2]] += frames
+                        self.rx_Not_For_Unit_count += frames
+                        break;                        
              
  
     def analyze_results(self):
@@ -472,7 +475,7 @@ class TC_LINK(common.V2X_SDKBaseTest):
             uut_rx_list = list(self._uut_list)
             for ii, uut in enumerate(uut_rx_list):
               if  uut_rx_list[ii] == self.dut_id:
-                if read != self.stats.tx_uut_count[i]:
+                if read != self.stats.tx_uut_count[ii]:
                   self.stats.dut_tx_count_error += self.stats.tx_uut_count[ii] - read
         
         
@@ -539,8 +542,6 @@ class TC_LINK(common.V2X_SDKBaseTest):
             except Exception as e:
                 pass #the limit not relevant  
 
-        
-
     def packet_handler(self, packet, xp_idx, ExpData): 
         data = packet.data.data[6:len(ExpData)-1]
         ind = packet.data.data[0:6]
@@ -550,7 +551,7 @@ class TC_LINK(common.V2X_SDKBaseTest):
             if (int(packet.radiotap.txpower) / 8) != self.tx_power :
                 self.stats.power_dbm_error += 1
         if self.datarate :       
-            if packet.wlan_radio.data_rate != self.datarate :
+            if packet.radiotap.datarate != self.datarate :
                self.stats.data_rate_error += 1
         if self.payload_len:
             if (len(packet.data.data) - 8) != self.payload_len : 

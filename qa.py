@@ -400,7 +400,7 @@ def v2x_tests ( suite, cpu_type = 'arm',total_frames = 10000):
                     tParam( tx = (2,1), rx = (0,1), frame_type= 'data', proto_id = 0x4343, frames = 500, frame_rate_hz = 50 ), 
                     tParam( tx = (0,1), rx = (2,1), frame_type= 'data', proto_id = 0x4343, frames = 600, frame_rate_hz = 50 )]
     suite.addTest(common.ParametrizedTestCase.parametrize(Tc_link.TC_LINK, param = dict( params = test_links, target_cpu = cpu_type , test_name = 'V2X simultaneous TX/RX') ) )
-    return   
+       
  # rate, size and power dbm
     test_links = [  tParam( tx = (0,1), rx = (2,1), frame_type= 'data', proto_id = 0x1234, frames = 10, frame_rate_hz = 10,  data_rate = 6, payload_len = 300, tx_power = -10), 
                     tParam( tx = (0,1), rx = (2,1), frame_type= 'data', proto_id = 0x5678, frames = 10, frame_rate_hz = 50,  data_rate = 6, payload_len = 300, tx_power = -10) ]
@@ -500,7 +500,7 @@ if __name__ == "__main__":
         
         #v2x_api_test(suite)
         v2x_tests( suite, 'arm', total_frames )
-        #dot4_tests(suite)
+        dot4_tests(suite)
         #v2x_api_tests( suite, 'arm', total_frames )
         #wlanMib_api_tests( suite, 'arm')
         #nav_api_tests( suite, 'arm', sampling_time_sec)
