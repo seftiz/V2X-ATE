@@ -187,7 +187,8 @@ class TC_LINK(common.V2X_SDKBaseTest):
                 if t_param.proto_id not in self.socket_list[uut_id][rf_if] :
                     if self._uut[uut_id].ip is u'':  #craton2                        
                         self._uut[uut_id].create_qa_cli(cli_name, target_cpu = self.target_cpu)
-                    elif str(self.test_name).find("power dbm") != -1:
+                    #elif str(self.test_name).find("power dbm") != -1:
+                    else:
                         if rf_if == 1:
                             self.v2x_cli_sniffer_if1 = self._uut[uut_id].create_qa_cli(cli_name, target_cpu = self.target_cpu)
                         else :
