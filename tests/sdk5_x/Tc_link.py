@@ -187,7 +187,7 @@ class TC_LINK(common.V2X_SDKBaseTest):
                 if t_param.proto_id not in self.socket_list[uut_id][rf_if] :
                     if self._uut[uut_id].ip is u'':  #craton2                        
                         self._uut[uut_id].create_qa_cli(cli_name, target_cpu = self.target_cpu)
-                    else :
+                    elif str(self.test_name).find("power dbm") != -1:
                         if rf_if == 1:
                             self.v2x_cli_sniffer_if1 = self._uut[uut_id].create_qa_cli(cli_name, target_cpu = self.target_cpu)
                         else :
@@ -328,11 +328,12 @@ class TC_LINK(common.V2X_SDKBaseTest):
 
     def main (self):
         
-        thread_list = []        
-        if bool(self.v2x_cli_sniffer_if1) :
+        thread_list = []
+        if str(self.test_name).find("power dbm") != -1:        
+          if bool(self.v2x_cli_sniffer_if1) :
             self.start_dut_sniffer(self.v2x_cli_sniffer_if1.interface(), 2, "RX")
-        if bool(self.v2x_cli_sniffer_if0) :
-            self.start_dut_sniffer(self.v2x_cli_sniffer_if1.interface(), 1, "RX")
+          if bool(self.v2x_cli_sniffer_if0) :
+            self.start_dut_sniffer(self.v2x_cli_sniffer_if0.interface(), 1, "RX")
 
         self.Tx_Rx()
             
@@ -406,7 +407,7 @@ class TC_LINK(common.V2X_SDKBaseTest):
             dest_addr = t_param.dest_addr if ( 'dest_addr' in vars(t_param) ) else None
             uut_tx_list = list(self._uut_list)
             for ii, uut in enumerate(uut_tx_list):
-              if  uut_rx_list[ii] == uut_id:
+              if  uut_tx_list[ii] == uut_id:
                   self.stats.tx_uut_count[ii] += frames   
             Tx_thread = (self.socket_list[uut_id][rf_if].count(int("0x"+cli_name.split("_")[2],0)) > 1)            
             if ( type(self.tx_data) is int ):
@@ -421,13 +422,16 @@ class TC_LINK(common.V2X_SDKBaseTest):
             cli_n = cli_name.split("_")
             if dest_addr:
                 #if (dest_addr != globals.setup.units.unit(uut_id ^ 1).rf_interfaces[rf_if].mac_addr) :
-                for jj in uut_tx_list:
-                    if (dest_addr != globals.setup.units.unit(jj).rf_interfaces[rf_if].mac_addr) :
-                        self.frames_Not_For_Unit_count[cli_n[2]] += frames
-                        self.rx_Not_For_Unit_count += frames
-                        break;                        
-             
- 
+                #for jj in uut_tx_list:
+                #    if (dest_addr != globals.setup.units.unit(jj).rf_interfaces[rf_if].mac_addr) :
+                #        self.frames_Not_For_Unit_count[cli_n[2]] += frames
+                #        self.rx_Not_For_Unit_count += frames
+                #        break;                        
+              if (dest_addr != globals.setup.units.unit(self.rx_list[i][0]).rf_interfaces[rf_if].mac_addr) :
+               self.frames_Not_For_Unit_count[cli_n[2]] += frames
+               self.rx_Not_For_Unit_count += frames
+
+
     def analyze_results(self):
 
         #check the DUT Rx data :
@@ -440,7 +444,10 @@ class TC_LINK(common.V2X_SDKBaseTest):
         # Rx ref checker :
         
         frames_recived = 0
-
+        dut_rx_counter = 0
+        ref_tx_counter = 0
+        dut_tx_counter = 0
+        ref_rx_counter = 0
         help = 0              
 
         for sniffer_file in self.sniffer_file:
@@ -459,88 +466,102 @@ class TC_LINK(common.V2X_SDKBaseTest):
         if frames_recived + self.rx_Not_For_Unit_count < self.stats.rx_uut_count[1] - 1 :
             self.stats.ref_rx_count_error += self.stats.rx_uut_count[1] - frames_recived
 
-   #Tx counters checker :
+   ##Tx counters checker :
 
-        read = 0
-        for i, tx in enumerate(self.tx_list):
-            uut_id, rf_if, cli_name, tx_data ,frames, frame_rate_hz, t_param = tx
+   #     read = 0
+   #     for i, tx in enumerate(self.tx_list):
+   #         uut_id, rf_if, cli_name, tx_data ,frames, frame_rate_hz, t_param = tx
         
-        #dut tx counters :
-            if uut_id == self.dut_id:                
-                self.read_cnt = self._uut[uut_id].qa_cli(cli_name).link.read_counters() 
-                time.sleep(2)
-                if bool(self.read_cnt) :
-                    read += self.read_cnt['tx'][1]
+   #     #dut tx counters :
+   #         if uut_id == self.dut_id:                
+   #             self.read_cnt = self._uut[uut_id].qa_cli(cli_name).link.read_counters() 
+   #             time.sleep(2)
+   #             if bool(self.read_cnt) :
+   #                 read += self.read_cnt['tx'][0]
 
-            uut_rx_list = list(self._uut_list)
-            for ii, uut in enumerate(uut_rx_list):
-              if  uut_rx_list[ii] == self.dut_id:
-                if read != self.stats.tx_uut_count[ii]:
-                  self.stats.dut_tx_count_error += self.stats.tx_uut_count[ii] - read
+   #         uut_Tx_list = list(self._uut_list)
+   #         for ii, uut in enumerate(uut_Tx_list):
+   #           if  uut_Tx_list[ii] == self.dut_id:
+   #             if read != self.stats.tx_uut_count[ii]:
+   #               self.stats.dut_tx_count_error += self.stats.tx_uut_count[ii] - read
         
         
-        #check the ref Tx counter :
-        read = 0
-        for tx in self.tx_list:
-            uut_id, rf_if, cli_name, tx_data ,frames, frame_rate_hz, t_param = tx
-            if uut_id :                
-                self.read_cnt = self._uut[uut_id].qa_cli(cli_name).link.read_counters()
-                time.sleep(1)
-                read += self.read_cnt['tx'][1]                
-        if read != self.stats.tx_uut_count[1] :
-            self.stats.ref_tx_count_error +=  self.stats.tx_uut_count[1] - read
+   #     #check the ref Tx counter :
+   #     read = 0
+   #     for tx in self.tx_list:
+   #         uut_id, rf_if, cli_name, tx_data ,frames, frame_rate_hz, t_param = tx
+   #         if uut_id :                
+   #             self.read_cnt = self._uut[uut_id].qa_cli(cli_name).link.read_counters()
+   #             time.sleep(1)
+   #             read += self.read_cnt['tx'][0]                
+   #     if read != self.stats.tx_uut_count[1] :
+   #         self.stats.ref_tx_count_error +=  self.stats.tx_uut_count[1] - read
 
-        #check the DUT Rx counter :
-        read = 0
-        for rx in self.rx_list:
-            uut_id, rf_if, cli_name, frames, _ = rx            
-            if not uut_id :
-                self.read_cnt = self._uut[uut_id].qa_cli(cli_name).link.read_counters()  
-                time.sleep(1)  
-                read += self.read_cnt['rx'][1]     
-        cli_n = cli_name.split("_")      
-        if read + self.rx_Not_For_Unit_count != self.stats.rx_uut_count[0] : 
-        #if read != self.stats.rx_uut_count[0] :            
-            self.stats.dut_rx_count_error += self.stats.rx_uut_count[0] - read        
+   #     #check the DUT Rx counter :
+   #     read = 0
+   #     for rx in self.rx_list:
+   #         uut_id, rf_if, cli_name, frames, _ = rx            
+   #         if not uut_id :
+   #             self.read_cnt = self._uut[uut_id].qa_cli(cli_name).link.read_counters()  
+   #             time.sleep(1)  
+   #             read += self.read_cnt['rx'][0]     
+   #     cli_n = cli_name.split("_")      
+   #     if read + self.rx_Not_For_Unit_count != self.stats.rx_uut_count[0] : 
+   #     #if read != self.stats.rx_uut_count[0] :            
+   #         self.stats.dut_rx_count_error += self.stats.rx_uut_count[0] - read        
 
 
-        if self.stats.tx_uut_count[0] :            
-            self.add_limit( "DUT Tx failed counter" , 0 , self.stats.dut_tx_count_error, None , 'EQ')
-        if self.stats.rx_uut_count[0] :           
-            self.add_limit( "DUT Rx failed counter" , 0 , self.stats.dut_rx_count_error, None , 'EQ')
-        if self.stats.tx_uut_count[1] :
-            self.add_limit( "ref Tx failed counter" , 0 , self.stats.ref_tx_count_error, None , 'EQ')
-        if self.stats.rx_uut_count[1] :
-            self.add_limit( "ref Rx failed counter" , 0 , self.stats.ref_rx_count_error, None , 'EQ')     
-        if ( self._capture_frames == 1 ):
-            self.add_limit( "data value mismatch - ref Tx to DUT Rx (sample)" , 0 ,self.stats.dutRx_data_mismatch , None ,'EQ')      
+   #     if self.stats.tx_uut_count[0] :            
+   #         self.add_limit( "DUT Tx failed counter" , 0 , self.stats.dut_tx_count_error, None , 'EQ')
+   #     if self.stats.rx_uut_count[0] :           
+   #         self.add_limit( "DUT Rx failed counter" , 0 , self.stats.dut_rx_count_error, None , 'EQ')
+   #     if self.stats.tx_uut_count[1] :
+   #         self.add_limit( "ref Tx failed counter" , 0 , self.stats.ref_tx_count_error, None , 'EQ')
+   #     if self.stats.rx_uut_count[1] :
+   #         self.add_limit( "ref Rx failed counter" , 0 , self.stats.ref_rx_count_error, None , 'EQ')     
+   #     if ( self._capture_frames == 1 ):
+   #         self.add_limit( "data value mismatch - ref Tx to DUT Rx (sample)" , 0 ,self.stats.dutRx_data_mismatch , None ,'EQ')      
         if frames_recived :
             self.add_limit( "data value mismatch - DUT Tx to REF Rx" , 0 , self.stats.data_mismatch, None ,'EQ')#frames_recived , 'EQ')
             if self.tx_power :
                 self.add_limit( "Rx ref : power mismatch" , 0 , self.stats.power_dbm_error, None ,'EQ')# frames_recived , 'EQ')
             if self.datarate :
                 self.add_limit( "Rx ref : data rate mismatch" , 0 , self.stats.data_rate_error, None ,'EQ')# frames_recived , 'EQ')
-            if self.payload_len:
-                self.add_limit( "Rx ref : data size mismatch" , 0 , self.stats.data_size_error, None ,'EQ')# frames_recived , 'EQ')
+            #if self.payload_len:
+            #    self.add_limit( "Rx ref : data size mismatch" , 0 , self.stats.data_size_error, None ,'EQ')# frames_recived , 'EQ')
 
         for t_param in self._testParams:
             # For Multiple RX convert to list is not list
             rx_list = [t_param.rx] if type(t_param.rx) == tuple else t_param.rx
             tx_list = [t_param.tx] if type(t_param.tx) == tuple else t_param.tx
 
-            uut_id, rf_if = rx_list[0]
-            link_rx_counters = self._uut[uut_id].qa_cli(t_param.rx_cli).link.read_counters()
+            rx_uut_id, rx_rf_if = rx_list[0]
+            link_rx_counters = self._uut[rx_uut_id].qa_cli(t_param.rx_cli).link.read_counters()
             uut_id, rf_if = tx_list[0]
             link_tx_counters = self._uut[uut_id].qa_cli(t_param.tx_cli).link.read_counters()
             time.sleep(1)
             cli_n = t_param.tx_cli.split("_")
             try :
                 if self.frames_Not_For_Unit_count.get(cli_n[2]) :
-                    self.add_limit( "(%d,%d), %s 0x%x" % ( uut_id, rf_if, t_param.frame_type, t_param.proto_id), 0 , link_rx_counters['rx'][1] , None , 'EQ')
+                    self.add_limit( "(%d,%d)[unicast wrong mac da RX frames], %s 0x%x" % ( rx_uut_id, rx_rf_if, t_param.frame_type, t_param.proto_id), 0 , link_rx_counters['rx'][1] , None , 'EQ')
                 else :
-                    self.add_limit( "(%d,%d), %s 0x%x" % ( uut_id, rf_if, t_param.frame_type, t_param.proto_id), link_tx_counters['tx'][1] , link_rx_counters['rx'][1] , None , 'EQ')
+                    self.add_limit( "(%d,%d)[RX unit 'Value'], %s 0x%x" % ( rx_uut_id, rx_rf_if, t_param.frame_type, t_param.proto_id), link_tx_counters['tx'][1] , link_rx_counters['rx'][1] , None , 'EQ')
+                
+                if rx_uut_id == self.dut_id:
+                    dut_rx_counter += link_rx_counters['rx'][1]
+                    ref_tx_counter += link_tx_counters['tx'][1]
+                else:
+                    ref_rx_counter += link_rx_counters['rx'][1]
+                    dut_tx_counter += link_tx_counters['tx'][1]
+
             except Exception as e:
                 pass #the limit not relevant  
+
+
+        self.add_limit( "DUT RX statistics", dut_rx_counter , dut_rx_counter , None , 'EQ')
+        self.add_limit( "DUT TX statistics", dut_tx_counter , dut_tx_counter , None , 'EQ')
+        self.add_limit( "ref RX statistics", ref_rx_counter , ref_rx_counter , None , 'EQ')
+        self.add_limit( "ref TX statistics", ref_tx_counter , ref_tx_counter , None , 'EQ')
 
     def packet_handler(self, packet, xp_idx, ExpData): 
         data = packet.data.data[6:len(ExpData)-1]
