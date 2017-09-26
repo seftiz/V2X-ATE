@@ -368,9 +368,10 @@ class TC_LINK(common.V2X_SDKBaseTest):
             #for stop in self.thread_stop_rx[1] :
               #self._uut[1].qa_cli(stop).link.rx_thread_stop()
         # stop the sniffers :
-        if bool(self.v2x_cli_sniffer_if0) :
+        if str(self.test_name).find("power dbm") != -1:
+          if bool(self.v2x_cli_sniffer_if0) :
             self.stop_dut_sniffer(1)
-        if bool(self.v2x_cli_sniffer_if1) :
+          if bool(self.v2x_cli_sniffer_if1) :
             self.stop_dut_sniffer(2)
                
 
