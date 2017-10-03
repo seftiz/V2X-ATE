@@ -440,7 +440,7 @@ class TC_LINK(common.V2X_SDKBaseTest):
         if ( self._capture_frames == 1 ):
             for rx_dut_data in self.Rx_DUT_data :
                 if rx_dut_data != self.tx_data[6:len(self.tx_data)].lower() :                        
-                        print "dutRx_data_mismatch %d " %self.stats.dutRx_data_mismatch                     
+                        #print "dutRx_data_mismatch %d " %self.stats.dutRx_data_mismatch                     
                         self.stats.dutRx_data_mismatch +=1
             
         # Rx ref checker :

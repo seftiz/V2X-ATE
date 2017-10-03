@@ -59,7 +59,10 @@ class SystemTestCase(unittest.TestCase):
             try:
                 comp = comparison.upper()
                 if comp == "EQ":
-                    limit_status = ( value == low_limit )
+                    if (low_limit * 0.9 <= value < low_limit) or (low_limit < value <= low_limit * 1.1):
+                        limit_status = 3
+                    else:
+                        limit_status = ( value == low_limit )
                 elif comp == "NE":
                     limit_status = ( value != low_limit )
                 elif comp == "GT":
@@ -144,6 +147,8 @@ class SystemTestCase(unittest.TestCase):
         dd = self
         if self.test_status == True:
             self.result.addSuccess(self)
+        elif self.test_status == 3:
+            self.result.addInconc(self)
         else:
             self.result.addFailure(self, sys.exc_info())
         

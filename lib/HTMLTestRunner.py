@@ -175,6 +175,7 @@ class Template_mixin(object):
     0: 'pass',
     1: 'fail',
     2: 'error',
+    3: 'inconc',
     }
 
     DEFAULT_TITLE = 'Unit Test Report'
@@ -378,10 +379,12 @@ a.popup_link:hover {
 .passClass  { background-color: black; }
 .failClass  { background-color: #c60; }
 .errorClass { background-color: #c00; }
+.inconcClass{ background-color: #ffa; }
 #.passCase   { color: #6c6; }
 .passCase   { color: black; }
 .failCase   { color: #c60; font-weight: bold; }
 .errorCase  { color: #c00; font-weight: bold; }
+.inconcCase { color: #ffa; font-weight: bold; }
 .hiddenRow  { display: none; }
 .testcase   { margin-left: 2em; }
 
@@ -444,6 +447,7 @@ a.popup_link:hover {
                         <td>Count</td>
                         <td>Pass</td>
                         <td>Fail</td>
+                        <td>inconc</td>
                         <td>Error</td>
                         <td>View</td>
                     </tr>
@@ -453,11 +457,12 @@ a.popup_link:hover {
                         <td>%(count)s</td>
                         <td>%(Pass)s</td>
                         <td>%(fail)s</td>
+                        <td>%(inconc)s</td>
                         <td>%(error)s</td>
                         <td>&nbsp;</td>
                     </tr>
                     </table>
-                    """ # variables: (test_list, count, Pass, fail, error)
+                    """ # variables: (test_list, count, Pass, fail, inconc, error)
 
     REPORT_CLASS_TMPL = r"""
 <tr class='%(style)s'>
@@ -465,10 +470,11 @@ a.popup_link:hover {
     <td>%(count)s</td>
     <td>%(Pass)s</td>
     <td>%(fail)s</td>
+    <td>%(inconc)s</td>
     <td>%(error)s</td>
     <td><a href="javascript:showClassDetail('%(cid)s',%(count)s)">Detail</a></td>
 </tr>
-""" # variables: (style, desc, count, Pass, fail, error, cid)
+""" # variables: (style, desc, count, Pass, fail, Inconc, error, cid)
 
 
     REPORT_TEST_WITH_OUTPUT_TMPL1 = r"""
@@ -580,13 +586,14 @@ class _TestResult(TestResult):
         self.success_count = 0
         self.failure_count = 0
         self.error_count = 0
+        self.inconclusive_count = 0
         self.verbosity = verbosity
        
 
 
         # result is a list of result in 4 tuple
         # (
-        #   result code (0: success; 1: fail; 2: error),
+        #   result code (0: success; 1: fail; 2: error, 3:inconc),
         #   TestCase object,
         #   Test output (byte string),
         #   stack trace,
@@ -662,7 +669,17 @@ class _TestResult(TestResult):
             sys.stderr.write('\n')
         else:
             sys.stderr.write('F')
-
+    def addInconc(self, test):
+        self.success_count += 1
+        TestResult.addInconc(self, test)
+        output = self.complete_output()
+        self.result.append((0, test, output, ''))
+        if self.verbosity > 1:
+            sys.stderr.write('ok ')
+            sys.stderr.write(str(test))
+            sys.stderr.write('\n')
+        else:
+            sys.stderr.write('.')
 
 class HTMLTestRunner(Template_mixin):
     """
@@ -717,6 +734,7 @@ class HTMLTestRunner(Template_mixin):
         status = []
         if result.success_count: status.append('Pass %s'    % result.success_count)
         if result.failure_count: status.append('Failure %s' % result.failure_count)
+        if result.inconclusive_count: status.append('Inconclusive %s' % result.inconclusive_count)
         if result.error_count:   status.append('Error %s'   % result.error_count  )
         if status:
             status = ' '.join(status)
@@ -783,11 +801,12 @@ class HTMLTestRunner(Template_mixin):
         sortedResult = self.sortResult(result.result)
         for cid, (cls, cls_results) in enumerate(sortedResult):
             # subtotal for a class
-            np = nf = ne = 0
+            np = nf = ne = ni = 0
             for n,t,o,e in cls_results:
                 if n == 0: np += 1
                 elif n == 1: nf += 1
-                else: ne += 1
+                elif n == 2: ne += 1
+                else: ni += 1
 
             # format class description
             if cls.__module__ == "__main__":
@@ -798,12 +817,13 @@ class HTMLTestRunner(Template_mixin):
             desc = doc and '%s: %s' % (name, doc) or name
 
             row = self.REPORT_CLASS_TMPL % dict(
-                style = ne > 0 and 'errorClass' or nf > 0 and 'failClass' or 'passClass',
+                style = ne > 0 and 'errorClass' or nf > 0 and 'failClass'  or ni > 0 and 'inconcClass' or 'passClass',
                 desc = desc,
-                count = np+nf+ne,
+                count = np+nf+ne+ni,
                 Pass = np,
                 fail = nf,
                 error = ne,
+                inconc = ni,
                 cid = 'c%s' % (cid+1),
             )
             rows.append(row)
@@ -813,9 +833,10 @@ class HTMLTestRunner(Template_mixin):
 
         report = self.REPORT_TMPL % dict(
             test_list = ''.join(rows),
-            count = str(result.success_count+result.failure_count+result.error_count),
+            count = str(result.success_count+result.failure_count+result.error_count+result.inconclusive_count),
             Pass = str(result.success_count),
             fail = str(result.failure_count),
+            inconc = str(result.inconclusive_count),
             error = str(result.error_count),
         )
         return report
@@ -827,8 +848,8 @@ class HTMLTestRunner(Template_mixin):
         limits_output = ''
 
         for (test_name, limit_name, low_limit, value, high_limit, comparison , limit_status) in test.limits:
-            status = ('Passed' if limit_status else 'Failed')
-            bg_color = ('00FF00' if limit_status else 'FF0000')
+            status = 'inconc' if limit_status == 3 else ('Passed' if limit_status else 'Failed')
+            bg_color = '#F0E68C' if limit_status == 3 else ('00FF00' if limit_status else 'FF0000')
 
             row = self.REPORT_TEST_LIMITS_DATA % dict( 
                             limit_name = str(limit_name),
@@ -890,8 +911,8 @@ class HTMLTestRunner(Template_mixin):
         row = tmpl % dict(
             tid = tid,
             #Class = (n == 0 and 'hiddenRow' or 'none'),
-            Class = (n == 0 and 'passCase' or 'none'),
-            style = n == 2 and 'errorCase' or (n == 1 and 'failCase' or 'none'),
+            Class = (n == 0 and 'passCase') or (n == 3 and 'inconcCase' or 'none'),
+            style = n == 2 and 'errorCase' or (n == 1 and 'failCase') or (n == 3 and 'inconcCase' or 'none'),
             desc = desc,
             script = script,
             status = self.STATUS[n],
